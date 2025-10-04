@@ -1,0 +1,86 @@
+[project]
+name = "ls-tree"
+version = "2024.12.19"
+description = "A modern Python command-line tool for listing directory contents with advanced filtering and metadata support"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Alejandro Marco Ramos", email = "alejandro.marco.ramos@gmail.com" },
+]
+maintainers = [
+    { name = "Alejandro Marco Ramos", email = "alejandro.marco.ramos@gmail.com" },
+]
+keywords = ["tree", "directory", "listing", "cli", "filesystem", "metadata"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Filesystems",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = ["pyyaml>=6.0.3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "ruff>=0.1.0", "mypy>=1.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/alejandromarcoramos/ls-tree"
+Repository = "https://github.com/alejandromarcoramos/ls-tree"
+Issues = "https://github.com/alejandromarcoramos/ls-tree/issues"
+Documentation = "https://github.com/alejandromarcoramos/ls-tree#readme"
+
+[project.scripts]
+ls-tree = "ls_tree:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["ls_tree"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
