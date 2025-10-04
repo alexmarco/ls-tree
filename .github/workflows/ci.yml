@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    - name: Lint with ruff
+      run: uv run ruff check .
+    
+    - name: Format check with ruff
+      run: uv run ruff format --check .
+    
+    - name: Type check with mypy
+      run: uv run mypy src/
+    
+    - name: Test with pytest
+      run: uv run pytest
+    
+    - name: Test CLI functionality
+      run: |
+        uv run python -m ls_tree --help
+        uv run python -m ls_tree --format tree .
+        uv run python -m ls_tree --format ascii .
+        uv run python -m ls_tree --format flat .
+        uv run python -m ls_tree --format json .
+        uv run python -m ls_tree --format yaml .
+        uv run python -m ls_tree --show-metadata .
+        uv run python -m ls_tree --no-emoji .
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install build dependencies
+      run: uv sync --dev
+    
+    - name: Build package
+      run: uv build
+    
+    - name: Check package
+      run: uv run twine check dist/*
