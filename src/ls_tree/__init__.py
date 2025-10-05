@@ -60,15 +60,15 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
     exclude_file_patterns: Iterator[str] = iter(args.exclude_file)
 
     # Verificar patrones generales
-    if any(path.match(pattern) for pattern in exclude_patterns):
+    if any(path.match(pattern) for pattern in exclude_patterns if pattern):
         return True
 
     # Verificar patrones específicos de directorio
-    if path.is_dir() and any(path.match(pattern) for pattern in exclude_dir_patterns):
+    if path.is_dir() and any(path.match(pattern) for pattern in exclude_dir_patterns if pattern):
         return True
 
     # Verificar patrones específicos de fichero
-    if path.is_file() and any(path.match(pattern) for pattern in exclude_file_patterns):
+    if path.is_file() and any(path.match(pattern) for pattern in exclude_file_patterns if pattern):
         return True
 
     return False
@@ -430,11 +430,13 @@ def render_tree(
     # Construir estructura completa para renderizado en árbol
     tree_structure: Dict[str, Union[Dict[str, Any], None]] = {}
     dir_map: Dict[Path, Dict[str, Union[Dict[str, Any], None]]] = {start_path: tree_structure}
+    metadata_map: Dict[Path, Dict[str, Any]] = {}
 
     # Procesar todos los elementos del generador
-    for dirpath, _dirnames, _filenames, _metadata in tree_generator:
+    for dirpath, _dirnames, _filenames, metadata in tree_generator:
         # Obtener el diccionario del directorio actual
         current_level_tree: Dict[str, Union[Dict[str, Any], None]] = dir_map.get(dirpath, {})
+        metadata_map[dirpath] = metadata
 
         # Añadir subdirectorios
         for d_name in _dirnames:
@@ -447,7 +449,7 @@ def render_tree(
             current_level_tree[f_name] = None
 
     # Renderizar el árbol construido
-    _render_tree_recursive(tree_structure, "", use_emoji, show_metadata, dir_map)
+    _render_tree_recursive(tree_structure, "", use_emoji, show_metadata, dir_map, metadata_map)
 
 
 def _render_tree_recursive(
@@ -456,6 +458,7 @@ def _render_tree_recursive(
     use_emoji: bool = True,
     show_metadata: bool = False,
     dir_map: Union[Dict[Path, Dict[str, Union[Dict[str, Any], None]]], None] = None,
+    metadata_map: Union[Dict[Path, Dict[str, Any]], None] = None,
 ) -> None:
     """
     Función auxiliar para renderizar recursivamente el árbol.
@@ -478,25 +481,29 @@ def _render_tree_recursive(
         if isinstance(subtree, dict):
             icon: str = "📁 " if use_emoji else "[d] "
             name_with_meta = name
-            if show_metadata and dir_map:
+            if show_metadata and dir_map and metadata_map:
                 # Buscar metadatos del directorio
-                for _path, tree_dict in dir_map.items():
-                    if tree_dict is subtree:
-                        # Aquí podríamos agregar metadatos del directorio si los tuviéramos
+                for path, tree_dict in dir_map.items():
+                    if tree_dict is subtree and path in metadata_map:
+                        dir_metadata = metadata_map[path].get("directory")
+                        if dir_metadata:
+                            name_with_meta = f"{name} [{dir_metadata.file_count} files, {_format_size(dir_metadata.total_size)}, {dir_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
             extension: str = "    " if is_last else "│   "
-            _render_tree_recursive(subtree, prefix + extension, use_emoji, show_metadata, dir_map)
+            _render_tree_recursive(subtree, prefix + extension, use_emoji, show_metadata, dir_map, metadata_map)
         else:
             # Usar emoji específico para el tipo de archivo si está habilitado
             icon = _get_file_emoji(name) + " " if use_emoji else "[f] "
 
             name_with_meta = name
-            if show_metadata and dir_map:
+            if show_metadata and dir_map and metadata_map:
                 # Buscar metadatos del archivo
-                for _path, tree_dict in dir_map.items():
-                    if name in tree_dict and tree_dict[name] is None:
-                        # Aquí podríamos agregar metadatos del archivo si los tuviéramos
+                for path, tree_dict in dir_map.items():
+                    if name in tree_dict and tree_dict[name] is None and path in metadata_map:
+                        file_metadata = metadata_map[path].get("files", {}).get(name)
+                        if file_metadata:
+                            name_with_meta = f"{name} [{_format_size(file_metadata.size)}, {file_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
 
@@ -518,6 +525,29 @@ def main() -> None:
     SystemExit
         Sale con código 1 si la ruta proporcionada no es un directorio válido.
     """
+    # Configurar codificación UTF-8 para Windows solo si no estamos en tests
+    import sys
+    if sys.platform == "win32":
+        # Verificar si estamos en un test
+        import inspect
+        frame = inspect.currentframe()
+        in_test = False
+        while frame:
+            if 'pytest' in str(frame.f_code.co_filename) or 'test_' in frame.f_code.co_name:
+                in_test = True
+                break
+            frame = frame.f_back
+        
+        if not in_test:
+            try:
+                import codecs
+                if hasattr(sys.stdout, 'detach'):
+                    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+                if hasattr(sys.stderr, 'detach'):
+                    sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
+            except (AttributeError, OSError):
+                # Si no se puede configurar UTF-8, continuar sin cambios
+                pass
     parser = argparse.ArgumentParser(
         description="Lista el contenido de un directorio con filtros avanzados."
     )

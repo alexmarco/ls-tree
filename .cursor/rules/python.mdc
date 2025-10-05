@@ -1,0 +1,112 @@
+---
+description: Normas para escribir código python limpio, consistente y profesional
+alwaysApply: false
+---
+# Normas de Desarrollo con Python
+
+Para escribir código limpio, consistente y profesional, seguiremos estas directrices clave. El objetivo es maximizar la
+automatización y la coherencia.
+
+## 1. Gestión de Dependencias con `uv` y `pyproject.toml`
+
+La **única fuente de verdad** sobre las dependencias es el fichero `pyproject.toml`. El entorno virtual es solo un
+reflejo de este fichero.
+
+### 1.1 Para Añadir/Actualizar una Dependencia
+
+1. **Edita manualmente** el `pyproject.toml` y añade la librería.
+2. **Sincroniza** tu entorno con el comando: `uv sync --all-extras`.
+
+### 1.2 Para Sincronizar tu Entorno (tras un `git pull`)
+
+Usa siempre `uv sync --all-extras` para asegurar que tu entorno es idéntico al `pyproject.toml`.
+
+## 2. Formateo y Calidad de Código con `Ruff`
+
+Usamos **Ruff** para todo: formateo (con un **límite de línea de 100 caracteres**), detección de errores y ordenación
+de `imports`.
+
+### 2.1 Regla
+
+Antes de hacer un `commit`, ejecuta: primero `uv run ruff format .` y después `uv run ruff check --fix .`.
+
+## 3. Análisis de Tipado con `mypy` 🏷️
+
+El uso de **type hints es obligatorio**. `mypy` es nuestra herramienta para validar que el tipado es correcto.
+
+### 3.1 Regla
+
+Antes de confirmar tus cambios, comprueba que el código pasa la verificación de `mypy` sin errores. Comando
+`uv run mypy .`
+
+## 4. Principios Clave del Tipado Estático 🧠
+
+Más allá de la herramienta, aplicaremos esta filosofía para que el tipado sea útil y no un estorbo. El objetivo es la
+**claridad y la prevención de bugs**.
+
+### 4.1. Las Firmas de las Funciones son Sagradas
+
+Toda función debe tener tipados sus argumentos y su valor de retorno.
+
+```python
+# Correcto
+def procesar_usuario(user_id: int, es_admin: bool) -> dict[str, any]:
+    # ...
+    return {}
+```
+
+### 4.2. Sé Específico, Evita los Tipos Genéricos
+
+Tipar algo como `list` o `dict` es mejor que nada, pero aporta poco valor. Sé tan específico como sea posible.
+
+```python
+# No hagas esto
+def obtener_nombres(usuarios: list) -> list:
+    # ...
+
+# Haz esto
+def obtener_nombres(usuarios: list[dict[str, any]]) -> list[str]:
+    # ...
+```
+
+### 4.3. Usa `TypeAlias` para Simplificar Tipos Complejos
+
+Cuando un tipo se vuelve complejo o se repite mucho, crea un alias. Esto hace el código inmensamente más legible.
+
+```python
+from typing import TypeAlias
+
+# Definimos un alias para un tipo complejo
+Usuario: TypeAlias = dict[str, str | int]
+
+# El alias hace la firma de la función mucho más limpia
+def saludar_usuario(usuario: Usuario) -> str:
+    return f"Hola, {usuario['nombre']}"
+```
+
+### 4.4 Usa `| None` para Valores Opcionales
+
+Si una variable puede ser de un tipo o `None`, indícalo explícitamente. Esto obliga a quien use la función a comprobar
+si el valor es nulo, previniendo incontables errores.
+
+```python
+def buscar_email(user_id: int) -> str | None:
+    # ... Si no se encuentra, retorna None
+    return None
+```
+
+### 4.5. `Any` es el Último Recurso
+
+Usar `Any` es decirle a `mypy`: "No revises esta parte". Es una vía de escape necesaria a veces (ej: librerías sin
+tipos), pero su uso excesivo anula los beneficios del tipado. Siempre intenta encontrar un tipo más específico antes de
+recurrir a `Any`.
+
+## 5. Documentación y Nomenclatura 📖
+
+* **Docstrings:** Usa el **estilo de Numpy** para documentar. Incluye ejemplos, retornos, y notas si fuera necesario
+* **Nomenclatura:** `snake_case` (variables/funciones), `PascalCase` (clases), `UPPER_SNAKE_CASE` (constantes).
+
+## 6. Pruebas (Testing) ✅
+
+* **Framework:** Usaremos **pytest**.
+* **Regla:** Toda nueva funcionalidad o corrección debe ir acompañada de sus pruebas.

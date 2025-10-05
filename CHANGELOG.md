@@ -21,6 +21,12 @@ and this project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 - Type hints and NumPy-style documentation throughout
 - Cross-platform compatibility (Windows, macOS, Linux)
 
+### Fixed
+
+- Fixed metadata rendering in tree and ASCII formats - metadata now displays correctly when using `--show-metadata` flag
+- Resolved Unicode encoding issues on Windows by setting UTF-8 encoding for stdout/stderr
+- Fixed test compatibility issues with pytest by detecting test environment and avoiding global state modifications
+
 ### Features
 
 - **Tree formats**: Default emoji tree, ASCII tree, and emoji-disabled tree
