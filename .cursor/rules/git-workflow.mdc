@@ -1,0 +1,101 @@
+---
+alwaysApply: false
+description: To keep our code organised, clean, and collaborative, it is essential that you follow this protocol when working with Git.
+---
+
+# Protocolo de Trabajo con Git
+
+## 1. Gestión de Ramas (Branches)
+
+Toda nueva funcionalidad o corrección debe desarrollarse en su propia rama, nunca directamente sobre `main` o `develop`.
+
+### 1.1 Nomenclatura
+
+- **Funcionalidad:** `feat/nombre-funcionalidad` (ej: `feat/login-con-google`)
+- **Corrección:** `fix/descripcion-del-bug` (ej: `fix/error-al-enviar-formulario`)
+- **Mejora:** `chore/mejora-realizada` (ej: `chore/refactor-api-service`)
+
+### 1.2 Creación
+
+Crea tu rama siempre a partir de la última versión de `develop`:
+
+```shell
+git checkout develop
+git pull origin develop
+git checkout -b feat/nombre-de-tu-rama
+```
+
+## 2. Commits: Cuándo y Cómo Hacerlos
+
+Un commit debe ser una unidad de trabajo lógica y completa.
+
+### 2.1 Cuándo
+
+Haz un commit cada vez que completes un paso pequeño y funcional de tu tarea. Esto facilita la revisión y la reversión de cambios.
+
+### 2.2 Formato del Mensaje
+
+Usa **Conventional Commits**.
+
+- **Estructura:** `<tipo>(<ámbito>): <descripción>`
+- **Tipos comunes:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+- **Ejemplos:**
+  - `feat(auth)`: añade inicio de sesión con correo y contraseña.
+  - `fix(api)`: corrige el error 500 al obtener usuarios
+
+## 3. Pull Requests (PRs)
+
+Cuando tu rama esté lista para integrarse en `develop`, abre un Pull Request.
+
+### 3.1 Antes de crear el PR
+
+Sincroniza tu rama con los últimos cambios de `develop` para evitar conflictos: `git pull origin develop --rebase`
+
+### 3.2 Creación del PR
+
+- **Título claro:** Usa el mismo formato que en los commits.
+- **Descripción:** Explica qué hace el PR, cómo probarlo y enlaza el issue que resuelve (ej: `Closes #123`).
+- **Revisión:** Asigna al menos a un revisor. No fusiones tu propio PR sin aprobación. Atiende a los comentarios subiendo nuevos commits a tu rama.
+
+## 4. Fusión (Merging)
+
+Una vez aprobado el PR, se fusionará en `develop`.
+
+- **Método:** Utiliza siempre **Squash and Merge**. Esto agrupa todos tus commits en uno solo en `develop`, manteniendo el historial limpio.
+- **Limpieza:** Tras la fusión, elimina tu rama.
+
+### 5. Gestión de Versiones y Tags
+
+Usamos tags para marcar los lanzamientos de versiones estables en producción.
+
+### 5.1 Cuándo
+
+Se crea un tag sobre la rama `main` justo después de fusionar en ella los cambios de `develop` que componen una nueva versión.
+
+### 5.2 Versionado por Calendario (CalVer)
+
+Usaremos un formato basado en la fecha de lanzamiento, lo que hace que la antigüedad de una versión sea evidente. El formato será `YY.MM.MICRO`.
+
+- **YY**: Las dos últimas cifras del año en curso (ej: 2025 -> 25).
+- **MM**: Mes con cero inicial (ej: 09 para septiembre).
+- **MICRO**: Un número secuencial que empieza en 0 para cada mes y se incrementa con cada nuevo lanzamiento dentro de ese mismo mes.
+
+### 5.3 Proceso de creación de tag
+
+Ejemplo del primer lanzamiento de septiembre de 2025:
+
+```shell
+# 1. Sitúate en main y actualiza
+git checkout main
+git pull origin main
+
+# 2. Crea un tag anotado (con mensaje)
+git tag -a v25.10.0 -m "Lanzamiento de Octubre 2025"
+
+# 3. Sube el tag al repositorio remoto
+git push origin v25.10.0
+```
+
+Si hubiera otro lanzamiento en el mismo mes, el tag sería `v25.10.1`.
+
+Este protocolo nos ayudará a trabajar de manera más eficiente y a mantener la calidad de nuestro código. Si tienes alguna duda, pregúntame.
