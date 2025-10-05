@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, Iterator, List, NamedTuple, Tuple, Union
+from typing_extensions import TypeAlias
 
 import yaml
 
@@ -23,6 +24,11 @@ class DirectoryMetadata(NamedTuple):
     file_count: int
     total_size: int
     modified: datetime
+
+
+# Type aliases para simplificar tipos complejos
+TreeItem: TypeAlias = Tuple[Path, List[str], List[str], Dict[str, Any]]
+TreeGenerator: TypeAlias = Generator[TreeItem, None, None]
 
 
 def is_excluded(path: Path, args: argparse.Namespace) -> bool:
@@ -68,9 +74,7 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
     return False
 
 
-def build_tree(
-    directory: Path, args: argparse.Namespace
-) -> Generator[Tuple[Path, List[str], List[str], Dict[str, Any]], None, None]:
+def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
     """
     Genera la estructura del directorio usando el moderno pathlib.Path.walk.
 
@@ -101,19 +105,17 @@ def build_tree(
     >>> for dirpath, dirs, files in build_tree(Path('src/'), args):
     ...     print(f"Directorio: {dirpath}, Subdirs: {len(dirs)}, Archivos: {len(files)}")
     """
-    # Usamos directory.walk() para máxima eficiencia
-    for dirpath, dirnames, filenames in directory.walk(top_down=True):
+    # Usamos os.walk() para compatibilidad con Python 3.8+
+    import os
+    for dirpath_str, dirnames, filenames in os.walk(directory, topdown=True):
+        dirpath = Path(dirpath_str)
         # --- PODA INTELIGENTE ---
         # Filtramos directorios usando iteradores para mayor eficiencia
-        filtered_dirs = (
-            d for d in sorted(dirnames) if not is_excluded(dirpath / d, args)
-        )
+        filtered_dirs = (d for d in sorted(dirnames) if not is_excluded(dirpath / d, args))
         dirnames[:] = list(filtered_dirs)
 
         # --- FILTRADO DE FICHEROS ---
-        filtered_files = (
-            f for f in sorted(filenames) if not is_excluded(dirpath / f, args)
-        )
+        filtered_files = (f for f in sorted(filenames) if not is_excluded(dirpath / f, args))
         filenames = list(filtered_files)
 
         # --- RECOLECCIÓN DE METADATOS ---
@@ -135,9 +137,7 @@ def build_tree(
                     total_size += stat.st_size
                 except (OSError, IOError):
                     # Archivo no accesible
-                    file_metadata[filename] = FileMetadata(
-                        size=0, modified=datetime.min
-                    )
+                    file_metadata[filename] = FileMetadata(size=0, modified=datetime.min)
 
             # Metadatos del directorio
             try:
@@ -324,17 +324,16 @@ def _format_size(size_bytes: int) -> str:
     if size_bytes == 0:
         return "0 B"
 
+    size_float = float(size_bytes)
     for unit in ["B", "KB", "MB", "GB", "TB"]:
-        if size_bytes < 1024.0:
-            return f"{size_bytes:.1f} {unit}"
-        size_bytes /= 1024.0
-    return f"{size_bytes:.1f} PB"
+        if size_float < 1024.0:
+            return f"{size_float:.1f} {unit}"
+        size_float /= 1024.0
+    return f"{size_float:.1f} PB"
 
 
 def render_flat(
-    tree_generator: Generator[
-        Tuple[Path, List[str], List[str], Dict[str, Any]], None, None
-    ],
+    tree_generator: TreeGenerator,
     start_path: Path = Path("."),
     show_metadata: bool = False,
 ) -> None:
@@ -360,7 +359,7 @@ def render_flat(
     project/src/utils
     project/src/utils/helper.py
     """
-    for dirpath, dirnames, filenames, metadata in tree_generator:
+    for dirpath, _dirnames, filenames, metadata in tree_generator:
         # Calcular ruta relativa
         try:
             rel_path = dirpath.relative_to(start_path)
@@ -369,7 +368,8 @@ def render_flat(
                     dir_meta = metadata.get("directory")
                     if dir_meta:
                         print(
-                            f"{rel_path} [{dir_meta.file_count} files, {_format_size(dir_meta.total_size)}]"
+                            f"{rel_path} [{dir_meta.file_count} files, "
+                            f"{_format_size(dir_meta.total_size)}]"
                         )
                     else:
                         print(str(rel_path))
@@ -388,9 +388,7 @@ def render_flat(
                     file_meta = metadata["files"].get(filename)
                     if file_meta:
                         mod_date = file_meta.modified.strftime("%Y-%m-%d %H:%M")
-                        print(
-                            f"{rel_file_path} [{_format_size(file_meta.size)}, {mod_date}]"
-                        )
+                        print(f"{rel_file_path} [{_format_size(file_meta.size)}, {mod_date}]")
                     else:
                         print(str(rel_file_path))
                 else:
@@ -400,9 +398,7 @@ def render_flat(
 
 
 def render_tree(
-    tree_generator: Generator[
-        Tuple[Path, List[str], List[str], Dict[str, Any]], None, None
-    ],
+    tree_generator: TreeGenerator,
     start_path: Path = Path("."),
     use_emoji: bool = True,
     show_metadata: bool = False,
@@ -433,22 +429,21 @@ def render_tree(
     """
     # Construir estructura completa para renderizado en árbol
     tree_structure: Dict[str, Union[Dict[str, Any], None]] = {}
-    dir_map: Dict[Path, Dict[str, Union[Dict[str, Any], None]]] = {
-        start_path: tree_structure
-    }
+    dir_map: Dict[Path, Dict[str, Union[Dict[str, Any], None]]] = {start_path: tree_structure}
 
     # Procesar todos los elementos del generador
-    for dirpath, dirnames, filenames, metadata in tree_generator:
+    for dirpath, _dirnames, _filenames, _metadata in tree_generator:
         # Obtener el diccionario del directorio actual
-        current_level_tree = dir_map.get(dirpath, {})
+        current_level_tree: Dict[str, Union[Dict[str, Any], None]] = dir_map.get(dirpath, {})
 
         # Añadir subdirectorios
-        for d_name in dirnames:
-            current_level_tree[d_name] = {}
-            dir_map[dirpath / d_name] = current_level_tree[d_name]
+        for d_name in _dirnames:
+            subdir_dict: Dict[str, Union[Dict[str, Any], None]] = {}
+            current_level_tree[d_name] = subdir_dict
+            dir_map[dirpath / d_name] = subdir_dict
 
         # Añadir archivos
-        for f_name in filenames:
+        for f_name in _filenames:
             current_level_tree[f_name] = None
 
     # Renderizar el árbol construido
@@ -460,7 +455,7 @@ def _render_tree_recursive(
     prefix: str = "",
     use_emoji: bool = True,
     show_metadata: bool = False,
-    dir_map: Dict[Path, Dict[str, Union[Dict[str, Any], None]]] = None,
+    dir_map: Union[Dict[Path, Dict[str, Union[Dict[str, Any], None]]], None] = None,
 ) -> None:
     """
     Función auxiliar para renderizar recursivamente el árbol.
@@ -474,7 +469,7 @@ def _render_tree_recursive(
     use_emoji : bool
         Si usar emojis para representar directorios y ficheros.
     """
-    entries: List[tuple[str, Union[Dict[str, Any], None]]] = list(tree.items())
+    entries = list(tree.items())
 
     for i, (name, subtree) in enumerate(entries):
         is_last: bool = i == (len(entries) - 1)
@@ -485,26 +480,21 @@ def _render_tree_recursive(
             name_with_meta = name
             if show_metadata and dir_map:
                 # Buscar metadatos del directorio
-                for path, tree_dict in dir_map.items():
+                for _path, tree_dict in dir_map.items():
                     if tree_dict is subtree:
                         # Aquí podríamos agregar metadatos del directorio si los tuviéramos
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
             extension: str = "    " if is_last else "│   "
-            _render_tree_recursive(
-                subtree, prefix + extension, use_emoji, show_metadata, dir_map
-            )
+            _render_tree_recursive(subtree, prefix + extension, use_emoji, show_metadata, dir_map)
         else:
             # Usar emoji específico para el tipo de archivo si está habilitado
-            if use_emoji:
-                icon = _get_file_emoji(name) + " "
-            else:
-                icon = "[f] "
+            icon = _get_file_emoji(name) + " " if use_emoji else "[f] "
 
             name_with_meta = name
             if show_metadata and dir_map:
                 # Buscar metadatos del archivo
-                for path, tree_dict in dir_map.items():
+                for _path, tree_dict in dir_map.items():
                     if name in tree_dict and tree_dict[name] is None:
                         # Aquí podríamos agregar metadatos del archivo si los tuviéramos
                         break
@@ -531,9 +521,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Lista el contenido de un directorio con filtros avanzados."
     )
-    parser.add_argument(
-        "path", nargs="?", default=".", help="La ruta al directorio a listar."
-    )
+    parser.add_argument("path", nargs="?", default=".", help="La ruta al directorio a listar.")
     parser.add_argument(
         "--format",
         choices=["tree", "ascii", "json", "yaml", "flat"],
@@ -583,9 +571,7 @@ def main() -> None:
         )
         sys.exit(1)
 
-    tree_generator: Generator[
-        Tuple[Path, List[str], List[str], Dict[str, Any]], None, None
-    ] = build_tree(start_path, args)
+    tree_generator: TreeGenerator = build_tree(start_path, args)
 
     if args.format == "tree":
         render_tree(
@@ -607,7 +593,7 @@ def main() -> None:
         # Para formatos que necesitan estructura completa, reconstruir el árbol
         tree_structure: Dict[str, Any] = {}
         dir_map: Dict[Path, Dict[str, Any]] = {start_path: tree_structure}
-        dir_metadata_map: Dict[Path, Dict[str, Any]] = {}
+        dir_metadata_map: Dict[Path, DirectoryMetadata] = {}
 
         for dirpath, dirnames, filenames, metadata in tree_generator:
             current_level_tree = dir_map.get(dirpath, {})
@@ -645,7 +631,7 @@ def main() -> None:
                     # Convertir el directorio a un objeto con metadatos
                     if dirpath != start_path:
                         # Encontrar el directorio padre y reemplazar la referencia
-                        for parent_path, parent_tree in dir_map.items():
+                        for _parent_path, parent_tree in dir_map.items():
                             if isinstance(parent_tree, dict):
                                 for name, child in parent_tree.items():
                                     if child is tree_dict:
