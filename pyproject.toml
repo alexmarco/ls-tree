@@ -1,5 +1,5 @@
 [project]
-name = "ls-tree-py"
+name = "ltree"
 version = "25.10.0"
 description = "A modern Python command-line tool for listing directory contents with advanced filtering and metadata support"
 readme = "README.md"
