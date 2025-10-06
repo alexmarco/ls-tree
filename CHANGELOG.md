@@ -5,7 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [25.10.11] - 2025-10-06
+
+### 🐛 Fixed
+
+- **release**: Fix automation workflow issues
+
+
+
+### 🔧 Chore
+
+- Bump version to 25.10.11
+
+
+## [25.10.10] - 2025-10-06
+
+### 🔧 Chore
+
+- Bump version to 25.10.10
+
+
+
+### 🚀 Added
+
+- **release**: Implement fully automated release workflow
+
+
+## [25.10.9] - 2025-10-06
 
 ### 🐛 Fixed
 
@@ -26,6 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 Chore
 
 - Bump version to 25.10.8
+
+- Bump version to 25.10.9
 
 
 
