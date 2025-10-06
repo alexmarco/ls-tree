@@ -3,99 +3,115 @@ alwaysApply: false
 description: To keep our code organised, clean, and collaborative, it is essential that you follow this protocol when working with Git.
 ---
 
-# Protocolo de Trabajo con Git
+# Git Workflow Protocol
 
-## 1. Gestión de Ramas (Branches)
+## 1. Branch Management
 
-Toda nueva funcionalidad o corrección debe desarrollarse en su propia rama, nunca directamente sobre `main` o `develop`.
+All new features or fixes must be developed in their own branch, never directly on `main` or `develop`.
 
-### 1.1 Nomenclatura
+### 1.1 Naming Convention
 
-- **Funcionalidad:** `feat/nombre-funcionalidad` (ej: `feat/login-con-google`)
-- **Corrección:** `fix/descripcion-del-bug` (ej: `fix/error-al-enviar-formulario`)
-- **Mejora:** `chore/mejora-realizada` (ej: `chore/refactor-api-service`)
+- **Feature:** `feat/feature-name` (e.g., `feat/google-login`)
+- **Bug fix:** `fix/bug-description` (e.g., `fix/form-submission-error`)
+- **Chore:** `chore/improvement-description` (e.g., `chore/refactor-api-service`)
 
-### 1.2 Creación
+### 1.2 Branch Creation
 
-Crea tu rama siempre a partir de la última versión de `develop`:
+Always create your branch from the latest version of `develop`:
 
 ```shell
 git checkout develop
 git pull origin develop
-git checkout -b feat/nombre-de-tu-rama
+git checkout -b feat/your-branch-name
 ```
 
-## 2. Commits: Cuándo y Cómo Hacerlos
+## 2. Commits: When and How
 
-Un commit debe ser una unidad de trabajo lógica y completa.
+A commit should be a logical and complete unit of work.
 
-### 2.1 Cuándo
+### 2.1 When to Commit
 
-Haz un commit cada vez que completes un paso pequeño y funcional de tu tarea. Esto facilita la revisión y la reversión de cambios.
+Make a commit every time you complete a small, functional step of your task. This facilitates review and change rollback.
 
-### 2.2 Formato del Mensaje
+### 2.2 Message Format
 
-Usa **Conventional Commits**.
+Use **Conventional Commits**.
 
-- **Estructura:** `<tipo>(<ámbito>): <descripción>`
-- **Tipos comunes:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
-- **Ejemplos:**
-  - `feat(auth)`: añade inicio de sesión con correo y contraseña.
-  - `fix(api)`: corrige el error 500 al obtener usuarios
+- **Structure:** `<type>(<scope>): <description>`
+- **Common types:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+- **Examples:**
+  - `feat(auth): add email and password login`
+  - `fix(api): resolve 500 error when fetching users`
+  - `docs: update README with installation instructions`
+  - `chore: bump version to 25.10.4`
 
 ## 3. Pull Requests (PRs)
 
-Cuando tu rama esté lista para integrarse en `develop`, abre un Pull Request.
+When your branch is ready to be integrated into `develop`, open a Pull Request.
 
-### 3.1 Antes de crear el PR
+### 3.1 Before Creating the PR
 
-Sincroniza tu rama con los últimos cambios de `develop` para evitar conflictos: `git pull origin develop --rebase`
+Sync your branch with the latest changes from `develop` to avoid conflicts: `git pull origin develop --rebase`
 
-### 3.2 Creación del PR
+### 3.2 PR Creation
 
-- **Título claro:** Usa el mismo formato que en los commits.
-- **Descripción:** Explica qué hace el PR, cómo probarlo y enlaza el issue que resuelve (ej: `Closes #123`).
-- **Revisión:** Asigna al menos a un revisor. No fusiones tu propio PR sin aprobación. Atiende a los comentarios subiendo nuevos commits a tu rama.
+- **Clear title:** Use the same format as commits.
+- **Description:** Explain what the PR does, how to test it, and link the issue it resolves (e.g., `Closes #123`).
+- **Review:** Assign at least one reviewer. Don't merge your own PR without approval. Address comments by pushing new commits to your branch.
 
-## 4. Fusión (Merging)
+## 4. Merging
 
-Una vez aprobado el PR, se fusionará en `develop`.
+Once approved, the PR will be merged into `develop`.
 
-- **Método:** Utiliza siempre **Squash and Merge**. Esto agrupa todos tus commits en uno solo en `develop`, manteniendo el historial limpio.
-- **Limpieza:** Tras la fusión, elimina tu rama.
+- **Method:** Always use **Squash and Merge**. This groups all your commits into one in `develop`, keeping the history clean.
+- **Cleanup:** After merging, delete your branch.
 
-### 5. Gestión de Versiones y Tags
+## 5. Version Management and Tags
 
-Usamos tags para marcar los lanzamientos de versiones estables en producción.
+We use tags to mark stable version releases in production.
 
-### 5.1 Cuándo
+### 5.1 When to Tag
 
-Se crea un tag sobre la rama `main` justo después de fusionar en ella los cambios de `develop` que componen una nueva versión.
+Create a tag on the `main` branch right after merging the changes from `develop` that compose a new version.
 
-### 5.2 Versionado por Calendario (CalVer)
+### 5.2 Calendar Versioning (CalVer)
 
-Usaremos un formato basado en la fecha de lanzamiento, lo que hace que la antigüedad de una versión sea evidente. El formato será `YY.MM.MICRO`.
+We use a format based on the release date, making the age of a version evident. The format is `YY.MM.MICRO`.
 
-- **YY**: Las dos últimas cifras del año en curso (ej: 2025 -> 25).
-- **MM**: Mes con cero inicial (ej: 09 para septiembre).
-- **MICRO**: Un número secuencial que empieza en 0 para cada mes y se incrementa con cada nuevo lanzamiento dentro de ese mismo mes.
+- **YY**: Last two digits of the current year (e.g., 2025 -> 25).
+- **MM**: Month with leading zero (e.g., 09 for September).
+- **MICRO**: A sequential number starting at 0 for each month and incrementing with each new release within that same month.
 
-### 5.3 Proceso de creación de tag
+### 5.3 Tag Creation Process
 
-Ejemplo del primer lanzamiento de septiembre de 2025:
+Example for the first release of October 2025:
 
 ```shell
-# 1. Sitúate en main y actualiza
+# 1. Switch to main and update
 git checkout main
 git pull origin main
 
-# 2. Crea un tag anotado (con mensaje)
-git tag -a v25.10.0 -m "Lanzamiento de Octubre 2025"
+# 2. Create an annotated tag (with message)
+git tag -a v25.10.0 -m "October 2025 Release"
 
-# 3. Sube el tag al repositorio remoto
+# 3. Push the tag to remote repository
 git push origin v25.10.0
 ```
 
-Si hubiera otro lanzamiento en el mismo mes, el tag sería `v25.10.1`.
+If there were another release in the same month, the tag would be `v25.10.1`.
 
-Este protocolo nos ayudará a trabajar de manera más eficiente y a mantener la calidad de nuestro código. Si tienes alguna duda, pregúntame.
+## 6. Release Workflow
+
+### 6.1 Automatic Releases
+
+- Tags trigger automatic PyPI releases via GitHub Actions
+- Version numbers in `pyproject.toml` must match the tag
+- All dependencies must be properly declared
+
+### 6.2 Testing Before Release
+
+- All tests must pass in CI
+- Code must be linted and formatted with `ruff`
+- Type checking must pass with `mypy`
+
+This protocol will help us work more efficiently and maintain code quality.

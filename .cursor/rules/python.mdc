@@ -1,112 +1,120 @@
 ---
-description: Normas para escribir código python limpio, consistente y profesional
+description: Standards for writing clean, consistent, and professional Python code
 alwaysApply: false
 ---
-# Normas de Desarrollo con Python
 
-Para escribir código limpio, consistente y profesional, seguiremos estas directrices clave. El objetivo es maximizar la
-automatización y la coherencia.
+# Python Development Standards
 
-## 1. Gestión de Dependencias con `uv` y `pyproject.toml`
+To write clean, consistent, and professional code, we will follow these key guidelines. The goal is to maximize automation and coherence.
 
-La **única fuente de verdad** sobre las dependencias es el fichero `pyproject.toml`. El entorno virtual es solo un
-reflejo de este fichero.
+## 1. Dependency Management with `uv` and `pyproject.toml`
 
-### 1.1 Para Añadir/Actualizar una Dependencia
+The **single source of truth** for dependencies is the `pyproject.toml` file. The virtual environment is just a reflection of this file.
 
-1. **Edita manualmente** el `pyproject.toml` y añade la librería.
-2. **Sincroniza** tu entorno con el comando: `uv sync --all-extras`.
+### 1.1 To Add/Update a Dependency
 
-### 1.2 Para Sincronizar tu Entorno (tras un `git pull`)
+1. **Manually edit** the `pyproject.toml` and add the library.
+2. **Sync** your environment with the command: `uv sync --all-extras`.
 
-Usa siempre `uv sync --all-extras` para asegurar que tu entorno es idéntico al `pyproject.toml`.
+### 1.2 To Sync Your Environment (after a `git pull`)
 
-## 2. Formateo y Calidad de Código con `Ruff`
+Always use `uv sync --all-extras` to ensure your environment is identical to `pyproject.toml`.
 
-Usamos **Ruff** para todo: formateo (con un **límite de línea de 100 caracteres**), detección de errores y ordenación
-de `imports`.
+## 2. Code Formatting and Quality with `Ruff`
 
-### 2.1 Regla
+We use **Ruff** for everything: formatting (with a **100-character line limit**), error detection, and `import` sorting.
 
-Antes de hacer un `commit`, ejecuta: primero `uv run ruff format .` y después `uv run ruff check --fix .`.
+### 2.1 Rule
 
-## 3. Análisis de Tipado con `mypy` 🏷️
+Before making a `commit`, run: first `uv run ruff format .` and then `uv run ruff check --fix .`.
 
-El uso de **type hints es obligatorio**. `mypy` es nuestra herramienta para validar que el tipado es correcto.
+## 3. Type Analysis with `mypy` 🏷️
 
-### 3.1 Regla
+**Type hints are mandatory**. `mypy` is our tool to validate that typing is correct.
 
-Antes de confirmar tus cambios, comprueba que el código pasa la verificación de `mypy` sin errores. Comando
-`uv run mypy .`
+### 3.1 Rule
 
-## 4. Principios Clave del Tipado Estático 🧠
+Before confirming your changes, ensure the code passes `mypy` verification without errors. Command: `uv run mypy .`
 
-Más allá de la herramienta, aplicaremos esta filosofía para que el tipado sea útil y no un estorbo. El objetivo es la
-**claridad y la prevención de bugs**.
+## 4. Key Principles of Static Typing 🧠
 
-### 4.1. Las Firmas de las Funciones son Sagradas
+Beyond the tool, we will apply this philosophy so that typing is useful and not a hindrance. The goal is **clarity and bug prevention**.
 
-Toda función debe tener tipados sus argumentos y su valor de retorno.
+### 4.1. Function Signatures are Sacred
+
+Every function must have its arguments and return value typed.
 
 ```python
-# Correcto
-def procesar_usuario(user_id: int, es_admin: bool) -> dict[str, any]:
+# Correct
+def process_user(user_id: int, is_admin: bool) -> dict[str, any]:
     # ...
     return {}
 ```
 
-### 4.2. Sé Específico, Evita los Tipos Genéricos
+### 4.2. Be Specific, Avoid Generic Types
 
-Tipar algo como `list` o `dict` es mejor que nada, pero aporta poco valor. Sé tan específico como sea posible.
+Typing something as `list` or `dict` is better than nothing, but adds little value. Be as specific as possible.
 
 ```python
-# No hagas esto
-def obtener_nombres(usuarios: list) -> list:
+# Don't do this
+def get_names(users: list) -> list:
     # ...
 
-# Haz esto
-def obtener_nombres(usuarios: list[dict[str, any]]) -> list[str]:
+# Do this
+def get_names(users: list[dict[str, any]]) -> list[str]:
     # ...
 ```
 
-### 4.3. Usa `TypeAlias` para Simplificar Tipos Complejos
+### 4.3. Use `TypeAlias` to Simplify Complex Types
 
-Cuando un tipo se vuelve complejo o se repite mucho, crea un alias. Esto hace el código inmensamente más legible.
+When a type becomes complex or is repeated frequently, create an alias. This makes the code immensely more readable.
 
 ```python
 from typing import TypeAlias
 
-# Definimos un alias para un tipo complejo
-Usuario: TypeAlias = dict[str, str | int]
+# Define an alias for a complex type
+User: TypeAlias = dict[str, str | int]
 
-# El alias hace la firma de la función mucho más limpia
-def saludar_usuario(usuario: Usuario) -> str:
-    return f"Hola, {usuario['nombre']}"
+# The alias makes the function signature much cleaner
+def greet_user(user: User) -> str:
+    return f"Hello, {user['name']}"
 ```
 
-### 4.4 Usa `| None` para Valores Opcionales
+### 4.4 Use `| None` for Optional Values
 
-Si una variable puede ser de un tipo o `None`, indícalo explícitamente. Esto obliga a quien use la función a comprobar
-si el valor es nulo, previniendo incontables errores.
+If a variable can be of a type or `None`, indicate it explicitly. This forces whoever uses the function to check if the value is null, preventing countless errors.
 
 ```python
-def buscar_email(user_id: int) -> str | None:
-    # ... Si no se encuentra, retorna None
+def find_email(user_id: int) -> str | None:
+    # ... If not found, returns None
     return None
 ```
 
-### 4.5. `Any` es el Último Recurso
+### 4.5. `Any` is the Last Resort
 
-Usar `Any` es decirle a `mypy`: "No revises esta parte". Es una vía de escape necesaria a veces (ej: librerías sin
-tipos), pero su uso excesivo anula los beneficios del tipado. Siempre intenta encontrar un tipo más específico antes de
-recurrir a `Any`.
+Using `Any` is telling `mypy`: "Don't review this part". It's a necessary escape route sometimes (e.g., libraries without types), but excessive use negates the benefits of typing. Always try to find a more specific type before resorting to `Any`.
 
-## 5. Documentación y Nomenclatura 📖
+## 5. Documentation and Naming 📖
 
-* **Docstrings:** Usa el **estilo de Numpy** para documentar. Incluye ejemplos, retornos, y notas si fuera necesario
-* **Nomenclatura:** `snake_case` (variables/funciones), `PascalCase` (clases), `UPPER_SNAKE_CASE` (constantes).
+* **Docstrings:** Use **NumPy style** for documentation. Include examples, returns, and notes if necessary
+* **Naming:** `snake_case` (variables/functions), `PascalCase` (classes), `UPPER_SNAKE_CASE` (constants).
 
-## 6. Pruebas (Testing) ✅
+## 6. Testing ✅
 
-* **Framework:** Usaremos **pytest**.
-* **Regla:** Toda nueva funcionalidad o corrección debe ir acompañada de sus pruebas.
+* **Framework:** We will use **pytest**.
+* **Rule:** Every new feature or fix must be accompanied by its tests.
+
+## 7. Package Testing with `uvx`
+
+* **Testing installations:** Use `uvx package-name` to test package installation and execution
+* **Dependency verification:** Ensure all dependencies are properly declared in `pyproject.toml`
+* **Cross-platform testing:** Test on different operating systems when possible
+
+## 8. Code Language
+
+* **Code comments:** Always in English
+* **Docstrings:** Always in English
+* **Variable names:** Always in English
+* **Function names:** Always in English
+* **Class names:** Always in English
+* **Error messages:** Always in English
