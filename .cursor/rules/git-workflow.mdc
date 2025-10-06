@@ -300,4 +300,57 @@ If there were another release in the same month, the tag would be `v25.10.1`.
 - Code must be linted and formatted with `ruff`
 - Type checking must pass with `mypy`
 
+### 6.3 Changelog Generation
+
+We use **git-cliff** to automatically generate changelogs from git commits following Conventional Commits format.
+
+#### 6.3.1 Manual Changelog Generation
+
+```bash
+# Generate complete changelog
+git-cliff --output CHANGELOG.md
+
+# Generate only unreleased changes
+git-cliff --unreleased --output CHANGELOG.md
+
+# Generate changelog for specific version
+git-cliff --tag v25.10.8 --output CHANGELOG.md
+```
+
+#### 6.3.2 Automatic Changelog in CI/CD
+
+- **Release workflow**: Automatically generates changelog before building package
+- **Configuration**: Uses `cliff.toml` for custom formatting and grouping
+- **Integration**: Changelog is included in the release artifacts
+
+#### 6.3.3 Changelog Format
+
+The generated changelog follows:
+- **Keep a Changelog** format
+- **Semantic Versioning** compliance
+- **Conventional Commits** parsing
+- **Emoji categorization** for better readability
+- **GitHub links** for issues and commits
+
+#### 6.3.4 Commit Message Requirements
+
+For proper changelog generation, use Conventional Commits format:
+
+```bash
+# Features
+git commit -m "feat(auth): add email and password login"
+
+# Bug fixes
+git commit -m "fix(api): resolve 500 error when fetching users"
+
+# Documentation
+git commit -m "docs: update README with installation instructions"
+
+# Chores
+git commit -m "chore: bump version to 25.10.4"
+
+# Breaking changes
+git commit -m "feat(api)!: change authentication method"
+```
+
 This protocol will help us work more efficiently and maintain code quality.
