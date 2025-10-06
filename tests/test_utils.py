@@ -110,19 +110,19 @@ class TestFormatSize:
     def test_megabytes(self) -> None:
         """Test formatting of megabytes."""
         assert _format_size(1024 * 1024) == "1.0 MB"
-        assert _format_size(1024 * 1024 * 1.5) == "1.5 MB"
+        assert _format_size(int(1024 * 1024 * 1.5)) == "1.5 MB"
         assert _format_size(1024 * 1024 * 2) == "2.0 MB"
 
     def test_gigabytes(self) -> None:
         """Test formatting of gigabytes."""
         assert _format_size(1024 * 1024 * 1024) == "1.0 GB"
-        assert _format_size(1024 * 1024 * 1024 * 1.5) == "1.5 GB"
+        assert _format_size(int(1024 * 1024 * 1024 * 1.5)) == "1.5 GB"
         assert _format_size(1024 * 1024 * 1024 * 2) == "2.0 GB"
 
     def test_terabytes(self) -> None:
         """Test formatting of terabytes."""
         assert _format_size(1024 * 1024 * 1024 * 1024) == "1.0 TB"
-        assert _format_size(1024 * 1024 * 1024 * 1024 * 1.5) == "1.5 TB"
+        assert _format_size(int(1024 * 1024 * 1024 * 1024 * 1.5)) == "1.5 TB"
 
     def test_petabytes(self) -> None:
         """Test formatting of petabytes."""
@@ -145,7 +145,7 @@ class TestFormatSize:
         assert _format_size(1536) == "1.5 KB"
 
         # 1.25 MB
-        assert _format_size(1024 * 1024 * 1.25) == "1.2 MB"  # Rounded to 1 decimal
+        assert _format_size(int(1024 * 1024 * 1.25)) == "1.2 MB"  # Rounded to 1 decimal
 
         # 1.75 GB
-        assert _format_size(1024 * 1024 * 1024 * 1.75) == "1.8 GB"  # Rounded to 1 decimal
+        assert _format_size(int(1024 * 1024 * 1024 * 1.75)) == "1.8 GB"  # Rounded to 1 decimal
