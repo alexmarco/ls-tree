@@ -43,14 +43,14 @@ jobs:
     
     - name: Test CLI functionality
       run: |
-        uv run python -m ls_tree --help
-        uv run python -m ls_tree --format tree .
-        uv run python -m ls_tree --format ascii .
-        uv run python -m ls_tree --format flat .
-        uv run python -m ls_tree --format json .
-        uv run python -m ls_tree --format yaml .
-        uv run python -m ls_tree --show-metadata .
-        uv run python -m ls_tree --no-emoji .
+        uv run python -m trxd --help
+        uv run python -m trxd --format tree .
+        uv run python -m trxd --format ascii .
+        uv run python -m trxd --format flat .
+        uv run python -m trxd --format json .
+        uv run python -m trxd --format yaml .
+        uv run python -m trxd --show-metadata .
+        uv run python -m trxd --no-emoji .
 
   test-windows:
     runs-on: windows-latest
@@ -79,9 +79,9 @@ jobs:
     
     - name: Test CLI functionality on Windows
       run: |
-        uv run python -m ls_tree --help
-        uv run python -m ls_tree --format tree .
-        uv run python -m ls_tree --show-metadata .
+        uv run python -m trxd --help
+        uv run python -m trxd --format tree .
+        uv run python -m trxd --show-metadata .
 
   build:
     needs: [test, test-windows]
