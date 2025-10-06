@@ -325,9 +325,9 @@ Fixes #456
 ### Review Process
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#dc2626', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#b91c1c', 'lineColor': '#64748b', 'secondaryColor': '#fef2f2', 'tertiaryColor': '#fee2e2', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#fef2f2', 'tertiaryBkg': '#fee2e2'}}}%%
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#dc2626', 'primaryTextColor': '#1e293b', 'primaryBorderColor': '#b91c1c', 'lineColor': '#64748b', 'secondaryColor': '#fef2f2', 'tertiaryColor': '#fee2e2', 'background': '#ffffff', 'mainBkg': '#ffffff', 'secondBkg': '#fef2f2', 'tertiaryBkg': '#fee2e2'}}}%%
 graph TD
-    A[📤 PR Creado] --> B[🤖 CI/CD Checks]
+    A[📤 PR Created] --> B[🤖 CI/CD Checks]
     B --> C{✅ Checks Pass?}
     C -->|❌ No| D[🔧 Fix Issues]
     D --> B
@@ -338,9 +338,15 @@ graph TD
     F -->|✅ Yes| H[🎉 Merge PR]
     H --> I[🏷️ Auto Release]
     
-    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style H fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-    style I fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+    style C fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+    style D fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+    style E fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style F fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+    style G fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+    style H fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#1e293b
+    style I fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
 ```
 
 ## 📚 Additional Resources
