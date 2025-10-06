@@ -1,5 +1,5 @@
 [project]
-name = "ltree"
+name = "trxd"
 version = "25.10.0"
 description = "A modern Python command-line tool for listing directory contents with advanced filtering and metadata support"
 readme = "README.md"
@@ -89,7 +89,4 @@ build-backend = "hatchling.build"
 packages = ["src/ls_tree"]
 
 [dependency-groups]
-dev = [
-    "types-pyyaml>=6.0.12.20241230",
-    "twine>=5.0.0",
-]
+dev = ["types-pyyaml>=6.0.12.20241230", "twine>=5.0.0"]
