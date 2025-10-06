@@ -288,23 +288,62 @@ If there were another release in the same month, the tag would be `v25.10.1`.
 
 ## 6. Release Workflow
 
-### 6.1 Automatic Releases
+### 6.1 Fully Automated Releases
 
-- Tags trigger automatic PyPI releases via GitHub Actions
-- Version numbers in `pyproject.toml` must match the tag
-- All dependencies must be properly declared
+Our release process is **completely automated** through GitHub Actions:
 
-### 6.2 Testing Before Release
+1. **Create tag** → Triggers automatic workflows
+2. **Changelog generation** → Automatic from git commits
+3. **GitHub release** → Created with changelog
+4. **PyPI publication** → Automatic package upload
+
+### 6.2 Release Process
+
+#### 6.2.1 Using the Release Script (Recommended)
+
+```bash
+# Automatic version increment (recommended)
+python scripts/release.py
+
+# Specific version
+python scripts/release.py 25.10.10
+
+# Dry run to see what would happen
+python scripts/release.py --dry-run
+```
+
+#### 6.2.2 Manual Release Process
+
+```bash
+# 1. Update version in pyproject.toml
+# 2. Create tag
+git tag -a v25.10.10 -m "Release v25.10.10"
+
+# 3. Push changes
+git push origin main
+git push origin v25.10.10
+
+# 4. GitHub Actions handle the rest automatically
+```
+
+### 6.3 Testing Before Release
 
 - All tests must pass in CI
 - Code must be linted and formatted with `ruff`
 - Type checking must pass with `mypy`
 
-### 6.3 Changelog Generation
+### 6.4 Changelog Generation
 
 We use **git-cliff** to automatically generate changelogs from git commits following Conventional Commits format.
 
-#### 6.3.1 Manual Changelog Generation
+#### 6.4.1 Automatic Changelog in CI/CD
+
+- **Pre-release workflow**: Generates changelog when tag is created
+- **Release workflow**: Publishes to PyPI with updated changelog
+- **Configuration**: Uses `cliff.toml` for custom formatting and grouping
+- **Integration**: Changelog is automatically committed and included in releases
+
+#### 6.4.2 Manual Changelog Generation (if needed)
 
 ```bash
 # Generate complete changelog
@@ -317,13 +356,7 @@ git-cliff --unreleased --output CHANGELOG.md
 git-cliff --tag v25.10.8 --output CHANGELOG.md
 ```
 
-#### 6.3.2 Automatic Changelog in CI/CD
-
-- **Release workflow**: Automatically generates changelog before building package
-- **Configuration**: Uses `cliff.toml` for custom formatting and grouping
-- **Integration**: Changelog is included in the release artifacts
-
-#### 6.3.3 Changelog Format
+#### 6.4.3 Changelog Format
 
 The generated changelog follows:
 
@@ -333,7 +366,7 @@ The generated changelog follows:
 - **Emoji categorization** for better readability
 - **GitHub links** for issues and commits
 
-#### 6.3.4 Commit Message Requirements
+#### 6.4.4 Commit Message Requirements
 
 For proper changelog generation, use Conventional Commits format:
 
@@ -353,5 +386,13 @@ git commit -m "chore: bump version to 25.10.4"
 # Breaking changes
 git commit -m "feat(api)!: change authentication method"
 ```
+
+### 6.5 Release Automation Benefits
+
+- **Zero manual work**: Just create a tag, everything else is automatic
+- **Consistent format**: All releases follow the same format
+- **No forgotten steps**: Changelog, GitHub release, and PyPI upload are automatic
+- **Error prevention**: Automated checks ensure quality
+- **Time saving**: No manual changelog maintenance required
 
 This protocol will help us work more efficiently and maintain code quality.

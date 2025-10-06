@@ -1,0 +1,48 @@
+name: Pre-Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0  # Fetch all history for git-cliff
+    
+    - name: Install git-cliff
+      run: |
+        curl -L https://github.com/orhun/git-cliff/releases/download/v2.10.1/git-cliff-2.10.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
+        sudo mv git-cliff-2.10.1/git-cliff /usr/local/bin/
+        chmod +x /usr/local/bin/git-cliff
+    
+    - name: Generate changelog
+      run: git-cliff --output CHANGELOG.md
+    
+    - name: Commit updated changelog
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add CHANGELOG.md
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "chore: update changelog for ${{ github.ref_name }}"
+          git push origin HEAD:main
+        fi
+    
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false

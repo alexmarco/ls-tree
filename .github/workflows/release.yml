@@ -25,14 +25,7 @@ jobs:
     - name: Install dependencies
       run: uv sync --all-extras
     
-    - name: Install git-cliff
-      run: |
-        curl -L https://github.com/orhun/git-cliff/releases/download/v2.10.1/git-cliff-2.10.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
-        sudo mv git-cliff-2.10.1/git-cliff /usr/local/bin/
-        chmod +x /usr/local/bin/git-cliff
-    
-    - name: Generate changelog
-      run: git-cliff --output CHANGELOG.md
+    # Changelog is now handled by pre-release workflow
     
     - name: Build package
       run: uv build
