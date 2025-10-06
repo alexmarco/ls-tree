@@ -15,7 +15,7 @@ class TestIntegration:
     def test_cli_basic_usage(self, sample_tree: Path) -> None:
         """Test uso básico de la CLI."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(sample_tree)],
+            [sys.executable, "-m", "trxd", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -30,7 +30,7 @@ class TestIntegration:
     def test_cli_help(self) -> None:
         """Test que la ayuda se muestra correctamente."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--help"],
+            [sys.executable, "-m", "trxd", "--help"],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -44,7 +44,7 @@ class TestIntegration:
     def test_cli_invalid_directory(self) -> None:
         """Test manejo de directorio inválido."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "/nonexistent/directory"],
+            [sys.executable, "-m", "trxd", "/nonexistent/directory"],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -56,7 +56,7 @@ class TestIntegration:
     def test_cli_tree_format(self, sample_tree: Path) -> None:
         """Test formato tree."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--format", "tree", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--format", "tree", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -70,7 +70,7 @@ class TestIntegration:
     def test_cli_ascii_format(self, sample_tree: Path) -> None:
         """Test formato ASCII."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--format", "ascii", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--format", "ascii", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -84,7 +84,7 @@ class TestIntegration:
     def test_cli_flat_format(self, sample_tree: Path) -> None:
         """Test formato flat."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--format", "flat", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--format", "flat", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -99,7 +99,7 @@ class TestIntegration:
     def test_cli_json_format(self, sample_tree: Path) -> None:
         """Test formato JSON."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--format", "json", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--format", "json", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -118,7 +118,7 @@ class TestIntegration:
     def test_cli_yaml_format(self, sample_tree: Path) -> None:
         """Test formato YAML."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--format", "yaml", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--format", "yaml", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -137,7 +137,7 @@ class TestIntegration:
     def test_cli_no_emoji(self, sample_tree: Path) -> None:
         """Test opción --no-emoji."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--no-emoji", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--no-emoji", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -150,7 +150,7 @@ class TestIntegration:
     def test_cli_show_metadata(self, sample_tree: Path) -> None:
         """Test opción --show-metadata."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", "--show-metadata", str(sample_tree)],
+            [sys.executable, "-m", "trxd", "--show-metadata", str(sample_tree)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -166,7 +166,7 @@ class TestIntegration:
             [
                 sys.executable,
                 "-m",
-                "ls_tree",
+                "trxd",
                 "--exclude",
                 "*.pyc",
                 "--exclude-dir",
@@ -189,7 +189,7 @@ class TestIntegration:
             [
                 sys.executable,
                 "-m",
-                "ls_tree",
+                "trxd",
                 "-x",
                 "*.pyc",
                 "-x",
@@ -218,7 +218,7 @@ class TestIntegration:
             [
                 sys.executable,
                 "-m",
-                "ls_tree",
+                "trxd",
                 "--format",
                 "json",
                 "--show-metadata",
@@ -251,7 +251,7 @@ class TestIntegration:
             [
                 sys.executable,
                 "-m",
-                "ls_tree",
+                "trxd",
                 "--format",
                 "yaml",
                 "--show-metadata",
@@ -284,7 +284,7 @@ class TestIntegration:
             [
                 sys.executable,
                 "-m",
-                "ls_tree",
+                "trxd",
                 "--format",
                 "tree",
                 "--no-emoji",
@@ -310,7 +310,7 @@ class TestIntegration:
     def test_cli_current_directory(self, sample_tree: Path) -> None:
         """Test que se usa el directorio actual por defecto."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree"],
+            [sys.executable, "-m", "trxd"],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -323,7 +323,7 @@ class TestIntegration:
     def test_cli_empty_directory(self, temp_dir: Path) -> None:
         """Test directorio vacío."""
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(temp_dir)],
+            [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -339,7 +339,7 @@ class TestIntegration:
         test_file.write_text("test content")
 
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(temp_dir)],
+            [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -360,7 +360,7 @@ class TestIntegration:
         (temp_dir / "level1" / "level2" / "level2.txt").write_text("level2")
 
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(temp_dir)],
+            [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -382,7 +382,7 @@ class TestIntegration:
         (temp_dir / "data.json").write_text('{"key": "value"}')
 
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(temp_dir)],
+            [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -407,7 +407,7 @@ class TestIntegration:
                 (subdir / f"file_{i}_{j}.txt").write_text(f"content {i}_{j}")
 
         result = subprocess.run(
-            [sys.executable, "-m", "ls_tree", str(temp_dir)],
+            [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
             text=True,
             encoding="utf-8",

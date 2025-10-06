@@ -1,4 +1,4 @@
-# Fichero: src/ls_tree/__init__.py (versión mejorada con tipos y documentación)
+# Fichero: src/ls_tree/__init__.py (trxd - versión mejorada con tipos y documentación)
 
 import argparse
 import json

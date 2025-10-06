@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from ls_tree import build_tree
+from trxd import build_tree
 
 
 class TestBuildTree:

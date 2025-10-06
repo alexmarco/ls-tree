@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 
-from ls_tree import is_excluded
+from trxd import is_excluded
 
 
 class TestIsExcluded:

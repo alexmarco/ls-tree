@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 import yaml
 
-from ls_tree import main
+from trxd import main
 
 
 class TestMain:

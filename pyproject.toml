@@ -33,13 +33,13 @@ dependencies = ["pyyaml>=6.0.3"]
 dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "ruff>=0.1.0", "mypy>=1.0.0"]
 
 [project.urls]
-Homepage = "https://github.com/alejandromarcoramos/ls-tree"
-Repository = "https://github.com/alejandromarcoramos/ls-tree"
-Issues = "https://github.com/alejandromarcoramos/ls-tree/issues"
-Documentation = "https://github.com/alejandromarcoramos/ls-tree#readme"
+Homepage = "https://github.com/alexmarco/ls-tree"
+Repository = "https://github.com/alexmarco/ls-tree"
+Issues = "https://github.com/alexmarco/ls-tree/issues"
+Documentation = "https://github.com/alexmarco/ls-tree#readme"
 
 [project.scripts]
-trxd = "ls_tree:main"
+trxd = "trxd:main"
 
 [tool.ruff]
 line-length = 100
@@ -58,7 +58,7 @@ select = [
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["ls_tree"]
+known-first-party = ["ls_tree", "trxd"]
 
 [tool.mypy]
 python_version = "3.8"
@@ -86,7 +86,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/ls_tree"]
+packages = ["src/ls_tree", "src/trxd"]
 
 [dependency-groups]
 dev = ["types-pyyaml>=6.0.12.20241230", "twine>=5.0.0"]

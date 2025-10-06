@@ -5,7 +5,7 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
-from ls_tree import build_tree, render_flat, render_tree
+from trxd import build_tree, render_flat, render_tree
 
 
 class TestRenderFlat:

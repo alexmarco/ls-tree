@@ -4,7 +4,7 @@ from datetime import datetime
 
 import pytest
 
-from ls_tree import DirectoryMetadata, FileMetadata
+from trxd import DirectoryMetadata, FileMetadata
 
 
 class TestFileMetadata:
