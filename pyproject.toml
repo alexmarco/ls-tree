@@ -1,6 +1,6 @@
 [project]
 name = "trxd"
-version = "25.10.12"
+version = "25.10.13"
 description = "A modern Python command-line tool for listing directory contents with advanced filtering and metadata support"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -43,7 +43,7 @@ trxd = "trxd:main"
 
 [tool.ruff]
 line-length = 100
-target-version = "py38"
+target-version = "25.10.13"
 
 [tool.ruff.lint]
 select = [
@@ -61,7 +61,7 @@ ignore = []
 known-first-party = ["trxd"]
 
 [tool.mypy]
-python_version = "25.10.12"
+python_version = "25.10.13"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
