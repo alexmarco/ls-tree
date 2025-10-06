@@ -530,7 +530,7 @@ def main() -> None:
     SystemExit
         Exit with code 1 if the provided path is not a valid directory.
     """
-    # Configurar codificación UTF-8 para Windows solo si no estamos en tests
+    # Configure UTF-8 encoding for Windows only if we are not in tests
     if sys.platform == "win32":
         # Check if we are in a test
         import inspect
@@ -557,7 +557,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="List the contents of a directory with advanced filters."
     )
-    parser.add_argument("path", nargs="?", default=".", help="La ruta al directorio a listar.")
+    parser.add_argument("path", nargs="?", default=".", help="The path to the directory to list.")
     parser.add_argument(
         "--format",
         choices=["tree", "ascii", "json", "yaml", "flat"],
