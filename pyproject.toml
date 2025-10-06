@@ -88,4 +88,5 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "types-pyyaml>=6.0.12.20241230",
+    "twine>=5.0.0",
 ]
