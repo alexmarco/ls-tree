@@ -457,7 +457,16 @@ class TestIntegration:
     def test_cli_csv_format_with_exclusions(self, sample_tree: Path) -> None:
         """Test CLI with CSV format and exclusions."""
         result = subprocess.run(
-            [sys.executable, "-m", "trxd", str(sample_tree), "--format", "csv", "--exclude", "*.pyc"],
+            [
+                sys.executable,
+                "-m",
+                "trxd",
+                str(sample_tree),
+                "--format",
+                "csv",
+                "--exclude",
+                "*.pyc",
+            ],
             capture_output=True,
             text=True,
             encoding="utf-8",

@@ -5,7 +5,8 @@ alwaysApply: false
 
 # Python Development Standards
 
-To write clean, consistent, and professional code, we will follow these key guidelines. The goal is to maximize automation and coherence.
+To write clean, consistent, and professional code, we will follow these key guidelines. The goal is to maximize
+automation and coherence.
 
 ## 1. Dependency Management with `uv` and `pyproject.toml`
 

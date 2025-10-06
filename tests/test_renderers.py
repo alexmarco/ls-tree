@@ -343,7 +343,9 @@ class TestRenderCsv:
 
     def test_render_csv_with_exclusions(self, sample_tree: Path) -> None:
         """Test CSV rendering with exclusions."""
-        args = argparse.Namespace(exclude=["*.pyc"], exclude_dir=["__pycache__"], exclude_file=[], show_metadata=False)
+        args = argparse.Namespace(
+            exclude=["*.pyc"], exclude_dir=["__pycache__"], exclude_file=[], show_metadata=False
+        )
 
         tree_generator = build_tree(sample_tree, args)
 
@@ -363,7 +365,7 @@ class TestRenderCsv:
         # Create an empty directory
         empty_dir = temp_dir / "empty_dir"
         empty_dir.mkdir()
-        
+
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(empty_dir, args)
@@ -373,7 +375,7 @@ class TestRenderCsv:
             output = mock_stdout.getvalue()
 
         # Should only contain header and directory entry
-        lines = output.strip().split('\n')
+        lines = output.strip().split("\n")
         assert len(lines) == 2  # Header + directory
         assert "type,path,name,extension" in lines[0]
         assert "directory,.,empty_dir," in lines[1]
@@ -384,7 +386,7 @@ class TestRenderCsv:
         single_file_dir = temp_dir / "single_file_dir"
         single_file_dir.mkdir()
         (single_file_dir / "single_file.txt").write_text("content")
-        
+
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(single_file_dir, args)
@@ -394,7 +396,7 @@ class TestRenderCsv:
             output = mock_stdout.getvalue()
 
         # Should contain header, directory, and file
-        lines = output.strip().split('\n')
+        lines = output.strip().split("\n")
         assert len(lines) == 3  # Header + directory + file
         assert "type,path,name,extension" in lines[0]
         assert "directory,.,single_file_dir," in lines[1]
