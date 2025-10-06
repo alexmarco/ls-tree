@@ -342,17 +342,17 @@ graph TD
 
 ### Documentation
 
-- [README.md](README.md) - Información general del proyecto
-- [CHANGELOG.md](CHANGELOG.md) - Historial de cambios
-- [pyproject.toml](pyproject.toml) - Configuración del proyecto
+- [README.md](README.md) - General project information
+- [CHANGELOG.md](CHANGELOG.md) - Change history
+- [pyproject.toml](pyproject.toml) - Project configuration
 
 ### Tools
 
-- [uv](https://github.com/astral-sh/uv) - Gestor de dependencias
-- [ruff](https://github.com/astral-sh/ruff) - Linter y formateador
-- [mypy](https://mypy.readthedocs.io/) - Verificador de tipos
-- [pytest](https://pytest.org/) - Framework de testing
-- [git-cliff](https://git-cliff.org/) - Generador de changelogs
+- [uv](https://github.com/astral-sh/uv) - Dependency manager
+- [ruff](https://github.com/astral-sh/ruff) - Linter and formatter
+- [mypy](https://mypy.readthedocs.io/) - Type checker
+- [pytest](https://pytest.org/) - Testing framework
+- [git-cliff](https://git-cliff.org/) - Changelog generator
 
 ### Useful Links
 
