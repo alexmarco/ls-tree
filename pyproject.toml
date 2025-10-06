@@ -33,10 +33,10 @@ dependencies = ["pyyaml>=6.0.3"]
 dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "ruff>=0.1.0", "mypy>=1.0.0"]
 
 [project.urls]
-Homepage = "https://github.com/alexmarco/ls-tree"
-Repository = "https://github.com/alexmarco/ls-tree"
-Issues = "https://github.com/alexmarco/ls-tree/issues"
-Documentation = "https://github.com/alexmarco/ls-tree#readme"
+Homepage = "https://github.com/alexmarco/trxd"
+Repository = "https://github.com/alexmarco/trxd"
+Issues = "https://github.com/alexmarco/trxd/issues"
+Documentation = "https://github.com/alexmarco/trxd#readme"
 
 [project.scripts]
 trxd = "trxd:main"
