@@ -338,8 +338,8 @@ We use **git-cliff** to automatically generate changelogs from git commits follo
 
 #### 6.4.1 Automatic Changelog in CI/CD
 
-- **Pre-release workflow**: Generates changelog when tag is created
-- **Release workflow**: Publishes to PyPI with updated changelog
+- **Changelog workflow**: Generates and commits changelog when tag is created
+- **Release workflow**: Creates GitHub release and publishes to PyPI
 - **Configuration**: Uses `cliff.toml` for custom formatting and grouping
 - **Integration**: Changelog is automatically committed and included in releases
 

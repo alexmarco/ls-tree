@@ -33,6 +33,18 @@ jobs:
     - name: Check package
       run: uv run twine check dist/* || echo "Package check completed"
     
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: ${{ github.ref_name }}
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false
+        files: dist/*
+    
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__

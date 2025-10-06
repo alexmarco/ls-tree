@@ -110,11 +110,18 @@ def main():
         print(f"Error: Must be on main branch, currently on {current_branch}")
         sys.exit(1)
     
-    # Check if working directory is clean
+    # Check if working directory is clean (ignore untracked files)
     result = run_command("git status --porcelain", check=False)
     if result.stdout.strip():
-        print("Error: Working directory is not clean. Please commit or stash changes.")
-        sys.exit(1)
+        # Check if there are only untracked files
+        lines = result.stdout.strip().split('\n')
+        tracked_changes = [line for line in lines if not line.startswith('??')]
+        if tracked_changes:
+            print("Error: Working directory has uncommitted changes. Please commit or stash changes.")
+            print("Uncommitted changes:")
+            for line in tracked_changes:
+                print(f"  {line}")
+            sys.exit(1)
     
     # Update version
     update_version(new_version)
@@ -128,7 +135,7 @@ def main():
     run_command("git push origin main")
     run_command(f"git push origin v{new_version}")
     
-    print(f"\n🎉 Release v{new_version} created successfully!")
+    print(f"\nRelease v{new_version} created successfully!")
     print("GitHub Actions will now:")
     print("1. Generate and update changelog automatically")
     print("2. Create GitHub release with changelog")

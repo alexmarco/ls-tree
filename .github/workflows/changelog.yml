@@ -1,9 +1,12 @@
-name: Pre-Release
+name: Update Changelog
 
 on:
   push:
     tags:
       - 'v*.*.*'
+
+permissions:
+  contents: write
 
 jobs:
   update-changelog:
@@ -35,14 +38,3 @@ jobs:
           git commit -m "chore: update changelog for ${{ github.ref_name }}"
           git push origin HEAD:main
         fi
-    
-    - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref_name }}
-        release_name: ${{ github.ref_name }}
-        body_path: CHANGELOG.md
-        draft: false
-        prerelease: false
