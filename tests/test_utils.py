@@ -1,9 +1,5 @@
 """Tests para funciones utilitarias."""
 
-from pathlib import Path
-
-import pytest
-
 from ls_tree import _format_size, _get_file_emoji
 
 
@@ -138,7 +134,7 @@ class TestFormatSize:
         # 5 TB
         size_5tb = 5 * 1024 * 1024 * 1024 * 1024
         assert _format_size(size_5tb) == "5.0 TB"
-        
+
         # 10 PB
         size_10pb = 10 * 1024 * 1024 * 1024 * 1024 * 1024
         assert _format_size(size_10pb) == "10.0 PB"
@@ -147,9 +143,9 @@ class TestFormatSize:
         """Test precisión decimal."""
         # 1.5 KB
         assert _format_size(1536) == "1.5 KB"
-        
+
         # 1.25 MB
         assert _format_size(1024 * 1024 * 1.25) == "1.2 MB"  # Redondeado a 1 decimal
-        
+
         # 1.75 GB
         assert _format_size(1024 * 1024 * 1024 * 1.75) == "1.8 GB"  # Redondeado

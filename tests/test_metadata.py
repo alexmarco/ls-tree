@@ -14,16 +14,16 @@ class TestFileMetadata:
         """Test creación básica de FileMetadata."""
         size = 1024
         modified = datetime(2024, 1, 15, 14, 30, 0)
-        
+
         metadata = FileMetadata(size=size, modified=modified)
-        
+
         assert metadata.size == size
         assert metadata.modified == modified
 
     def test_file_metadata_immutable(self) -> None:
         """Test que FileMetadata es inmutable (NamedTuple)."""
         metadata = FileMetadata(size=1024, modified=datetime.now())
-        
+
         # NamedTuple es inmutable, no se puede modificar
         with pytest.raises(AttributeError):
             metadata.size = 2048  # type: ignore
@@ -34,7 +34,7 @@ class TestFileMetadata:
         metadata1 = FileMetadata(size=1024, modified=dt)
         metadata2 = FileMetadata(size=1024, modified=dt)
         metadata3 = FileMetadata(size=2048, modified=dt)
-        
+
         assert metadata1 == metadata2
         assert metadata1 != metadata3
 
@@ -42,7 +42,7 @@ class TestFileMetadata:
         """Test representación string de FileMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata = FileMetadata(size=1024, modified=dt)
-        
+
         repr_str = repr(metadata)
         assert "FileMetadata" in repr_str
         assert "1024" in repr_str
@@ -57,25 +57,19 @@ class TestDirectoryMetadata:
         file_count = 5
         total_size = 2048
         modified = datetime(2024, 1, 15, 14, 30, 0)
-        
+
         metadata = DirectoryMetadata(
-            file_count=file_count,
-            total_size=total_size,
-            modified=modified
+            file_count=file_count, total_size=total_size, modified=modified
         )
-        
+
         assert metadata.file_count == file_count
         assert metadata.total_size == total_size
         assert metadata.modified == modified
 
     def test_directory_metadata_immutable(self) -> None:
         """Test que DirectoryMetadata es inmutable (NamedTuple)."""
-        metadata = DirectoryMetadata(
-            file_count=5,
-            total_size=2048,
-            modified=datetime.now()
-        )
-        
+        metadata = DirectoryMetadata(file_count=5, total_size=2048, modified=datetime.now())
+
         # NamedTuple es inmutable, no se puede modificar
         with pytest.raises(AttributeError):
             metadata.file_count = 10  # type: ignore
@@ -86,7 +80,7 @@ class TestDirectoryMetadata:
         metadata1 = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
         metadata2 = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
         metadata3 = DirectoryMetadata(file_count=10, total_size=2048, modified=dt)
-        
+
         assert metadata1 == metadata2
         assert metadata1 != metadata3
 
@@ -94,7 +88,7 @@ class TestDirectoryMetadata:
         """Test representación string de DirectoryMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
-        
+
         repr_str = repr(metadata)
         assert "DirectoryMetadata" in repr_str
         assert "5" in repr_str
