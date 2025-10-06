@@ -6,9 +6,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Generator, Iterator, List, NamedTuple, Tuple, Union
-from typing_extensions import TypeAlias
 
 import yaml
+from typing_extensions import TypeAlias
 
 
 class FileMetadata(NamedTuple):
@@ -68,10 +68,9 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
         return True
 
     # Verificar patrones específicos de fichero
-    if path.is_file() and any(path.match(pattern) for pattern in exclude_file_patterns if pattern):
-        return True
-
-    return False
+    return path.is_file() and any(
+        path.match(pattern) for pattern in exclude_file_patterns if pattern
+    )
 
 
 def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
@@ -487,11 +486,17 @@ def _render_tree_recursive(
                     if tree_dict is subtree and path in metadata_map:
                         dir_metadata = metadata_map[path].get("directory")
                         if dir_metadata:
-                            name_with_meta = f"{name} [{dir_metadata.file_count} files, {_format_size(dir_metadata.total_size)}, {dir_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
+                            name_with_meta = (
+                            f"{name} [{dir_metadata.file_count} files, "
+                            f"{_format_size(dir_metadata.total_size)}, "
+                            f"{dir_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
+                        )
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
             extension: str = "    " if is_last else "│   "
-            _render_tree_recursive(subtree, prefix + extension, use_emoji, show_metadata, dir_map, metadata_map)
+            _render_tree_recursive(
+                subtree, prefix + extension, use_emoji, show_metadata, dir_map, metadata_map
+            )
         else:
             # Usar emoji específico para el tipo de archivo si está habilitado
             icon = _get_file_emoji(name) + " " if use_emoji else "[f] "
@@ -503,7 +508,10 @@ def _render_tree_recursive(
                     if name in tree_dict and tree_dict[name] is None and path in metadata_map:
                         file_metadata = metadata_map[path].get("files", {}).get(name)
                         if file_metadata:
-                            name_with_meta = f"{name} [{_format_size(file_metadata.size)}, {file_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
+                            name_with_meta = (
+                                f"{name} [{_format_size(file_metadata.size)}, "
+                                f"{file_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
+                            )
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
 
@@ -526,7 +534,6 @@ def main() -> None:
         Sale con código 1 si la ruta proporcionada no es un directorio válido.
     """
     # Configurar codificación UTF-8 para Windows solo si no estamos en tests
-    import sys
     if sys.platform == "win32":
         # Verificar si estamos en un test
         import inspect
@@ -537,7 +544,7 @@ def main() -> None:
                 in_test = True
                 break
             frame = frame.f_back
-        
+
         if not in_test:
             try:
                 import codecs

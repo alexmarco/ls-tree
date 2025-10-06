@@ -22,7 +22,7 @@ def sample_tree(temp_dir: Path) -> Path:
     (temp_dir / "src" / "components").mkdir()
     (temp_dir / "src" / "utils").mkdir()
     (temp_dir / "docs").mkdir()
-    
+
     # Crear archivos
     (temp_dir / "README.md").write_text("# Proyecto de prueba")
     (temp_dir / "src" / "main.py").write_text("print('Hello World')")
@@ -30,7 +30,7 @@ def sample_tree(temp_dir: Path) -> Path:
     (temp_dir / "src" / "components" / "Header.py").write_text("class Header: pass")
     (temp_dir / "src" / "utils" / "helpers.py").write_text("def helper(): pass")
     (temp_dir / "docs" / "manual.pdf").write_text("PDF content")
-    
+
     # Crear archivos que serán excluidos en las pruebas
     (temp_dir / "src" / "__pycache__").mkdir()
     (temp_dir / "src" / "__pycache__" / "main.pyc").write_text("compiled")
@@ -39,5 +39,5 @@ def sample_tree(temp_dir: Path) -> Path:
     (temp_dir / "node_modules" / "package").mkdir()
     (temp_dir / ".git").mkdir()
     (temp_dir / ".git" / "config").write_text("git config")
-    
+
     return temp_dir
