@@ -12,61 +12,61 @@ from trxd import main
 
 
 class TestMain:
-    """Tests para la función main."""
+    """Tests for 'main' function."""
 
     def test_main_help(self) -> None:
-        """Test que la ayuda se muestra correctamente."""
+        """Test that the help is shown correctly."""
         with patch("sys.argv", ["trxd", "--help"]):
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert exc_info.value.code == 0
 
     def test_main_invalid_directory(self) -> None:
-        """Test que se maneja correctamente un directorio inválido."""
+        """Test that an invalid directory is handled correctly."""
         with patch("sys.argv", ["trxd", "/nonexistent/directory"]), patch(
             "sys.stderr", new_callable=StringIO
         ) as mock_stderr, pytest.raises(SystemExit) as exc_info:
             main()
             assert exc_info.value.code == 1
-            assert "no es un directorio válido" in mock_stderr.getvalue()
+            assert "is not a valid directory" in mock_stderr.getvalue()
 
     def test_main_default_format(self, sample_tree: Path) -> None:
-        """Test formato por defecto (tree con emojis)."""
+        """Test default format (tree with emojis)."""
         with patch("sys.argv", ["trxd", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se usa formato tree con emojis
+        # Verify that tree format with emojis is used
         assert "📁" in output
         assert "🐍" in output
         assert "├──" in output
         assert "└──" in output
 
     def test_main_tree_format(self, sample_tree: Path) -> None:
-        """Test formato tree explícito."""
+        """Test explicit tree format."""
         with patch("sys.argv", ["trxd", "--format", "tree", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se usa formato tree
+        # Verify that tree format is used
         assert "📁" in output
         assert "🐍" in output
         assert "├──" in output
         assert "└──" in output
 
     def test_main_ascii_format(self, sample_tree: Path) -> None:
-        """Test formato ASCII."""
+        """Test ASCII format."""
         with patch("sys.argv", ["trxd", "--format", "ascii", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se usa formato ASCII
+        # Verify that ASCII format is used
         assert "📁" not in output
         assert "🐍" not in output
         assert "[d]" in output
@@ -75,14 +75,14 @@ class TestMain:
         assert "└──" in output
 
     def test_main_flat_format(self, sample_tree: Path) -> None:
-        """Test formato flat."""
+        """Test flat format."""
         with patch("sys.argv", ["trxd", "--format", "flat", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se usa formato flat
+        # Verify that flat format is used
         assert "📁" not in output
         assert "🐍" not in output
         assert "├──" not in output
@@ -91,69 +91,69 @@ class TestMain:
         assert "main.py" in output
 
     def test_main_json_format(self, sample_tree: Path) -> None:
-        """Test formato JSON."""
+        """Test JSON format."""
         with patch("sys.argv", ["trxd", "--format", "json", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se genera JSON válido
+        # Verify that valid JSON is generated
         try:
             json_data = json.loads(output)
             assert isinstance(json_data, dict)
-            # Verificar estructura básica
+            # Verify basic structure
             assert "src" in json_data
         except json.JSONDecodeError:
             pytest.fail("Output no es JSON válido")
 
     def test_main_yaml_format(self, sample_tree: Path) -> None:
-        """Test formato YAML."""
+        """Test YAML format."""
         with patch("sys.argv", ["trxd", "--format", "yaml", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se genera YAML válido
+        # Verify that valid YAML is generated
         try:
             yaml_data = yaml.safe_load(output)
             assert isinstance(yaml_data, dict)
-            # Verificar estructura básica
+            # Verify basic structure
             assert "src" in yaml_data
         except yaml.YAMLError:
             pytest.fail("Output no es YAML válido")
 
     def test_main_no_emoji(self, sample_tree: Path) -> None:
-        """Test opción --no-emoji."""
+        """Test --no-emoji option."""
         with patch("sys.argv", ["trxd", "--no-emoji", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que NO se usan emojis
+        # Verify that no emojis are used
         assert "📁" not in output
         assert "🐍" not in output
-        # Verificar que se usan marcadores ASCII
+        # Verify that ASCII markers are used
         assert "[d]" in output
         assert "[f]" in output
 
     def test_main_show_metadata(self, sample_tree: Path) -> None:
-        """Test opción --show-metadata."""
+        """Test --show-metadata option."""
         with patch("sys.argv", ["trxd", "--show-metadata", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen metadatos
-        assert "[" in output  # Metadatos en formato [X files, Y KB]
+        # Verify that metadata is included
+        assert "[" in output  # Metadata in format [X files, Y KB]
         assert "files" in output
         assert "KB" in output or "B" in output
 
     def test_main_exclude_patterns(self, sample_tree: Path) -> None:
-        """Test patrones de exclusión."""
+        """Test exclusion patterns."""
         with patch(
             "sys.argv",
             ["trxd", "--exclude", "*.pyc", "--exclude-dir", "__pycache__", str(sample_tree)],
@@ -161,14 +161,14 @@ class TestMain:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se excluyen archivos y directorios
+        # Verify that files and directories are excluded
         assert "main.pyc" not in output
         assert "__pycache__" not in output
-        # Verificar que se incluyen archivos válidos
+        # Verify that valid files are included
         assert "main.py" in output
 
     def test_main_multiple_exclusions(self, sample_tree: Path) -> None:
-        """Test múltiples exclusiones."""
+        """Test multiple exclusions."""
         with patch(
             "sys.argv",
             [
@@ -187,39 +187,39 @@ class TestMain:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se excluyen múltiples patrones
+        # Verify that multiple patterns are excluded
         assert "main.pyc" not in output
         assert "main.pyo" not in output
         assert "__pycache__" not in output
         assert "node_modules" not in output
-        # Verificar que se incluyen archivos válidos
+        # Verify that valid files are included
         assert "main.py" in output
 
     def test_main_current_directory(self, sample_tree: Path) -> None:
-        """Test que se usa el directorio actual por defecto."""
+        """Test that the current directory is used by default."""
         with patch("sys.argv", ["trxd"]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout, patch("pathlib.Path.cwd", return_value=sample_tree):
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se procesa el directorio actual
+        # Verify that the current directory is processed
         assert "src" in output or "main.py" in output
 
     def test_main_json_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato JSON con metadatos."""
+        """Test JSON format with metadata."""
         with patch(
             "sys.argv", ["trxd", "--format", "json", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se genera JSON válido con metadatos
+        # Verify that valid JSON with metadata is generated
         try:
             json_data = json.loads(output)
             assert isinstance(json_data, dict)
 
-            # Verificar que se incluyen metadatos
+            # Verify that metadata is included
             if "_metadata" in json_data:
                 metadata = json_data["_metadata"]
                 assert "file_count" in metadata
@@ -229,19 +229,19 @@ class TestMain:
             pytest.fail("Output no es JSON válido")
 
     def test_main_yaml_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato YAML con metadatos."""
+        """Test YAML format with metadata."""
         with patch(
             "sys.argv", ["trxd", "--format", "yaml", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se genera YAML válido con metadatos
+        # Verify that valid YAML with metadata is generated
         try:
             yaml_data = yaml.safe_load(output)
             assert isinstance(yaml_data, dict)
 
-            # Verificar que se incluyen metadatos
+            # Verify that metadata is included
             if "_metadata" in yaml_data:
                 metadata = yaml_data["_metadata"]
                 assert "file_count" in metadata
@@ -251,36 +251,36 @@ class TestMain:
             pytest.fail("Output no es YAML válido")
 
     def test_main_flat_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato flat con metadatos."""
+        """Test flat format with metadata."""
         with patch(
             "sys.argv", ["trxd", "--format", "flat", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen metadatos en formato flat
-        assert "[" in output  # Metadatos en formato [X files, Y KB]
+        # Verify that metadata is included in flat format
+        assert "[" in output  # Metadata in format [X files, Y KB]
         assert "files" in output
         assert "KB" in output or "B" in output
 
     def test_main_ascii_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato ASCII con metadatos."""
+        """Test ASCII format with metadata."""
         with patch(
             "sys.argv", ["trxd", "--format", "ascii", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se usa formato ASCII con metadatos
+        # Verify that ASCII format with metadata is used
         assert "📁" not in output
         assert "🐍" not in output
         assert "[d]" in output
         assert "[f]" in output
-        assert "[" in output  # Metadatos
+        assert "[" in output  # Metadata
         assert "files" in output
 
     def test_main_combined_options(self, sample_tree: Path) -> None:
-        """Test combinación de múltiples opciones."""
+        """Test combination of multiple options."""
         with patch(
             "sys.argv",
             [
@@ -297,11 +297,11 @@ class TestMain:
             main()
             output = mock_stdout.getvalue()
 
-        # Verificar que se aplican todas las opciones
+        # Verify that all options are applied
         assert "📁" not in output  # No emojis
-        assert "[d]" in output  # Marcadores ASCII
-        assert "[f]" in output  # Marcadores ASCII
-        assert "[" in output  # Metadatos
-        assert "files" in output  # Metadatos
-        assert "main.pyc" not in output  # Excluido
-        assert "main.py" in output  # Incluido
+        assert "[d]" in output  # ASCII markers
+        assert "[f]" in output  # ASCII markers
+        assert "[" in output  # Metadata
+        assert "files" in output  # Metadata
+        assert "main.pyc" not in output  # Excluded
+        assert "main.py" in output  # Included

@@ -1,4 +1,4 @@
-"""Tests para las funciones de renderizado."""
+"""Tests for the render functions."""
 
 import argparse
 from io import StringIO
@@ -9,10 +9,10 @@ from trxd import build_tree, render_flat, render_tree
 
 
 class TestRenderFlat:
-    """Tests para la función render_flat."""
+    """Tests for the render_flat function."""
 
     def test_render_flat_basic(self, sample_tree: Path) -> None:
-        """Test renderizado básico en formato plano."""
+        """Test basic rendering in flat format."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
@@ -21,7 +21,7 @@ class TestRenderFlat:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen directorios y archivos
+        # Verify that directories and files are included
         assert "src" in output
         assert "src\\main.py" in output or "src/main.py" in output
         assert "src\\components" in output or "src/components" in output
@@ -33,7 +33,7 @@ class TestRenderFlat:
         assert "docs\\manual.pdf" in output or "docs/manual.pdf" in output
 
     def test_render_flat_with_metadata(self, sample_tree: Path) -> None:
-        """Test renderizado plano con metadatos."""
+        """Test flat rendering with metadata."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(sample_tree, args)
@@ -42,13 +42,13 @@ class TestRenderFlat:
             render_flat(tree_generator, sample_tree, show_metadata=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen metadatos
-        assert "[" in output  # Metadatos en formato [X files, Y KB]
+        # Verify that metadata is included
+        assert "[" in output  # Metadata in format [X files, Y KB]
         assert "files" in output
         assert "KB" in output or "B" in output
 
     def test_render_flat_with_exclusions(self, sample_tree: Path) -> None:
-        """Test renderizado plano con exclusiones."""
+        """Test flat rendering with exclusions."""
         args = argparse.Namespace(
             exclude=["*.pyc"],
             exclude_dir=["__pycache__", "node_modules", ".git"],
@@ -62,18 +62,18 @@ class TestRenderFlat:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
-        # Verificar que se excluyen archivos y directorios
+        # Verify that files and directories are excluded
         assert "main.pyc" not in output
         assert "__pycache__" not in output
         assert "node_modules" not in output
         assert ".git" not in output
 
-        # Verificar que se incluyen archivos válidos
+        # Verify that valid files are included
         assert "main.py" in output
         assert "Button.py" in output
 
     def test_render_flat_empty_directory(self, temp_dir: Path) -> None:
-        """Test renderizado plano en directorio vacío."""
+        """Test flat rendering in empty directory."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
@@ -82,11 +82,11 @@ class TestRenderFlat:
             render_flat(tree_generator, temp_dir)
             output = mock_stdout.getvalue()
 
-        # Debería mostrar solo el directorio raíz (puede estar vacío)
+        # Should show only the root directory (may be empty)
         assert output.strip() == "." or output.strip() == ""
 
     def test_render_flat_single_file(self, temp_dir: Path) -> None:
-        """Test renderizado plano con un solo archivo."""
+        """Test flat rendering with a single file."""
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
@@ -98,11 +98,11 @@ class TestRenderFlat:
             render_flat(tree_generator, temp_dir)
             output = mock_stdout.getvalue()
 
-        # Debería mostrar el directorio y el archivo
+        # Should show the directory and the file
         assert "test.txt" in output
 
     def test_render_flat_relative_paths(self, sample_tree: Path) -> None:
-        """Test que se muestran rutas relativas correctamente."""
+        """Test that relative paths are shown correctly."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
@@ -111,18 +111,18 @@ class TestRenderFlat:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
-        # Verificar que no se incluyen rutas absolutas
+        # Verify that absolute paths are not included
         assert str(sample_tree) not in output
-        # Verificar que se incluyen rutas relativas
+        # Verify that relative paths are included
         assert "src" in output
         assert "src\\main.py" in output or "src/main.py" in output
 
 
 class TestRenderTree:
-    """Tests para la función render_tree."""
+    """Tests for the render_tree function."""
 
     def test_render_tree_basic(self, sample_tree: Path) -> None:
-        """Test renderizado básico en formato árbol."""
+        """Test basic rendering in tree format."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
@@ -131,16 +131,16 @@ class TestRenderTree:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen elementos del árbol
-        assert "📁" in output  # Emoji de directorio
-        assert "🐍" in output  # Emoji de Python
-        assert "├──" in output  # Conectores del árbol
-        assert "└──" in output  # Conectores del árbol
+        # Verify that elements of the tree are included
+        assert "📁" in output  # Directory emoji
+        assert "🐍" in output  # Python emoji
+        assert "├──" in output  # Tree connectors
+        assert "└──" in output  # Tree connectors
         assert "src" in output
         assert "main.py" in output
 
     def test_render_tree_no_emoji(self, sample_tree: Path) -> None:
-        """Test renderizado en formato árbol sin emojis."""
+        """Test tree rendering without emojis."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
@@ -149,17 +149,17 @@ class TestRenderTree:
             render_tree(tree_generator, sample_tree, use_emoji=False)
             output = mock_stdout.getvalue()
 
-        # Verificar que NO se incluyen emojis
+        # Verify that emojis are not included
         assert "📁" not in output
         assert "🐍" not in output
-        # Verificar que se incluyen marcadores ASCII
-        assert "[d]" in output  # Marcador de directorio
-        assert "[f]" in output  # Marcador de archivo
-        assert "├──" in output  # Conectores del árbol
-        assert "└──" in output  # Conectores del árbol
+        # Verify that ASCII markers are included
+        assert "[d]" in output  # Directory marker
+        assert "[f]" in output  # File marker
+        assert "├──" in output  # Tree connectors
+        assert "└──" in output  # Tree connectors
 
     def test_render_tree_with_metadata(self, sample_tree: Path) -> None:
-        """Test renderizado en formato árbol con metadatos."""
+        """Test tree rendering with metadata."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(sample_tree, args)
@@ -168,13 +168,13 @@ class TestRenderTree:
             render_tree(tree_generator, sample_tree, use_emoji=True, show_metadata=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen metadatos
-        assert "[" in output  # Metadatos en formato [X files, Y KB]
+        # Verify that metadata is included
+        assert "[" in output  # Metadata in format [X files, Y KB]
         assert "files" in output
         assert "KB" in output or "B" in output
 
     def test_render_tree_with_exclusions(self, sample_tree: Path) -> None:
-        """Test renderizado en formato árbol con exclusiones."""
+        """Test tree rendering with exclusions."""
         args = argparse.Namespace(
             exclude=["*.pyc"],
             exclude_dir=["__pycache__", "node_modules", ".git"],
@@ -188,18 +188,18 @@ class TestRenderTree:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se excluyen archivos y directorios
+        # Verify that files and directories are excluded
         assert "main.pyc" not in output
         assert "__pycache__" not in output
         assert "node_modules" not in output
         assert ".git" not in output
 
-        # Verificar que se incluyen archivos válidos
+        # Verify that valid files are included
         assert "main.py" in output
         assert "Button.py" in output
 
     def test_render_tree_empty_directory(self, temp_dir: Path) -> None:
-        """Test renderizado en formato árbol en directorio vacío."""
+        """Test tree rendering in empty directory."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
@@ -208,11 +208,11 @@ class TestRenderTree:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Debería mostrar solo el directorio raíz (puede estar vacío)
+        # Should show only the root directory (may be empty)
         assert "📁" in output or "[d]" in output or output.strip() == ""
 
     def test_render_tree_single_file(self, temp_dir: Path) -> None:
-        """Test renderizado en formato árbol con un solo archivo."""
+        """Test tree rendering with a single file."""
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
@@ -224,18 +224,18 @@ class TestRenderTree:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Debería mostrar el directorio y el archivo
+        # Should show the directory and the file
         assert "test.txt" in output
-        # En directorio con un solo archivo, puede no mostrar el directorio raíz
+        # In directory with a single file, the root directory may not be shown
         assert "📄" in output or "[f]" in output
 
     def test_render_tree_nested_structure(self, temp_dir: Path) -> None:
-        """Test renderizado en formato árbol con estructura anidada."""
+        """Test tree rendering with nested structure."""
         # Crear estructura anidada
         (temp_dir / "level1").mkdir()
         (temp_dir / "level1" / "level2").mkdir()
 
-        # Crear archivos en diferentes niveles
+        # Create files at different levels
         (temp_dir / "root.txt").write_text("root")
         (temp_dir / "level1" / "level1.txt").write_text("level1")
         (temp_dir / "level1" / "level2" / "level2.txt").write_text("level2")
@@ -248,21 +248,21 @@ class TestRenderTree:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen todos los niveles
+        # Verify that all levels are included
         assert "level1" in output
         assert "level2" in output
         assert "root.txt" in output
         assert "level1.txt" in output
         assert "level2.txt" in output
 
-        # Verificar conectores del árbol
+        # Verify tree connectors
         assert "├──" in output
         assert "└──" in output
-        assert "│   " in output  # Indentación
+        assert "│   " in output  # Indentation
 
     def test_render_tree_file_types(self, temp_dir: Path) -> None:
-        """Test renderizado en formato árbol con diferentes tipos de archivo."""
-        # Crear archivos de diferentes tipos
+        """Test tree rendering with different file types."""
+        # Create files of different types
         (temp_dir / "script.py").write_text("print('hello')")
         (temp_dir / "style.css").write_text("body { color: red; }")
         (temp_dir / "index.html").write_text("<html></html>")
@@ -277,7 +277,7 @@ class TestRenderTree:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que se incluyen emojis específicos para cada tipo
+        # Verify that specific emojis are included for each type
         assert "🐍" in output  # Python
         assert "🎨" in output  # CSS
         assert "🌐" in output  # HTML
@@ -285,7 +285,7 @@ class TestRenderTree:
         assert "🖼️" in output  # PNG
 
     def test_render_tree_relative_paths(self, sample_tree: Path) -> None:
-        """Test que se muestran rutas relativas correctamente."""
+        """Test that relative paths are shown correctly."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
@@ -294,8 +294,8 @@ class TestRenderTree:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 
-        # Verificar que no se incluyen rutas absolutas
+        # Verify that absolute paths are not included
         assert str(sample_tree) not in output
-        # Verificar que se incluyen rutas relativas
+        # Verify that relative paths are included
         assert "src" in output
         assert "main.py" in output

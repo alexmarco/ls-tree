@@ -1,4 +1,4 @@
-"""Tests para las clases de metadatos."""
+"""Tests for metadata classes."""
 
 from datetime import datetime
 
@@ -8,10 +8,10 @@ from trxd import DirectoryMetadata, FileMetadata
 
 
 class TestFileMetadata:
-    """Tests para la clase FileMetadata."""
+    """Tests for the FileMetadata class."""
 
     def test_file_metadata_creation(self) -> None:
-        """Test creación básica de FileMetadata."""
+        """Test basic creation of FileMetadata."""
         size = 1024
         modified = datetime(2024, 1, 15, 14, 30, 0)
 
@@ -21,15 +21,15 @@ class TestFileMetadata:
         assert metadata.modified == modified
 
     def test_file_metadata_immutable(self) -> None:
-        """Test que FileMetadata es inmutable (NamedTuple)."""
+        """Test that FileMetadata is immutable (NamedTuple)."""
         metadata = FileMetadata(size=1024, modified=datetime.now())
 
-        # NamedTuple es inmutable, no se puede modificar
+        # NamedTuple is immutable, cannot be modified
         with pytest.raises(AttributeError):
             metadata.size = 2048  # type: ignore
 
     def test_file_metadata_equality(self) -> None:
-        """Test igualdad de FileMetadata."""
+        """Test equality of FileMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata1 = FileMetadata(size=1024, modified=dt)
         metadata2 = FileMetadata(size=1024, modified=dt)
@@ -39,7 +39,7 @@ class TestFileMetadata:
         assert metadata1 != metadata3
 
     def test_file_metadata_repr(self) -> None:
-        """Test representación string de FileMetadata."""
+        """Test string representation of FileMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata = FileMetadata(size=1024, modified=dt)
 
@@ -50,10 +50,10 @@ class TestFileMetadata:
 
 
 class TestDirectoryMetadata:
-    """Tests para la clase DirectoryMetadata."""
+    """Tests for the DirectoryMetadata class."""
 
     def test_directory_metadata_creation(self) -> None:
-        """Test creación básica de DirectoryMetadata."""
+        """Test basic creation of DirectoryMetadata."""
         file_count = 5
         total_size = 2048
         modified = datetime(2024, 1, 15, 14, 30, 0)
@@ -67,15 +67,15 @@ class TestDirectoryMetadata:
         assert metadata.modified == modified
 
     def test_directory_metadata_immutable(self) -> None:
-        """Test que DirectoryMetadata es inmutable (NamedTuple)."""
+        """Test that DirectoryMetadata is immutable (NamedTuple)."""
         metadata = DirectoryMetadata(file_count=5, total_size=2048, modified=datetime.now())
 
-        # NamedTuple es inmutable, no se puede modificar
+        # NamedTuple is immutable, cannot be modified
         with pytest.raises(AttributeError):
             metadata.file_count = 10  # type: ignore
 
     def test_directory_metadata_equality(self) -> None:
-        """Test igualdad de DirectoryMetadata."""
+        """Test equality of DirectoryMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata1 = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
         metadata2 = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
@@ -85,7 +85,7 @@ class TestDirectoryMetadata:
         assert metadata1 != metadata3
 
     def test_directory_metadata_repr(self) -> None:
-        """Test representación string de DirectoryMetadata."""
+        """Test string representation of DirectoryMetadata."""
         dt = datetime(2024, 1, 15, 14, 30, 0)
         metadata = DirectoryMetadata(file_count=5, total_size=2048, modified=dt)
 

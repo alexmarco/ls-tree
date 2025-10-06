@@ -12,40 +12,40 @@ from typing_extensions import TypeAlias
 
 
 class FileMetadata(NamedTuple):
-    """Metadatos de un archivo."""
+    """File metadata"""
 
     size: int
     modified: datetime
 
 
 class DirectoryMetadata(NamedTuple):
-    """Metadatos de un directorio."""
+    """Directory metadata"""
 
     file_count: int
     total_size: int
     modified: datetime
 
 
-# Type aliases para simplificar tipos complejos
+# Type aliases to simplify complex types
 TreeItem: TypeAlias = Tuple[Path, List[str], List[str], Dict[str, Any]]
 TreeGenerator: TypeAlias = Generator[TreeItem, None, None]
 
 
 def is_excluded(path: Path, args: argparse.Namespace) -> bool:
     """
-    Comprueba si un fichero o directorio debe ser excluido según los filtros.
+    Check if a file or directory should be excluded according to the filters.
 
     Parameters
     ----------
     path : Path
-        La ruta del fichero o directorio a verificar.
+        The path of the file or directory to check.
     args : argparse.Namespace
-        Los argumentos de línea de comandos que contienen los patrones de exclusión.
+        The command-line arguments that contain the exclusion patterns.
 
     Returns
     -------
     bool
-        True si el path debe ser excluido, False en caso contrario.
+        True if the path should be excluded, False otherwise.
 
     Examples
     --------
@@ -59,15 +59,15 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
     exclude_dir_patterns: Iterator[str] = iter(args.exclude_dir)
     exclude_file_patterns: Iterator[str] = iter(args.exclude_file)
 
-    # Verificar patrones generales
+    # Check general patterns
     if any(path.match(pattern) for pattern in exclude_patterns if pattern):
         return True
 
-    # Verificar patrones específicos de directorio
+    # Check specific directory patterns
     if path.is_dir() and any(path.match(pattern) for pattern in exclude_dir_patterns if pattern):
         return True
 
-    # Verificar patrones específicos de fichero
+    # Check specific file patterns
     return path.is_file() and any(
         path.match(pattern) for pattern in exclude_file_patterns if pattern
     )
@@ -75,28 +75,28 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
 
 def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
     """
-    Genera la estructura del directorio usando el moderno pathlib.Path.walk.
+    Generates the directory structure using the modern pathlib.Path.walk.
 
     Parameters
     ----------
     directory : Path
-        El directorio raíz desde el cual construir el árbol.
+        The root directory from which to build the tree.
     args : argparse.Namespace
-        Los argumentos de línea de comandos que contienen los filtros de exclusión.
+        The command-line arguments that contain the exclusion filters.
 
     Yields
     ------
     Tuple[Path, List[str], List[str], Dict[str, Any]]
-        Tupla que contiene (dirpath, dirnames, filenames, metadata) para cada directorio.
-        Los directorios y ficheros ya están filtrados según los criterios de exclusión.
-        metadata contiene información sobre archivos y directorios si está habilitada.
+        Tuple that contains (dirpath, dirnames, filenames, metadata) for each directory.
+        The directories and files are already filtered according to the exclusion criteria.
+        metadata contains information about files and directories if enabled.
 
     Notes
     -----
-    Esta función utiliza la poda inteligente modificando 'dirnames' in-place
-    para evitar explorar directorios excluidos, mejorando la eficiencia.
-    Al ser un generador, permite procesar directorios grandes de forma eficiente
-    sin cargar toda la estructura en memoria.
+    This function uses the intelligent pruning modifying 'dirnames' in-place
+    to avoid exploring excluded directories, improving efficiency.
+    As a generator, it allows processing large directories efficiently without loading the entire
+    structure into memory.
 
     Examples
     --------
@@ -104,25 +104,25 @@ def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
     >>> for dirpath, dirs, files in build_tree(Path('src/'), args):
     ...     print(f"Directorio: {dirpath}, Subdirs: {len(dirs)}, Archivos: {len(files)}")
     """
-    # Usamos os.walk() para compatibilidad con Python 3.8+
+    # We use os.walk() for compatibility with Python 3.8+
     import os
 
     for dirpath_str, dirnames, filenames in os.walk(directory, topdown=True):
         dirpath = Path(dirpath_str)
-        # --- PODA INTELIGENTE ---
-        # Filtramos directorios usando iteradores para mayor eficiencia
+        # --- INTELLIGENT PRUNING ---
+        # Filter directories using iterators for greater efficiency
         filtered_dirs = (d for d in sorted(dirnames) if not is_excluded(dirpath / d, args))
         dirnames[:] = list(filtered_dirs)
 
-        # --- FILTRADO DE FICHEROS ---
+        # --- FILE FILTERING ---
         filtered_files = (f for f in sorted(filenames) if not is_excluded(dirpath / f, args))
         filenames = list(filtered_files)
 
-        # --- RECOLECCIÓN DE METADATOS ---
+        # --- METADATA COLLECTION ---
         metadata: Dict[str, Any] = {}
 
         if args.show_metadata:
-            # Metadatos de archivos
+            # File metadata
             file_metadata: Dict[str, FileMetadata] = {}
             total_size = 0
 
@@ -136,10 +136,10 @@ def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
                     )
                     total_size += stat.st_size
                 except (OSError, IOError):
-                    # Archivo no accesible
+                    # File not accessible
                     file_metadata[filename] = FileMetadata(size=0, modified=datetime.min)
 
-            # Metadatos del directorio
+            # Directory metadata
             try:
                 dir_stat = dirpath.stat()
                 dir_modified = datetime.fromtimestamp(dir_stat.st_mtime)
@@ -155,31 +155,27 @@ def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
                 ),
             }
 
-        # Yield del directorio procesado
+        # Yield the processed directory
         yield dirpath, dirnames, filenames, metadata
-
-
-# --- El resto del script (renderizadores y función main) no necesita cambios ---
-
 
 def _get_file_emoji(filename: str) -> str:
     """
-    Obtiene un emoji apropiado para el tipo de archivo basado en su extensión.
+    Get an appropriate emoji for the file type based on its extension.
 
     Parameters
     ----------
     filename : str
-        Nombre del archivo incluyendo extensión.
+        The file name including the extension.
 
     Returns
     -------
     str
-        Emoji apropiado para el tipo de archivo, o emoji por defecto si no se encuentra.
+        Appropriate emoji for the file type, or default emoji if not found.
     """
-    # Obtener extensión del archivo
+    # Get the file extension
     extension = Path(filename).suffix.lower()
 
-    # Mapeo de extensiones a emojis
+    # Mapping of extensions to emojis
     emoji_map = {
         # Documentos
         ".pdf": "📄",
@@ -189,7 +185,7 @@ def _get_file_emoji(filename: str) -> str:
         ".md": "📝",
         ".rst": "📝",
         ".rtf": "📄",
-        # Imágenes
+        # Images
         ".jpg": "🖼️",
         ".jpeg": "🖼️",
         ".png": "🖼️",
@@ -217,7 +213,7 @@ def _get_file_emoji(filename: str) -> str:
         ".ogg": "🎵",
         ".m4a": "🎵",
         ".wma": "🎵",
-        # Código fuente
+        # Source code
         ".py": "🐍",
         ".js": "📜",
         ".ts": "📜",
@@ -252,7 +248,7 @@ def _get_file_emoji(filename: str) -> str:
         ".ps1": "💻",
         ".bat": "💻",
         ".cmd": "💻",
-        # Datos
+        # Data
         ".json": "📋",
         ".xml": "📋",
         ".yaml": "📋",
@@ -264,7 +260,7 @@ def _get_file_emoji(filename: str) -> str:
         ".db": "🗄️",
         ".sqlite": "🗄️",
         ".sqlite3": "🗄️",
-        # Configuración
+        # Configuration
         ".ini": "⚙️",
         ".cfg": "⚙️",
         ".conf": "⚙️",
@@ -274,7 +270,7 @@ def _get_file_emoji(filename: str) -> str:
         ".gitignore": "🙈",
         ".dockerfile": "🐳",
         ".dockerignore": "🐳",
-        # Comprimidos
+        # Compressed
         ".zip": "📦",
         ".rar": "📦",
         ".7z": "📦",
@@ -282,7 +278,7 @@ def _get_file_emoji(filename: str) -> str:
         ".gz": "📦",
         ".bz2": "📦",
         ".xz": "📦",
-        # Ejecutables
+        # Executables
         ".exe": "⚡",
         ".msi": "⚡",
         ".deb": "📱",
@@ -290,12 +286,12 @@ def _get_file_emoji(filename: str) -> str:
         ".dmg": "📱",
         ".app": "📱",
         ".run": "⚡",
-        # Fuentes
+        # Fonts
         ".ttf": "🔤",
         ".otf": "🔤",
         ".woff": "🔤",
         ".woff2": "🔤",
-        # Otros
+        # Others
         ".lock": "🔒",
         ".log": "📋",
         ".tmp": "🗑️",
@@ -304,22 +300,22 @@ def _get_file_emoji(filename: str) -> str:
         ".orig": "🗑️",
     }
 
-    return emoji_map.get(extension, "📄")  # Emoji por defecto
+    return emoji_map.get(extension, "📄")  # Default emoji
 
 
 def _format_size(size_bytes: int) -> str:
     """
-    Formatea el tamaño en bytes a una representación legible.
+    Format the size in bytes to a readable representation.
 
     Parameters
     ----------
     size_bytes : int
-        Tamaño en bytes.
+        Size in bytes.
 
     Returns
     -------
     str
-        Tamaño formateado (ej: "1.2 KB", "3.4 MB").
+        Formatted size (e.g.: "1.2 KB", "3.4 MB").
     """
     if size_bytes == 0:
         return "0 B"
@@ -338,16 +334,16 @@ def render_flat(
     show_metadata: bool = False,
 ) -> None:
     """
-    Renderiza la estructura en formato plano con rutas completas.
+    Render the structure in flat format with full paths.
 
     Parameters
     ----------
     tree_generator : Generator[Tuple[Path, List[str], List[str], Dict[str, Any]], None, None]
-        El generador de la estructura del directorio.
+        The generator of the directory structure.
     start_path : Path, optional
-        La ruta base para mostrar las rutas relativas, por defecto Path(".").
+        The base path to show relative paths, default Path(".").
     show_metadata : bool, optional
-        Si mostrar metadatos (tamaño, fecha) junto con las rutas.
+        If show metadata (size, date) together with the paths.
 
     Examples
     --------
@@ -360,7 +356,7 @@ def render_flat(
     project/src/utils/helper.py
     """
     for dirpath, _dirnames, filenames, metadata in tree_generator:
-        # Calcular ruta relativa
+        # Calculate relative path
         try:
             rel_path = dirpath.relative_to(start_path)
             if rel_path != Path("."):
@@ -376,10 +372,10 @@ def render_flat(
                 else:
                     print(str(rel_path))
         except ValueError:
-            # Si no es subdirectorio, mostrar ruta absoluta
+            # If not a subdirectory, show absolute path
             print(str(dirpath))
 
-        # Mostrar archivos en este directorio
+        # Show files in this directory
         for filename in filenames:
             file_path = dirpath / filename
             try:
@@ -404,18 +400,18 @@ def render_tree(
     show_metadata: bool = False,
 ) -> None:
     """
-    Renderiza la estructura en formato de árbol con conectores ASCII.
+    Render the structure in tree format with ASCII connectors.
 
     Parameters
     ----------
     tree_generator : Generator[Tuple[Path, List[str], List[str], Dict[str, Any]], None, None]
-        El generador de la estructura del directorio.
+        The generator of the directory structure.
     start_path : Path, optional
-        La ruta base para mostrar las rutas relativas, por defecto Path(".").
+        The base path to show relative paths, default Path(".").
     use_emoji : bool, optional
-        Si usar emojis para representar directorios y ficheros, por defecto True.
+        If use emojis to represent directories and files, default True.
     show_metadata : bool, optional
-        Si mostrar metadatos (tamaño, fecha) junto con los nombres.
+        If show metadata (size, date) together with the names.
 
     Examples
     --------
@@ -427,28 +423,28 @@ def render_tree(
     │   └── [d] utils
     │       └── [f] helper.py
     """
-    # Construir estructura completa para renderizado en árbol
+    # Build complete structure for tree rendering
     tree_structure: Dict[str, Union[Dict[str, Any], None]] = {}
     dir_map: Dict[Path, Dict[str, Union[Dict[str, Any], None]]] = {start_path: tree_structure}
     metadata_map: Dict[Path, Dict[str, Any]] = {}
 
-    # Procesar todos los elementos del generador
+    # Process all elements of the generator
     for dirpath, _dirnames, _filenames, metadata in tree_generator:
-        # Obtener el diccionario del directorio actual
+        # Get the dictionary of the current directory
         current_level_tree: Dict[str, Union[Dict[str, Any], None]] = dir_map.get(dirpath, {})
         metadata_map[dirpath] = metadata
 
-        # Añadir subdirectorios
+        # Add subdirectories
         for d_name in _dirnames:
             subdir_dict: Dict[str, Union[Dict[str, Any], None]] = {}
             current_level_tree[d_name] = subdir_dict
             dir_map[dirpath / d_name] = subdir_dict
 
-        # Añadir archivos
+        # Add files
         for f_name in _filenames:
             current_level_tree[f_name] = None
 
-    # Renderizar el árbol construido
+    # Render the built tree
     _render_tree_recursive(tree_structure, "", use_emoji, show_metadata, dir_map, metadata_map)
 
 
@@ -461,16 +457,16 @@ def _render_tree_recursive(
     metadata_map: Union[Dict[Path, Dict[str, Any]], None] = None,
 ) -> None:
     """
-    Función auxiliar para renderizar recursivamente el árbol.
+    Auxiliary function to render the tree recursively.
 
     Parameters
     ----------
     tree : Dict[str, Union[Dict[str, Any], None]]
-        El árbol de directorios a renderizar.
+        The tree of directories to render.
     prefix : str
-        El prefijo de espaciado para la indentación.
+        The prefix for the indentation.
     use_emoji : bool
-        Si usar emojis para representar directorios y ficheros.
+        If use emojis to represent directories and files.
     """
     entries = list(tree.items())
 
@@ -482,7 +478,7 @@ def _render_tree_recursive(
             icon: str = "📁 " if use_emoji else "[d] "
             name_with_meta = name
             if show_metadata and dir_map and metadata_map:
-                # Buscar metadatos del directorio
+                # Search directory metadata
                 for path, tree_dict in dir_map.items():
                     if tree_dict is subtree and path in metadata_map:
                         dir_metadata = metadata_map[path].get("directory")
@@ -499,12 +495,12 @@ def _render_tree_recursive(
                 subtree, prefix + extension, use_emoji, show_metadata, dir_map, metadata_map
             )
         else:
-            # Usar emoji específico para el tipo de archivo si está habilitado
+            # Use specific emoji for the file type if enabled
             icon = _get_file_emoji(name) + " " if use_emoji else "[f] "
 
             name_with_meta = name
             if show_metadata and dir_map and metadata_map:
-                # Buscar metadatos del archivo
+                # Search file metadata
                 for path, tree_dict in dir_map.items():
                     if name in tree_dict and tree_dict[name] is None and path in metadata_map:
                         file_metadata = metadata_map[path].get("files", {}).get(name)
@@ -519,24 +515,24 @@ def _render_tree_recursive(
 
 def main() -> None:
     """
-    Punto de entrada principal para la herramienta de línea de comandos.
+    Main entry point for the command-line tool.
 
-    Esta función configura el parser de argumentos, valida la ruta de entrada,
-    construye el árbol de directorios y renderiza la salida en el formato solicitado.
+    This function configures the argument parser, validates the input path,
+    builds the directory tree and renders the output in the requested format.
 
     Returns
     -------
     None
-        Esta función no retorna valor, imprime la salida directamente.
+        This function does not return value, prints the output directly.
 
     Raises
     ------
     SystemExit
-        Sale con código 1 si la ruta proporcionada no es un directorio válido.
+        Exit with code 1 if the provided path is not a valid directory.
     """
     # Configurar codificación UTF-8 para Windows solo si no estamos en tests
     if sys.platform == "win32":
-        # Verificar si estamos en un test
+        # Check if we are in a test
         import inspect
 
         frame = inspect.currentframe()
@@ -556,49 +552,49 @@ def main() -> None:
                 if hasattr(sys.stderr, "detach"):
                     sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
             except (AttributeError, OSError):
-                # Si no se puede configurar UTF-8, continuar sin cambios
+                # If UTF-8 cannot be configured, continue without changes
                 pass
     parser = argparse.ArgumentParser(
-        description="Lista el contenido de un directorio con filtros avanzados."
+        description="List the contents of a directory with advanced filters."
     )
     parser.add_argument("path", nargs="?", default=".", help="La ruta al directorio a listar.")
     parser.add_argument(
         "--format",
         choices=["tree", "ascii", "json", "yaml", "flat"],
         default="tree",
-        help="Formato de salida.",
+        help="Output format.",
     )
     parser.add_argument(
         "-x",
         "--exclude",
         action="append",
         default=[],
-        help="Patrón a excluir (ficheros y directorios).",
+        help="Pattern to exclude (files and directories).",
     )
     parser.add_argument(
         "-xd",
         "--exclude-dir",
         action="append",
         default=[],
-        help="Patrón a excluir (solo directorios).",
+        help="Pattern to exclude (only directories).",
     )
     parser.add_argument(
         "-xf",
         "--exclude-file",
         action="append",
         default=[],
-        help="Patrón a excluir (solo ficheros).",
+        help="Pattern to exclude (only files).",
     )
     parser.add_argument(
         "-m",
         "--show-metadata",
         action="store_true",
-        help="Mostrar metadatos (tamaño, fecha de modificación) para archivos y directorios.",
+        help="Show metadata (size, modification date) for files and directories.",
     )
     parser.add_argument(
         "--no-emoji",
         action="store_true",
-        help="Desactivar emojis en el formato tree (usar caracteres ASCII en su lugar).",
+        help="Disable emojis in tree format (use ASCII characters instead).",
     )
 
     args: argparse.Namespace = parser.parse_args()
@@ -606,7 +602,7 @@ def main() -> None:
 
     if not start_path.is_dir():
         print(
-            f"Error: La ruta '{start_path}' no es un directorio válido.",
+            f"Error: The path '{start_path}' is not a valid directory.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -630,7 +626,7 @@ def main() -> None:
     elif args.format == "flat":
         render_flat(tree_generator, start_path, show_metadata=args.show_metadata)
     elif args.format in ["json", "yaml"]:
-        # Para formatos que necesitan estructura completa, reconstruir el árbol
+        # For formats that need complete structure, rebuild the tree
         tree_structure: Dict[str, Any] = {}
         dir_map: Dict[Path, Dict[str, Any]] = {start_path: tree_structure}
         dir_metadata_map: Dict[Path, DirectoryMetadata] = {}
@@ -638,12 +634,12 @@ def main() -> None:
         for dirpath, dirnames, filenames, metadata in tree_generator:
             current_level_tree = dir_map.get(dirpath, {})
 
-            # Procesar subdirectorios
+            # Process subdirectories
             for d_name in dirnames:
                 current_level_tree[d_name] = {}
                 dir_map[dirpath / d_name] = current_level_tree[d_name]
 
-            # Procesar archivos
+            # Process files
             for f_name in filenames:
                 if args.show_metadata and metadata and "files" in metadata:
                     file_meta = metadata["files"].get(f_name)
@@ -656,21 +652,21 @@ def main() -> None:
                     else:
                         current_level_tree[f_name] = {"type": "file"}
                 else:
-                    # Sin metadata: formato simple tradicional
+                    # Without metadata: simple traditional format
                     current_level_tree[f_name] = None
 
-            # Guardar metadatos del directorio
+            # Save directory metadata
             if args.show_metadata and metadata and "directory" in metadata:
                 dir_metadata_map[dirpath] = metadata["directory"]
 
-        # Añadir metadatos de directorios a la estructura solo si se solicitan
+        # Add directory metadata to the structure only if requested
         if args.show_metadata:
             for dirpath, tree_dict in dir_map.items():
                 if dirpath in dir_metadata_map:
                     dir_meta = dir_metadata_map[dirpath]
-                    # Convertir el directorio a un objeto con metadatos
+                    # Convert the directory to an object with metadata
                     if dirpath != start_path:
-                        # Encontrar el directorio padre y reemplazar la referencia
+                        # Find the parent directory and replace the reference
                         for _parent_path, parent_tree in dir_map.items():
                             if isinstance(parent_tree, dict):
                                 for name, child in parent_tree.items():
@@ -684,15 +680,15 @@ def main() -> None:
                                         }
                                         break
                     else:
-                        # Directorio raíz
+                        # Root directory
                         tree_structure["_metadata"] = {
                             "file_count": dir_meta.file_count,
                             "total_size": dir_meta.total_size,
                             "modified": dir_meta.modified.isoformat(),
                         }
         else:
-            # Sin metadata: mantener estructura simple tradicional
-            # Los archivos ya están como None, los directorios como {}
+            # Without metadata: keep simple traditional structure
+            # The files are already None, the directories are {}
             pass
 
         if args.format == "json":

@@ -1,4 +1,4 @@
-"""Tests para funciones de filtrado."""
+"""Tests for filtering functions."""
 
 import argparse
 from pathlib import Path
@@ -7,35 +7,35 @@ from trxd import is_excluded
 
 
 class TestIsExcluded:
-    """Tests para la función is_excluded."""
+    """Tests for the is_excluded function."""
 
     def test_no_exclusions(self) -> None:
-        """Test que sin exclusiones, nada se excluye."""
+        """Test that without exclusions, nothing is excluded."""
         args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[])
 
         assert not is_excluded(Path("file.txt"), args)
         assert not is_excluded(Path("directory"), args)
 
     def test_exclude_patterns(self) -> None:
-        """Test patrones de exclusión generales."""
+        """Test general exclusion patterns."""
         args = argparse.Namespace(exclude=["*.pyc", "*.tmp"], exclude_dir=[], exclude_file=[])
 
-        # Archivos que deben ser excluidos
+        # Files that should be excluded
         assert is_excluded(Path("script.pyc"), args)
         assert is_excluded(Path("temp.tmp"), args)
         assert is_excluded(Path("src/script.pyc"), args)
 
-        # Archivos que NO deben ser excluidos
+        # Files that should not be excluded
         assert not is_excluded(Path("script.py"), args)
         assert not is_excluded(Path("file.txt"), args)
 
     def test_exclude_dir_patterns(self) -> None:
-        """Test patrones de exclusión específicos para directorios."""
+        """Test specific exclusion patterns for directories."""
         args = argparse.Namespace(
             exclude=[], exclude_dir=["__pycache__", "node_modules", ".git"], exclude_file=[]
         )
 
-        # Crear objetos Path que simulen directorios usando mock
+        # Create Path objects that simulate directories using mock
         from unittest.mock import Mock
 
         cache_dir = Mock(spec=Path)
@@ -50,26 +50,26 @@ class TestIsExcluded:
         git_dir.match.return_value = True
         git_dir.is_dir.return_value = True
 
-        # Directorios que deben ser excluidos
+        # Directories that should be excluded
         assert is_excluded(cache_dir, args)
         assert is_excluded(node_dir, args)
         assert is_excluded(git_dir, args)
 
-        # Archivos con nombres similares NO deben ser excluidos
+        # Files with similar names should not be excluded
         assert not is_excluded(Path("__pycache__.txt"), args)
         assert not is_excluded(Path("node_modules.zip"), args)
 
-        # Directorios que NO deben ser excluidos
+        # Directories that should not be excluded
         assert not is_excluded(Path("src"), args)
         assert not is_excluded(Path("docs"), args)
 
     def test_exclude_file_patterns(self) -> None:
-        """Test patrones de exclusión específicos para archivos."""
+        """Test specific exclusion patterns for files."""
         args = argparse.Namespace(
             exclude=[], exclude_dir=[], exclude_file=["*.log", "*.tmp", "*.bak"]
         )
 
-        # Crear objetos Path que simulen archivos usando mock
+        # Create Path objects that simulate files using mock
         from unittest.mock import Mock
 
         log_file = Mock(spec=Path)
@@ -84,32 +84,32 @@ class TestIsExcluded:
         bak_file.match.return_value = True
         bak_file.is_file.return_value = True
 
-        # Archivos que deben ser excluidos
+        # Files that should be excluded
         assert is_excluded(log_file, args)
         assert is_excluded(tmp_file, args)
         assert is_excluded(bak_file, args)
 
-        # Directorios con nombres similares NO deben ser excluidos
+        # Directories with similar names should not be excluded
         assert not is_excluded(Path("logs"), args)  # directorio
         assert not is_excluded(Path("temp"), args)  # directorio
 
-        # Archivos que NO deben ser excluidos
+        # Files that should not be excluded
         assert not is_excluded(Path("script.py"), args)
         assert not is_excluded(Path("readme.md"), args)
 
     def test_combined_exclusions(self) -> None:
-        """Test combinación de diferentes tipos de exclusiones."""
+        """Test combination of different types of exclusions."""
         args = argparse.Namespace(
             exclude=["*.pyc", "*.pyo"],
             exclude_dir=["__pycache__", "node_modules"],
             exclude_file=["*.log", "*.tmp"],
         )
 
-        # Archivos excluidos por patrones generales
+        # Files excluded by general patterns
         assert is_excluded(Path("script.pyc"), args)
         assert is_excluded(Path("module.pyo"), args)
 
-        # Crear objetos Path que simulen directorios usando mock
+        # Create Path objects that simulate directories using mock
         from unittest.mock import Mock
 
         cache_dir = Mock(spec=Path)
@@ -120,11 +120,11 @@ class TestIsExcluded:
         node_dir.match.return_value = True
         node_dir.is_dir.return_value = True
 
-        # Directorios excluidos por patrones de directorio
+        # Directories excluded by directory patterns
         assert is_excluded(cache_dir, args)
         assert is_excluded(node_dir, args)
 
-        # Crear objetos Path que simulen archivos usando mock
+        # Create Path objects that simulate files using mock
         from unittest.mock import Mock
 
         log_file = Mock(spec=Path)
@@ -135,95 +135,95 @@ class TestIsExcluded:
         tmp_file.match.return_value = True
         tmp_file.is_file.return_value = True
 
-        # Archivos excluidos por patrones de archivo
+        # Files excluded by file patterns
         assert is_excluded(log_file, args)
         assert is_excluded(tmp_file, args)
 
-        # Archivos que NO deben ser excluidos
+        # Files that should not be excluded
         assert not is_excluded(Path("script.py"), args)
         assert not is_excluded(Path("readme.md"), args)
         assert not is_excluded(Path("src"), args)
 
     def test_wildcard_patterns(self) -> None:
-        """Test patrones con wildcards."""
+        """Test patterns with wildcards."""
         args = argparse.Namespace(exclude=["test_*", "*_test.py"], exclude_dir=[], exclude_file=[])
 
-        # Archivos que coinciden con patrones
+        # Files that match patterns
         assert is_excluded(Path("test_file.py"), args)
         assert is_excluded(Path("unit_test.py"), args)
         assert is_excluded(Path("integration_test.py"), args)
 
-        # Archivos que NO coinciden
+        # Files that do not match
         assert not is_excluded(Path("main.py"), args)
         assert not is_excluded(Path("helper.py"), args)
 
     def test_hidden_files_and_dirs(self) -> None:
-        """Test archivos y directorios ocultos."""
+        """Test hidden files and directories."""
         args = argparse.Namespace(exclude=[".*"], exclude_dir=[], exclude_file=[])
 
-        # Archivos y directorios ocultos
+        # Hidden files and directories
         assert is_excluded(Path(".gitignore"), args)
         assert is_excluded(Path(".env"), args)
         assert is_excluded(Path(".git"), args)
         assert is_excluded(Path(".vscode"), args)
 
-        # Archivos normales
+        # Normal files
         assert not is_excluded(Path("readme.md"), args)
         assert not is_excluded(Path("src"), args)
 
     def test_case_sensitivity(self) -> None:
-        """Test sensibilidad a mayúsculas/minúsculas."""
+        """Test case sensitivity."""
         import platform
 
         args = argparse.Namespace(exclude=["*.PYC"], exclude_dir=[], exclude_file=[])
 
-        # En Windows, pathlib.Path.match es case-insensitive por defecto
-        # En Linux/Unix, es case-sensitive
+        # In Windows, pathlib.Path.match is case-insensitive by default
+        # In Linux/Unix, it is case-sensitive
         if platform.system() == "Windows":
-            assert is_excluded(Path("script.pyc"), args)  # minúsculas
+            assert is_excluded(Path("script.pyc"), args)  # lowercase
         else:
-            assert not is_excluded(Path("script.pyc"), args)  # minúsculas no coincide
+            assert not is_excluded(Path("script.pyc"), args)  # lowercase does not match
         assert is_excluded(Path("script.PYC"), args)  # mayúsculas
 
     def test_nested_paths(self) -> None:
-        """Test rutas anidadas."""
+        """Test nested paths."""
         args = argparse.Namespace(exclude=["src/*.pyc"], exclude_dir=[], exclude_file=[])
 
-        # Archivos en subdirectorios
+        # Files in subdirectories
         assert is_excluded(Path("src/script.pyc"), args)
-        # El patrón "src/*.pyc" no coincide con "src/utils/helper.pyc" porque * no incluye /
+        # The pattern "src/*.pyc" does not match "src/utils/helper.pyc" because * does not include /
         # assert is_excluded(Path("src/utils/helper.pyc"), args)
 
-        # Archivos en otros directorios
+        # Files in other directories
         assert not is_excluded(Path("docs/script.pyc"), args)
         assert not is_excluded(Path("script.pyc"), args)
 
     def test_empty_patterns(self) -> None:
-        """Test con patrones vacíos."""
+        """Test with empty patterns."""
         args = argparse.Namespace(exclude=[""], exclude_dir=[""], exclude_file=[""])
 
-        # Patrones vacíos no deberían excluir nada
+        # Empty patterns should not exclude anything
         assert not is_excluded(Path("file.txt"), args)
         assert not is_excluded(Path("directory"), args)
 
     def test_multiple_matches(self) -> None:
-        """Test cuando un archivo coincide con múltiples patrones."""
+        """Test when a file matches multiple patterns."""
         args = argparse.Namespace(
             exclude=["*.pyc", "*.tmp"], exclude_dir=[], exclude_file=["*.log"]
         )
 
-        # Archivo que coincide con patrón general
+        # File that matches general pattern
         assert is_excluded(Path("script.pyc"), args)
 
-        # Crear objeto Path que simule archivo usando mock
+        # Create Path object that simulates file using mock
         from unittest.mock import Mock
 
         log_file = Mock(spec=Path)
         log_file.match.return_value = True
         log_file.is_file.return_value = True
 
-        # Archivo que coincide con patrón de archivo
+        # File that matches file pattern
         assert is_excluded(log_file, args)
 
-        # Archivo que no coincide con ningún patrón
+        # File that does not match any pattern
         assert not is_excluded(Path("script.py"), args)

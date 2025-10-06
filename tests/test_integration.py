@@ -1,4 +1,4 @@
-"""Tests de integración para trxd."""
+"""Integration tests for trxd."""
 
 import json
 import subprocess
@@ -10,10 +10,10 @@ import yaml
 
 
 class TestIntegration:
-    """Tests de integración para trxd."""
+    """Integration tests for trxd."""
 
     def test_cli_basic_usage(self, sample_tree: Path) -> None:
-        """Test uso básico de la CLI."""
+        """Test basic CLI usage."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", str(sample_tree)],
             capture_output=True,
@@ -25,10 +25,10 @@ class TestIntegration:
         assert result.returncode == 0
         assert "src" in result.stdout
         assert "main.py" in result.stdout
-        assert "📁" in result.stdout  # Emojis por defecto
+        assert "📁" in result.stdout  # Default emojis
 
     def test_cli_help(self) -> None:
-        """Test que la ayuda se muestra correctamente."""
+        """Test that the help is shown correctly."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--help"],
             capture_output=True,
@@ -37,12 +37,12 @@ class TestIntegration:
         )
 
         assert result.returncode == 0
-        assert "Lista el contenido de un directorio" in result.stdout
+        assert "List the contents of a directory" in result.stdout
         assert "--format" in result.stdout
         assert "--exclude" in result.stdout
 
     def test_cli_invalid_directory(self) -> None:
-        """Test manejo de directorio inválido."""
+        """Test handling of invalid directory."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "/nonexistent/directory"],
             capture_output=True,
@@ -51,10 +51,10 @@ class TestIntegration:
         )
 
         assert result.returncode == 1
-        assert "no es un directorio válido" in result.stderr
+        assert "is not a valid directory" in result.stderr
 
     def test_cli_tree_format(self, sample_tree: Path) -> None:
-        """Test formato tree."""
+        """Test tree format."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--format", "tree", str(sample_tree)],
             capture_output=True,
@@ -68,7 +68,7 @@ class TestIntegration:
         assert "└──" in result.stdout
 
     def test_cli_ascii_format(self, sample_tree: Path) -> None:
-        """Test formato ASCII."""
+        """Test ASCII format."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--format", "ascii", str(sample_tree)],
             capture_output=True,
@@ -82,7 +82,7 @@ class TestIntegration:
         assert "[f]" in result.stdout
 
     def test_cli_flat_format(self, sample_tree: Path) -> None:
-        """Test formato flat."""
+        """Test flat format."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--format", "flat", str(sample_tree)],
             capture_output=True,
@@ -97,7 +97,7 @@ class TestIntegration:
         assert "main.py" in result.stdout
 
     def test_cli_json_format(self, sample_tree: Path) -> None:
-        """Test formato JSON."""
+        """Test JSON format."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--format", "json", str(sample_tree)],
             capture_output=True,
@@ -107,7 +107,7 @@ class TestIntegration:
 
         assert result.returncode == 0
 
-        # Verificar que es JSON válido
+        # Verify that it is valid JSON
         try:
             json_data = json.loads(result.stdout)
             assert isinstance(json_data, dict)
@@ -116,7 +116,7 @@ class TestIntegration:
             pytest.fail("Output no es JSON válido")
 
     def test_cli_yaml_format(self, sample_tree: Path) -> None:
-        """Test formato YAML."""
+        """Test YAML format."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--format", "yaml", str(sample_tree)],
             capture_output=True,
@@ -126,7 +126,7 @@ class TestIntegration:
 
         assert result.returncode == 0
 
-        # Verificar que es YAML válido
+        # Verify that it is valid YAML
         try:
             yaml_data = yaml.safe_load(result.stdout)
             assert isinstance(yaml_data, dict)
@@ -135,7 +135,7 @@ class TestIntegration:
             pytest.fail("Output no es YAML válido")
 
     def test_cli_no_emoji(self, sample_tree: Path) -> None:
-        """Test opción --no-emoji."""
+        """Test --no-emoji option."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--no-emoji", str(sample_tree)],
             capture_output=True,
@@ -148,7 +148,7 @@ class TestIntegration:
         assert "[d]" in result.stdout
 
     def test_cli_show_metadata(self, sample_tree: Path) -> None:
-        """Test opción --show-metadata."""
+        """Test --show-metadata option."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", "--show-metadata", str(sample_tree)],
             capture_output=True,
@@ -157,11 +157,11 @@ class TestIntegration:
         )
 
         assert result.returncode == 0
-        assert "[" in result.stdout  # Metadatos
+        assert "[" in result.stdout  # Metadata
         assert "files" in result.stdout
 
     def test_cli_exclude_patterns(self, sample_tree: Path) -> None:
-        """Test patrones de exclusión."""
+        """Test exclusion patterns."""
         result = subprocess.run(
             [
                 sys.executable,
@@ -184,7 +184,7 @@ class TestIntegration:
         assert "main.py" in result.stdout
 
     def test_cli_multiple_exclusions(self, sample_tree: Path) -> None:
-        """Test múltiples exclusiones."""
+        """Test multiple exclusions."""
         result = subprocess.run(
             [
                 sys.executable,
@@ -213,7 +213,7 @@ class TestIntegration:
         assert "main.py" in result.stdout
 
     def test_cli_json_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato JSON con metadatos."""
+        """Test JSON format with metadata."""
         result = subprocess.run(
             [
                 sys.executable,
@@ -231,12 +231,12 @@ class TestIntegration:
 
         assert result.returncode == 0
 
-        # Verificar que es JSON válido con metadatos
+        # Verify that it is valid JSON with metadata
         try:
             json_data = json.loads(result.stdout)
             assert isinstance(json_data, dict)
 
-            # Verificar que se incluyen metadatos
+            # Verify that metadata is included
             if "_metadata" in json_data:
                 metadata = json_data["_metadata"]
                 assert "file_count" in metadata
@@ -246,7 +246,7 @@ class TestIntegration:
             pytest.fail("Output no es JSON válido")
 
     def test_cli_yaml_with_metadata(self, sample_tree: Path) -> None:
-        """Test formato YAML con metadatos."""
+        """Test YAML format with metadata."""
         result = subprocess.run(
             [
                 sys.executable,
@@ -264,12 +264,12 @@ class TestIntegration:
 
         assert result.returncode == 0
 
-        # Verificar que es YAML válido con metadatos
+        # Verify that it is valid YAML with metadata
         try:
             yaml_data = yaml.safe_load(result.stdout)
             assert isinstance(yaml_data, dict)
 
-            # Verificar que se incluyen metadatos
+            # Verify that metadata is included
             if "_metadata" in yaml_data:
                 metadata = yaml_data["_metadata"]
                 assert "file_count" in metadata
@@ -279,7 +279,7 @@ class TestIntegration:
             pytest.fail("Output no es YAML válido")
 
     def test_cli_combined_options(self, sample_tree: Path) -> None:
-        """Test combinación de múltiples opciones."""
+        """Test combination of multiple options."""
         result = subprocess.run(
             [
                 sys.executable,
@@ -300,15 +300,15 @@ class TestIntegration:
 
         assert result.returncode == 0
         assert "📁" not in result.stdout  # No emojis
-        assert "[d]" in result.stdout  # Marcadores ASCII
-        assert "[f]" in result.stdout  # Marcadores ASCII
-        assert "[" in result.stdout  # Metadatos
-        assert "files" in result.stdout  # Metadatos
-        assert "main.pyc" not in result.stdout  # Excluido
-        assert "main.py" in result.stdout  # Incluido
+        assert "[d]" in result.stdout  # ASCII markers
+        assert "[f]" in result.stdout  # ASCII markers
+        assert "[" in result.stdout  # Metadata
+        assert "files" in result.stdout  # Metadata
+        assert "main.pyc" not in result.stdout  # Excluded
+        assert "main.py" in result.stdout  # Included
 
     def test_cli_current_directory(self, sample_tree: Path) -> None:
-        """Test que se usa el directorio actual por defecto."""
+        """Test that the current directory is used by default."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd"],
             capture_output=True,
@@ -321,7 +321,7 @@ class TestIntegration:
         assert "src" in result.stdout or "main.py" in result.stdout
 
     def test_cli_empty_directory(self, temp_dir: Path) -> None:
-        """Test directorio vacío."""
+        """Test empty directory."""
         result = subprocess.run(
             [sys.executable, "-m", "trxd", str(temp_dir)],
             capture_output=True,
@@ -330,11 +330,11 @@ class TestIntegration:
         )
 
         assert result.returncode == 0
-        # Debería mostrar solo el directorio raíz
+        # Should show only the root directory
         assert len(result.stdout.strip().split("\n")) <= 1
 
     def test_cli_single_file(self, temp_dir: Path) -> None:
-        """Test directorio con un solo archivo."""
+        """Test directory with a single file."""
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
@@ -349,12 +349,12 @@ class TestIntegration:
         assert "test.txt" in result.stdout
 
     def test_cli_nested_structure(self, temp_dir: Path) -> None:
-        """Test estructura anidada."""
+        """Test nested structure."""
         # Crear estructura anidada
         (temp_dir / "level1").mkdir()
         (temp_dir / "level1" / "level2").mkdir()
 
-        # Crear archivos en diferentes niveles
+        # Create files at different levels
         (temp_dir / "root.txt").write_text("root")
         (temp_dir / "level1" / "level1.txt").write_text("level1")
         (temp_dir / "level1" / "level2" / "level2.txt").write_text("level2")
@@ -374,8 +374,8 @@ class TestIntegration:
         assert "level2.txt" in result.stdout
 
     def test_cli_file_types(self, temp_dir: Path) -> None:
-        """Test diferentes tipos de archivo."""
-        # Crear archivos de diferentes tipos
+        """Test different file types."""
+        # Create files of different types
         (temp_dir / "script.py").write_text("print('hello')")
         (temp_dir / "style.css").write_text("body { color: red; }")
         (temp_dir / "index.html").write_text("<html></html>")
@@ -395,8 +395,8 @@ class TestIntegration:
         assert "data.json" in result.stdout
 
     def test_cli_performance_large_directory(self, temp_dir: Path) -> None:
-        """Test rendimiento con directorio grande."""
-        # Crear muchos archivos y directorios
+        """Test performance with large directory."""
+        # Create many files and directories
         for i in range(100):
             (temp_dir / f"file_{i}.txt").write_text(f"content {i}")
 
@@ -414,7 +414,7 @@ class TestIntegration:
         )
 
         assert result.returncode == 0
-        # Verificar que se procesan todos los archivos
+        # Verify that all files are processed
         assert "file_0.txt" in result.stdout
         assert "file_99.txt" in result.stdout
         assert "dir_0" in result.stdout
