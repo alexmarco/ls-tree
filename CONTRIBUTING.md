@@ -257,28 +257,28 @@ We use **Calendar Versioning (CalVer)**:
 ### Bug Report Template
 
 ```markdown
-## 🐛 Descripción del Bug
-Descripción clara y concisa del problema.
+## 🐛 Bug Description
+A clear and concise description of the problem.
 
-## 🔄 Pasos para Reproducir
-1. Ve a '...'
-2. Haz clic en '...'
-3. Desplázate hasta '...'
-4. Ve el error
+## 🔄 Steps to Reproduce
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
 
-## ✅ Comportamiento Esperado
-Descripción de lo que esperabas que pasara.
+## ✅ Expected Behavior
+A clear and concise description of what you expected to happen.
 
-## 📸 Capturas de Pantalla
-Si aplica, añade capturas de pantalla.
+## 📸 Screenshots
+If applicable, add screenshots to help explain your problem.
 
-## 🖥️ Información del Sistema
+## 🖥️ System Information
 - OS: [e.g. Windows 10, macOS 12.0, Ubuntu 20.04]
 - Python: [e.g. 3.9.7]
 - trxd: [e.g. 25.10.5]
 
-## 📝 Información Adicional
-Cualquier otra información relevante.
+## 📝 Additional Information
+Any other relevant information about the problem.
 ```
 
 ## 🔄 Pull Requests
@@ -293,28 +293,28 @@ Cualquier otra información relevante.
 ### Pull Request Template
 
 ```markdown
-## 📝 Descripción
-Descripción clara de los cambios realizados.
+## 📝 Description
+Clear description of the changes made in this PR.
 
-## 🔗 Issues Relacionados
+## 🔗 Related Issues
 Closes #123
 Fixes #456
 
 ## 🧪 Testing
-- [ ] Tests unitarios añadidos/actualizados
-- [ ] Tests de integración pasan
-- [ ] Verificado manualmente
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manually verified
 
-## 📚 Documentación
-- [ ] README actualizado si es necesario
-- [ ] Docstrings añadidos/actualizados
-- [ ] Comentarios en código si es necesario
+## 📚 Documentation
+- [ ] README updated if necessary
+- [ ] Docstrings added/updated
+- [ ] Code comments if necessary
 
 ## ✅ Checklist
-- [ ] Código sigue las convenciones del proyecto
-- [ ] Self-review del código realizado
-- [ ] Tests pasan localmente
-- [ ] Documentación actualizada
+- [ ] Code follows project conventions
+- [ ] Self-review of code completed
+- [ ] Tests pass locally
+- [ ] Documentation updated
 ```
 
 ### Review Process
