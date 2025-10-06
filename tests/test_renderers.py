@@ -5,7 +5,7 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
-from trxd import build_tree, render_flat, render_tree
+from trxd import build_tree, render_csv, render_flat, render_tree
 
 
 class TestRenderFlat:
@@ -299,3 +299,154 @@ class TestRenderTree:
         # Verify that relative paths are included
         assert "src" in output
         assert "main.py" in output
+
+
+class TestRenderCsv:
+    """Tests for the render_csv function."""
+
+    def test_render_csv_basic(self, sample_tree: Path) -> None:
+        """Test basic rendering in CSV format."""
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree)
+            output = mock_stdout.getvalue()
+
+        # Verify CSV headers
+        assert "type,path,name,extension" in output
+        # Verify directory entries (check for src directory)
+        assert "directory,src,src," in output
+        # Verify file entries (check for main.py file)
+        assert "main.py,py" in output
+        assert "helpers.py,py" in output
+
+    def test_render_csv_with_metadata(self, sample_tree: Path) -> None:
+        """Test CSV rendering with metadata."""
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree, show_metadata=True)
+            output = mock_stdout.getvalue()
+
+        # Verify CSV headers with metadata
+        assert "type,path,name,extension,size,modified,file_count,total_size" in output
+        # Verify directory entries with metadata (check for src directory)
+        assert "directory,src,src,,0," in output
+        # Verify file entries with metadata (check for main.py file)
+        assert "main.py,py," in output
+        # Verify that metadata columns are present
+        assert "size,modified,file_count,total_size" in output
+
+    def test_render_csv_with_exclusions(self, sample_tree: Path) -> None:
+        """Test CSV rendering with exclusions."""
+        args = argparse.Namespace(exclude=["*.pyc"], exclude_dir=["__pycache__"], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree)
+            output = mock_stdout.getvalue()
+
+        # Verify that excluded files are not in output
+        assert "*.pyc" not in output
+        # Verify that excluded directories are not in output
+        assert "__pycache__" not in output
+        # Verify that non-excluded files are present
+        assert "main.py,py" in output
+
+    def test_render_csv_empty_directory(self, temp_dir: Path) -> None:
+        """Test CSV rendering with empty directory."""
+        # Create an empty directory
+        empty_dir = temp_dir / "empty_dir"
+        empty_dir.mkdir()
+        
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(empty_dir, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, empty_dir)
+            output = mock_stdout.getvalue()
+
+        # Should only contain header and directory entry
+        lines = output.strip().split('\n')
+        assert len(lines) == 2  # Header + directory
+        assert "type,path,name,extension" in lines[0]
+        assert "directory,.,empty_dir," in lines[1]
+
+    def test_render_csv_single_file(self, temp_dir: Path) -> None:
+        """Test CSV rendering with single file."""
+        # Create a directory with a single file
+        single_file_dir = temp_dir / "single_file_dir"
+        single_file_dir.mkdir()
+        (single_file_dir / "single_file.txt").write_text("content")
+        
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(single_file_dir, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, single_file_dir)
+            output = mock_stdout.getvalue()
+
+        # Should contain header, directory, and file
+        lines = output.strip().split('\n')
+        assert len(lines) == 3  # Header + directory + file
+        assert "type,path,name,extension" in lines[0]
+        assert "directory,.,single_file_dir," in lines[1]
+        assert "file,single_file.txt,single_file.txt,txt" in lines[2]
+
+    def test_render_csv_nested_structure(self, sample_tree: Path) -> None:
+        """Test CSV rendering with nested directory structure."""
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree)
+            output = mock_stdout.getvalue()
+
+        # Verify nested structure is properly represented
+        assert "directory,src,src," in output
+        assert "directory,src\\utils,utils," in output or "directory,src/utils,utils," in output
+        assert "main.py,py" in output
+        assert "helpers.py,py" in output
+
+    def test_render_csv_file_types(self, sample_tree: Path) -> None:
+        """Test CSV rendering with different file types."""
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree)
+            output = mock_stdout.getvalue()
+
+        # Verify different file extensions are captured
+        assert "main.py,py" in output
+        assert "helpers.py,py" in output
+        assert "Button.py,py" in output
+        assert "Header.py,py" in output
+        assert "README.md,md" in output
+        assert "manual.pdf,pdf" in output
+
+    def test_render_csv_relative_paths(self, sample_tree: Path) -> None:
+        """Test that relative paths are shown correctly in CSV."""
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
+
+        tree_generator = build_tree(sample_tree, args)
+
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            render_csv(tree_generator, sample_tree)
+            output = mock_stdout.getvalue()
+
+        # Verify that absolute paths are not included
+        assert str(sample_tree) not in output
+        # Verify that relative paths are included
+        assert "src" in output
+        assert "main.py" in output
+        assert "helpers.py" in output

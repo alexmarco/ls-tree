@@ -4,7 +4,7 @@ A modern Python command-line tool for listing directory contents with advanced f
 
 ## Features
 
-- **Multiple output formats**: Tree (with emojis), ASCII tree, flat list, JSON, and YAML
+- **Multiple output formats**: Tree (with emojis), ASCII tree, flat list, JSON, YAML, and CSV
 - **Advanced filtering**: Exclude files and directories using glob patterns
 - **Metadata support**: File sizes, modification dates, and directory statistics
 - **Memory efficient**: Uses generators for large directory structures
@@ -71,6 +71,9 @@ trxd --format json
 
 # YAML format
 trxd --format yaml
+
+# CSV format
+trxd --format csv
 ```
 
 ### Filtering options
@@ -330,6 +333,49 @@ src:
           modified: '2024-01-15T14:15:00'
 ```
 
+### CSV format
+
+The CSV format provides a structured, tabular output that's perfect for data analysis and processing:
+
+```bash
+$ trxd --format csv src/
+type,path,name,extension
+directory,src,src,
+file,src/main.py,main.py,py
+directory,src/components,components,
+file,src/components/Button.py,Button.py,py
+file,src/components/Header.py,Header.py,py
+directory,src/utils,utils,
+file,src/utils/helpers.py,helpers.py,py
+```
+
+### CSV format with metadata
+
+When using `--show-metadata` with CSV format, additional columns are included:
+
+```bash
+$ trxd --format csv --show-metadata src/
+type,path,name,extension,size,modified,file_count,total_size
+directory,src,src,,0,2024-01-15 14:30:00,4,2156
+file,src/main.py,main.py,py,1234,2024-01-15 14:30:00,,
+directory,src/components,components,,0,2024-01-15 14:25:00,2,922
+file,src/components/Button.py,Button.py,py,450,2024-01-15 14:25:00,,
+file,src/components/Header.py,Header.py,py,472,2024-01-15 14:20:00,,
+directory,src/utils,utils,,0,2024-01-15 14:15:00,1,800
+file,src/utils/helpers.py,helpers.py,py,800,2024-01-15 14:15:00,,
+```
+
+**CSV Columns:**
+
+- `type`: "directory" or "file"
+- `path`: Relative path from the starting directory
+- `name`: File or directory name
+- `extension`: File extension (empty for directories)
+- `size`: File size in bytes (only with `--show-metadata`)
+- `modified`: Last modification date (only with `--show-metadata`)
+- `file_count`: Number of files in directory (only with `--show-metadata`)
+- `total_size`: Total size of all files in directory (only with `--show-metadata`)
+
 ### ASCII format with metadata
 
 ```bash
@@ -385,8 +431,14 @@ $ trxd --format flat --exclude-dir "*" src/
 $ trxd --format flat | grep "\.py$" | wc -l  # Count Python files
 $ trxd --show-metadata --format json | jq '.src.contents | keys'  # Get directory contents with jq
 
+# CSV data analysis
+$ trxd --format csv --show-metadata | awk -F',' '$1=="file" {sum+=$5} END {print "Total file size:", sum}'  # Sum file sizes
+$ trxd --format csv | grep "\.py$" | wc -l  # Count Python files using CSV
+$ trxd --format csv --show-metadata | grep "directory" | awk -F',' '{print $3, $7}'  # Show directory file counts
+
 # Generate reports
 $ trxd --show-metadata --format json | jq '[.src.contents | to_entries[] | select(.value.type == "file") | {name: .key, size: .value.size}]'
+$ trxd --format csv --show-metadata > directory-analysis.csv  # Export to CSV for Excel/analysis
 ```
 
 ## Command-line options

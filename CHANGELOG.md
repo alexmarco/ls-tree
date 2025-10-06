@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 
+## [25.10.7] - 2025-10-06
+
+### Added
+
+- CSV output format for structured data analysis
+- Comprehensive CSV columns: type, path, name, extension, size, modified, file_count, total_size
+- CSV format support with metadata using `--show-metadata` flag
+- CSV format compatibility with all filtering options (--exclude, --exclude-dir, --exclude-file)
+- Complete test coverage for CSV functionality (8 unit tests + 3 integration tests)
+- Updated documentation with CSV examples and usage patterns
+
+### Changed
+
+- Updated README.md with detailed CSV format documentation
+- Added CSV examples in integration section for data analysis workflows
+
 ## [25.10.6] - 2025-10-06
 
 ### Fixed

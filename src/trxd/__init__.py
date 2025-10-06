@@ -1,6 +1,7 @@
 # Fichero: src/trxd/__init__.py (versión mejorada con tipos y documentación)
 
 import argparse
+import csv
 import json
 import sys
 from datetime import datetime
@@ -393,6 +394,97 @@ def render_flat(
                 print(str(file_path))
 
 
+def render_csv(
+    tree_generator: TreeGenerator,
+    start_path: Path = Path("."),
+    show_metadata: bool = False,
+) -> None:
+    """
+    Render the structure in CSV format with comprehensive information.
+
+    Parameters
+    ----------
+    tree_generator : Generator[Tuple[Path, List[str], List[str], Dict[str, Any]], None, None]
+        The generator of the directory structure.
+    start_path : Path, optional
+        The base path to show relative paths, default Path(".").
+    show_metadata : bool, optional
+        If show metadata (size, date) together with the paths.
+
+    Examples
+    --------
+    >>> args = argparse.Namespace(exclude=['*.pyc'], exclude_dir=['__pycache__'])
+    >>> gen = build_tree(Path('src/'), args)
+    >>> render_csv(gen, Path('project/'))
+    type,path,size,modified,file_count,total_size
+    directory,project/src,0,2024-01-01 12:00:00,5,1024
+    file,project/src/main.py,512,2024-01-01 12:00:00,,
+    """
+    # Define CSV headers
+    headers = ["type", "path", "name", "extension"]
+    if show_metadata:
+        headers.extend(["size", "modified", "file_count", "total_size"])
+    
+    # Create CSV writer
+    writer = csv.writer(sys.stdout)
+    writer.writerow(headers)
+    
+    for dirpath, _dirnames, filenames, metadata in tree_generator:
+        # Calculate relative path for directory
+        try:
+            rel_path = dirpath.relative_to(start_path)
+            dir_path_str = str(rel_path) if rel_path != Path(".") else "."
+        except ValueError:
+            dir_path_str = str(dirpath)
+        
+        # Add directory row
+        row = ["directory", dir_path_str, dirpath.name, ""]
+        if show_metadata and metadata:
+            dir_meta = metadata.get("directory")
+            if dir_meta:
+                row.extend([
+                    "0",  # Directory size is always 0
+                    dir_meta.modified.strftime("%Y-%m-%d %H:%M:%S"),
+                    str(dir_meta.file_count),
+                    str(dir_meta.total_size)
+                ])
+            else:
+                row.extend(["", "", "", ""])
+        elif show_metadata:
+            row.extend(["", "", "", ""])
+        
+        writer.writerow(row)
+        
+        # Add file rows
+        for filename in filenames:
+            file_path = dirpath / filename
+            try:
+                rel_file_path = file_path.relative_to(start_path)
+                file_path_str = str(rel_file_path)
+            except ValueError:
+                file_path_str = str(file_path)
+            
+            # Get file extension
+            extension = file_path.suffix[1:] if file_path.suffix else ""
+            
+            row = ["file", file_path_str, filename, extension]
+            if show_metadata and metadata and "files" in metadata:
+                file_meta = metadata["files"].get(filename)
+                if file_meta:
+                    row.extend([
+                        str(file_meta.size),
+                        file_meta.modified.strftime("%Y-%m-%d %H:%M:%S"),
+                        "",  # file_count is empty for files
+                        ""   # total_size is empty for files
+                    ])
+                else:
+                    row.extend(["", "", "", ""])
+            elif show_metadata:
+                row.extend(["", "", "", ""])
+            
+            writer.writerow(row)
+
+
 def render_tree(
     tree_generator: TreeGenerator,
     start_path: Path = Path("."),
@@ -560,7 +652,7 @@ def main() -> None:
     parser.add_argument("path", nargs="?", default=".", help="The path to the directory to list.")
     parser.add_argument(
         "--format",
-        choices=["tree", "ascii", "json", "yaml", "flat"],
+        choices=["tree", "ascii", "json", "yaml", "flat", "csv"],
         default="tree",
         help="Output format.",
     )
@@ -625,6 +717,8 @@ def main() -> None:
         )
     elif args.format == "flat":
         render_flat(tree_generator, start_path, show_metadata=args.show_metadata)
+    elif args.format == "csv":
+        render_csv(tree_generator, start_path, show_metadata=args.show_metadata)
     elif args.format in ["json", "yaml"]:
         # For formats that need complete structure, rebuild the tree
         tree_structure: Dict[str, Any] = {}

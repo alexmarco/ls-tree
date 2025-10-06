@@ -419,3 +419,54 @@ class TestIntegration:
         assert "file_99.txt" in result.stdout
         assert "dir_0" in result.stdout
         assert "dir_9" in result.stdout
+
+    def test_cli_csv_format(self, sample_tree: Path) -> None:
+        """Test CLI with CSV format."""
+        result = subprocess.run(
+            [sys.executable, "-m", "trxd", str(sample_tree), "--format", "csv"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+
+        assert result.returncode == 0
+        # Verify CSV headers
+        assert "type,path,name,extension" in result.stdout
+        # Verify directory entries
+        assert "directory,src,src," in result.stdout
+        # Verify file entries
+        assert "main.py,py" in result.stdout
+
+    def test_cli_csv_format_with_metadata(self, sample_tree: Path) -> None:
+        """Test CLI with CSV format and metadata."""
+        result = subprocess.run(
+            [sys.executable, "-m", "trxd", str(sample_tree), "--format", "csv", "--show-metadata"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+
+        assert result.returncode == 0
+        # Verify CSV headers with metadata
+        assert "type,path,name,extension,size,modified,file_count,total_size" in result.stdout
+        # Verify directory entries with metadata
+        assert "directory,src,src,,0," in result.stdout
+        # Verify file entries with metadata
+        assert "main.py,py," in result.stdout
+
+    def test_cli_csv_format_with_exclusions(self, sample_tree: Path) -> None:
+        """Test CLI with CSV format and exclusions."""
+        result = subprocess.run(
+            [sys.executable, "-m", "trxd", str(sample_tree), "--format", "csv", "--exclude", "*.pyc"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+
+        assert result.returncode == 0
+        # Verify CSV headers
+        assert "type,path,name,extension" in result.stdout
+        # Verify that excluded files are not in output
+        assert "*.pyc" not in result.stdout
+        # Verify that non-excluded files are present
+        assert "main.py,py" in result.stdout
