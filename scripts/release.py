@@ -48,13 +48,13 @@ def update_version(new_version: str) -> None:
 
 def validate_version(version: str) -> bool:
     """Validate version format (YY.MM.MICRO)."""
-    pattern = r'^\d{2}\.\d{2}\.\d+$'
+    pattern = r"^\d{2}\.\d{2}\.\d+$"
     return bool(re.match(pattern, version))
 
 
 def get_next_version(current_version: str) -> str:
     """Get next version by incrementing micro version."""
-    parts = current_version.split('.')
+    parts = current_version.split(".")
     if len(parts) != 3:
         raise ValueError(f"Invalid version format: {current_version}")
 
@@ -68,12 +68,10 @@ def main():
     parser.add_argument(
         "version",
         nargs="?",
-        help="Version to release (format: YY.MM.MICRO). If not provided, increments micro version."
+        help="Version to release (format: YY.MM.MICRO). If not provided, increments micro version.",
     )
     parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be done without executing"
+        "--dry-run", action="store_true", help="Show what would be done without executing"
     )
 
     args = parser.parse_args()
@@ -113,12 +111,11 @@ def main():
     result = run_command("git status --porcelain", check=False)
     if result.stdout.strip():
         # Check if there are only untracked files
-        lines = result.stdout.strip().split('\n')
-        tracked_changes = [line for line in lines if not line.startswith('??')]
+        lines = result.stdout.strip().split("\n")
+        tracked_changes = [line for line in lines if not line.startswith("??")]
         if tracked_changes:
             print(
-                "Error: Working directory has uncommitted changes. "
-                "Please commit or stash changes."
+                "Error: Working directory has uncommitted changes. Please commit or stash changes."
             )
             print("Uncommitted changes:")
             for line in tracked_changes:
