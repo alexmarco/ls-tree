@@ -66,124 +66,54 @@ trxd/
 └── pyproject.toml      # Project configuration
 ```
 
-### Project Architecture
-
-```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#1e40af', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'lineColor': '#64748b', 'secondaryColor': '#eff6ff', 'tertiaryColor': '#dbeafe', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#eff6ff', 'tertiaryBkg': '#dbeafe'}}}%%
-graph TB
-    subgraph "🎯 Entry Point"
-        A[__main__.py] --> B[TreeApplication]
-    end
-    
-    subgraph "🏗️ Core Components"
-        B --> C[TreeBuilder]
-        B --> D[FileTypeDetector]
-        B --> E[MetadataCollector]
-        C --> F[TreeGenerator]
-    end
-    
-    subgraph "🎨 Renderers"
-        B --> G[Renderer Interface]
-        G --> H[TreeRenderer]
-        G --> I[FlatRenderer]
-        G --> J[CSVRenderer]
-        G --> K[JSONRenderer]
-        G --> L[YAMLRenderer]
-    end
-    
-    subgraph "🧪 Testing"
-        M[test_main.py] --> B
-        N[test_renderers.py] --> G
-        O[test_integration.py] --> B
-        P[test_utils.py] --> E
-    end
-    
-    subgraph "⚙️ Automation"
-        Q[scripts/release.py] --> R[GitHub Actions]
-        R --> S[Changelog Workflow]
-        R --> T[Release Workflow]
-        S --> U[git-cliff]
-        T --> V[PyPI Upload]
-    end
-    
-    style A fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
-    style B fill:#dbeafe,stroke:#3b82f6,stroke-width:3px
-    style G fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
-    style R fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-```
 
 ## 🔄 Workflow
 
-### General Development Flow
+### Development Process
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1d4ed8', 'lineColor': '#64748b', 'secondaryColor': '#f1f5f9', 'tertiaryColor': '#e2e8f0', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f1f5f9', 'tertiaryBkg': '#e2e8f8'}}}%%
 graph TD
-    A[🚀 Fork Repository] --> B[📥 Clone Local]
-    B --> C[🌿 Create Feature Branch]
-    C --> D[💻 Make Changes]
-    D --> E[🧪 Run Tests]
-    E --> F{✅ Tests Pass?}
-    F -->|❌ No| G[🔧 Fix Issues]
-    G --> E
-    F -->|✅ Yes| H[📝 Commit Changes]
-    H --> I[📤 Push Branch]
-    I --> J[🔄 Create Pull Request]
-    J --> K[👀 Code Review]
-    K --> L{✅ Approved?}
-    L -->|❌ No| M[🔧 Address Feedback]
-    M --> H
-    L -->|✅ Yes| N[🎉 Merge to Main]
-    N --> O[🏷️ Automatic Release]
+    A[🚀 Fork & Clone] --> B[🌿 Create Branch]
+    B --> C[💻 Make Changes]
+    C --> D[🧪 Test & Lint]
+    D --> E[📝 Commit]
+    E --> F[📤 Push & PR]
+    F --> G[👀 Review]
+    G --> H[🎉 Merge]
+    
+    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style H fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
 ```
 
-### Automated Release Flow
+### Release Process
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#059669', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#047857', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#dcfce7', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f0fdf4', 'tertiaryBkg': '#dcfce7'}}}%%
-graph TD
-    A[🎯 Ready for Release] --> B[📜 Run Release Script]
-    B --> C[🔢 Update Version]
-    C --> D[🏷️ Create Git Tag]
-    D --> E[📤 Push to GitHub]
-    E --> F[⚡ Trigger GitHub Actions]
-    F --> G[📝 Generate Changelog]
-    G --> H[📦 Build Package]
-    H --> I[🚀 Create GitHub Release]
-    I --> J[📚 Publish to PyPI]
-    J --> K[✅ Release Complete]
+graph LR
+    A[📜 Run Script] --> B[🏷️ Create Tag]
+    B --> C[⚡ Auto Release]
+    C --> D[📚 PyPI Upload]
     
     style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style K fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-    style F fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style D fill:#dcfce7,stroke:#16a34a,stroke-width:2px
 ```
 
-### Branch Conventions
+### Branch Naming
 
-```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#7c3aed', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#6d28d9', 'lineColor': '#64748b', 'secondaryColor': '#faf5ff', 'tertiaryColor': '#f3e8ff', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#faf5ff', 'tertiaryBkg': '#f3e8ff'}}}%%
-graph LR
-    A[main] --> B[feat/feature-name]
-    A --> C[fix/bug-description]
-    A --> D[chore/improvement]
-    A --> E[docs/documentation]
-    A --> F[test/test-coverage]
-    
-    B --> G[Pull Request]
-    C --> G
-    D --> G
-    E --> G
-    F --> G
-    
-    G --> A
-    
-    style A fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style B fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style C fill:#fecaca,stroke:#dc2626,stroke-width:2px
-    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
-    style E fill:#e0e7ff,stroke:#6366f1,stroke-width:2px
-    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-```
+Use descriptive branch names with prefixes:
+
+- `feat/` - New features
+- `fix/` - Bug fixes  
+- `docs/` - Documentation
+- `chore/` - Maintenance tasks
+- `test/` - Testing improvements
+
+**Examples:**
+- `feat/add-xml-output`
+- `fix/csv-encoding-issue`
+- `docs/update-readme`
 
 ## 📏 Code Standards
 
@@ -255,45 +185,22 @@ class TestFeature:
             feature_function("")
 ```
 
-## ⚙️ CI/CD Flow
+## ⚙️ CI/CD
 
-### Continuous Integration Pipeline
+Our automated workflows ensure code quality and smooth releases:
 
-```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#7c2d12', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#92400e', 'lineColor': '#64748b', 'secondaryColor': '#fef7ed', 'tertiaryColor': '#fed7aa', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#fef7ed', 'tertiaryBkg': '#fed7aa'}}}%%
-graph LR
-    A[📤 Push/PR] --> B[🤖 GitHub Actions]
-    B --> C[🐍 Setup Python]
-    C --> D[📦 Install Dependencies]
-    D --> E[🎨 Format Check]
-    E --> F[🔍 Lint Check]
-    F --> G[🏷️ Type Check]
-    G --> H[🧪 Run Tests]
-    H --> I{✅ All Pass?}
-    I -->|❌ No| J[❌ Fail CI]
-    I -->|✅ Yes| K[✅ Pass CI]
-    
-    subgraph "🔄 Release Pipeline"
-        L[🏷️ Tag Created] --> M[📝 Generate Changelog]
-        M --> N[📦 Build Package]
-        N --> O[🚀 Create Release]
-        O --> P[📚 Publish to PyPI]
-    end
-    
-    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style K fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-    style J fill:#fecaca,stroke:#dc2626,stroke-width:2px
-    style L fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
-    style P fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-```
+### Quality Checks
+Every push and PR automatically runs:
+- **Code formatting** with `ruff`
+- **Linting** with `ruff check`
+- **Type checking** with `mypy`
+- **Tests** with `pytest`
 
-### Available Workflows
-
-| Workflow | Trigger | Purpose |
-|----------|---------|-----------|
-| **CI** | Push/PR | Verify code quality |
-| **Changelog** | Tag | Generate changelog automatically |
-| **Release** | Tag | Create release and publish to PyPI |
+### Release Automation
+When you create a tag, GitHub Actions automatically:
+- Generates changelog with `git-cliff`
+- Creates GitHub release
+- Publishes to PyPI
 
 ## 🏷️ Release Process
 
@@ -449,88 +356,26 @@ graph TD
 - **Discussions**: For general questions and ideas
 - **Pull Requests**: For code contributions
 
-## 💡 Contribution Examples
+## 💡 Contribution Ideas
 
-### Example 1: Adding a New Renderer
+### Good First Issues
+- Add new output formats (XML, HTML)
+- Improve error messages and help text
+- Add more integration tests
+- Document advanced use cases
 
-```python
-# 1. Create the new renderer
-class XMLRenderer(Renderer):
-    def render(self, tree_generator: TreeGenerator) -> None:
-        print('<?xml version="1.0" encoding="UTF-8"?>')
-        print('<tree>')
-        for item in tree_generator:
-            print(f'  <item type="{item.type}" name="{item.name}"/>')
-        print('</tree>')
+### Intermediate Tasks
+- Implement advanced filters (date, permissions)
+- Add support for compressed files
+- Optimize performance for large directories
+- Add interactive mode
 
-# 2. Add tests
-def test_xml_renderer():
-    renderer = XMLRenderer()
-    # ... tests aquí
+### Advanced Features
+- Implement parallelization
+- Add database support
+- Create plugin system
+- Implement streaming for large files
 
-# 3. Update TreeApplication to include the new format
-```
-
-### Example 2: Improving Filtering
-
-```python
-# 1. Add new filtering functionality
-class TreeBuilder:
-    def __init__(self, args: argparse.Namespace):
-        self.args = args
-        self.size_filter = self._parse_size_filter(args.size_filter)
-    
-    def _parse_size_filter(self, size_str: str) -> Optional[tuple]:
-        # Implementar filtrado por tamaño
-        pass
-
-# 2. Add CLI argument
-parser.add_argument('--size-filter', help='Filter by file size (e.g., >1MB)')
-
-# 3. Add tests
-def test_size_filtering():
-    # ... tests aquí
-```
-
-### Example 3: Performance Optimization
-
-```python
-# 1. Identify bottleneck
-# 2. Implement optimization
-class OptimizedTreeBuilder:
-    def build_tree(self, directory: Path) -> TreeGenerator:
-        # Usar generadores para memoria eficiente
-        # Implementar caché para metadatos
-        pass
-
-# 3. Add benchmarks
-def benchmark_tree_building():
-    # Medir rendimiento antes/después
-    pass
-```
-
-## 🎯 Contribution Roadmap
-
-### 🟢 Easy (Good First Issues)
-
-- [ ] Add more output formats (XML, HTML)
-- [ ] Improve error messages
-- [ ] Add more integration tests
-- [ ] Document advanced use cases
-
-### 🟡 Intermediate
-
-- [ ] Implement advanced filters (date, permissions)
-- [ ] Add support for compressed files
-- [ ] Optimize performance for large directories
-- [ ] Add interactive mode
-
-### 🔴 Advanced
-
-- [ ] Implement parallelization
-- [ ] Add database support
-- [ ] Create plugin system
-- [ ] Implement streaming for large files
 
 ## 🏆 Recognition
 
