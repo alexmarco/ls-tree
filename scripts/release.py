@@ -13,7 +13,6 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 def run_command(cmd: str, check: bool = True) -> subprocess.CompletedProcess:
@@ -58,7 +57,7 @@ def get_next_version(current_version: str) -> str:
     parts = current_version.split('.')
     if len(parts) != 3:
         raise ValueError(f"Invalid version format: {current_version}")
-    
+
     year, month, micro = parts
     new_micro = int(micro) + 1
     return f"{year}.{month}.{new_micro}"
@@ -67,21 +66,21 @@ def get_next_version(current_version: str) -> str:
 def main():
     parser = argparse.ArgumentParser(description="Create a new release")
     parser.add_argument(
-        "version", 
-        nargs="?", 
+        "version",
+        nargs="?",
         help="Version to release (format: YY.MM.MICRO). If not provided, increments micro version."
     )
     parser.add_argument(
-        "--dry-run", 
-        action="store_true", 
+        "--dry-run",
+        action="store_true",
         help="Show what would be done without executing"
     )
-    
+
     args = parser.parse_args()
-    
+
     current_version = get_current_version()
     print(f"Current version: {current_version}")
-    
+
     if args.version:
         new_version = args.version
         if not validate_version(new_version):
@@ -89,27 +88,27 @@ def main():
             sys.exit(1)
     else:
         new_version = get_next_version(current_version)
-    
+
     print(f"New version: {new_version}")
-    
+
     if args.dry_run:
         print("DRY RUN - Would execute:")
         print(f"1. Update pyproject.toml version to {new_version}")
-        print(f"2. git add pyproject.toml")
+        print("2. git add pyproject.toml")
         print(f"3. git commit -m 'chore: bump version to {new_version}'")
         print(f"4. git tag -a v{new_version} -m 'Release v{new_version}'")
-        print(f"5. git push origin main")
+        print("5. git push origin main")
         print(f"6. git push origin v{new_version}")
         print("7. GitHub Actions will handle changelog and PyPI release")
         return
-    
+
     # Check if we're on main branch
     result = run_command("git branch --show-current", check=False)
     current_branch = result.stdout.strip()
     if current_branch != "main":
         print(f"Error: Must be on main branch, currently on {current_branch}")
         sys.exit(1)
-    
+
     # Check if working directory is clean (ignore untracked files)
     result = run_command("git status --porcelain", check=False)
     if result.stdout.strip():
@@ -117,30 +116,33 @@ def main():
         lines = result.stdout.strip().split('\n')
         tracked_changes = [line for line in lines if not line.startswith('??')]
         if tracked_changes:
-            print("Error: Working directory has uncommitted changes. Please commit or stash changes.")
+            print(
+                "Error: Working directory has uncommitted changes. "
+                "Please commit or stash changes."
+            )
             print("Uncommitted changes:")
             for line in tracked_changes:
                 print(f"  {line}")
             sys.exit(1)
-    
+
     # Update version
     update_version(new_version)
-    
+
     # Commit version change
     run_command("git add pyproject.toml")
     run_command(f'git commit -m "chore: bump version to {new_version}"')
-    
+
     # Create and push tag
     run_command(f'git tag -a v{new_version} -m "Release v{new_version}"')
     run_command("git push origin main")
     run_command(f"git push origin v{new_version}")
-    
+
     print(f"\nRelease v{new_version} created successfully!")
     print("GitHub Actions will now:")
     print("1. Generate and update changelog automatically")
     print("2. Create GitHub release with changelog")
     print("3. Build and publish to PyPI")
-    print(f"\nMonitor progress at: https://github.com/alexmarco/trxd/actions")
+    print("\nMonitor progress at: https://github.com/alexmarco/trxd/actions")
 
 
 if __name__ == "__main__":
