@@ -326,6 +326,7 @@ git-cliff --tag v25.10.8 --output CHANGELOG.md
 #### 6.3.3 Changelog Format
 
 The generated changelog follows:
+
 - **Keep a Changelog** format
 - **Semantic Versioning** compliance
 - **Conventional Commits** parsing
