@@ -11,12 +11,7 @@ class TestBuildTree:
 
     def test_build_tree_basic(self, sample_tree: Path) -> None:
         """Test construcción básica del árbol."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
         results = list(tree_generator)
@@ -35,7 +30,7 @@ class TestBuildTree:
             exclude=["*.pyc"],
             exclude_dir=["__pycache__", "node_modules", ".git"],
             exclude_file=[],
-            show_metadata=False
+            show_metadata=False,
         )
 
         tree_generator = build_tree(sample_tree, args)
@@ -56,10 +51,7 @@ class TestBuildTree:
     def test_build_tree_file_exclusions(self, sample_tree: Path) -> None:
         """Test exclusión de archivos específicos."""
         args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=["*.pyc"],
-            show_metadata=False
+            exclude=[], exclude_dir=[], exclude_file=["*.pyc"], show_metadata=False
         )
 
         tree_generator = build_tree(sample_tree, args)
@@ -82,12 +74,7 @@ class TestBuildTree:
 
     def test_build_tree_with_metadata(self, sample_tree: Path) -> None:
         """Test construcción del árbol con metadatos."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=True
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(sample_tree, args)
         results = list(tree_generator)
@@ -104,24 +91,19 @@ class TestBuildTree:
                 for filename in filenames:
                     assert filename in file_metadata
                     file_meta = file_metadata[filename]
-                    assert hasattr(file_meta, 'size')
-                    assert hasattr(file_meta, 'modified')
+                    assert hasattr(file_meta, "size")
+                    assert hasattr(file_meta, "modified")
 
                 # Verificar metadatos del directorio
                 dir_metadata = metadata["directory"]
-                assert hasattr(dir_metadata, 'file_count')
-                assert hasattr(dir_metadata, 'total_size')
-                assert hasattr(dir_metadata, 'modified')
+                assert hasattr(dir_metadata, "file_count")
+                assert hasattr(dir_metadata, "total_size")
+                assert hasattr(dir_metadata, "modified")
                 assert dir_metadata.file_count == len(filenames)
 
     def test_build_tree_without_metadata(self, sample_tree: Path) -> None:
         """Test construcción del árbol sin metadatos."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
         results = list(tree_generator)
@@ -132,18 +114,13 @@ class TestBuildTree:
 
     def test_build_tree_generator_behavior(self, sample_tree: Path) -> None:
         """Test que build_tree es un generador."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
         # Verificar que es un generador
-        assert hasattr(tree_generator, '__iter__')
-        assert hasattr(tree_generator, '__next__')
+        assert hasattr(tree_generator, "__iter__")
+        assert hasattr(tree_generator, "__next__")
 
         # Verificar que se puede iterar
         first_result = next(tree_generator)
@@ -155,12 +132,7 @@ class TestBuildTree:
 
     def test_build_tree_empty_directory(self, temp_dir: Path) -> None:
         """Test construcción del árbol en directorio vacío."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
         results = list(tree_generator)
@@ -181,12 +153,7 @@ class TestBuildTree:
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
         results = list(tree_generator)
@@ -213,12 +180,7 @@ class TestBuildTree:
         (temp_dir / "level1" / "level2" / "level2.txt").write_text("level2")
         (temp_dir / "level1" / "level2" / "level3" / "level3.txt").write_text("level3")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
         results = list(tree_generator)
@@ -242,12 +204,7 @@ class TestBuildTree:
         file2 = temp_dir / "file2.txt"
         file2.write_text("content2")  # 8 bytes
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=True
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(temp_dir, args)
         results = list(tree_generator)

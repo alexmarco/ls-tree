@@ -59,9 +59,7 @@ class TestDirectoryMetadata:
         modified = datetime(2024, 1, 15, 14, 30, 0)
 
         metadata = DirectoryMetadata(
-            file_count=file_count,
-            total_size=total_size,
-            modified=modified
+            file_count=file_count, total_size=total_size, modified=modified
         )
 
         assert metadata.file_count == file_count
@@ -70,11 +68,7 @@ class TestDirectoryMetadata:
 
     def test_directory_metadata_immutable(self) -> None:
         """Test que DirectoryMetadata es inmutable (NamedTuple)."""
-        metadata = DirectoryMetadata(
-            file_count=5,
-            total_size=2048,
-            modified=datetime.now()
-        )
+        metadata = DirectoryMetadata(file_count=5, total_size=2048, modified=datetime.now())
 
         # NamedTuple es inmutable, no se puede modificar
         with pytest.raises(AttributeError):

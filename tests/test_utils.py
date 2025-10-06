@@ -1,7 +1,5 @@
 """Tests para funciones utilitarias."""
 
-
-
 from ls_tree import _format_size, _get_file_emoji
 
 

@@ -19,7 +19,7 @@ class TestIntegration:
             capture_output=True,
             text=True,
             encoding="utf-8",
-            cwd=sample_tree.parent
+            cwd=sample_tree.parent,
         )
 
         assert result.returncode == 0
@@ -33,7 +33,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--help"],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -47,7 +47,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "/nonexistent/directory"],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 1
@@ -59,7 +59,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--format", "tree", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -73,7 +73,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--format", "ascii", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -87,7 +87,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--format", "flat", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -102,7 +102,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--format", "json", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -121,7 +121,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--format", "yaml", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -140,7 +140,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--no-emoji", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -153,7 +153,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", "--show-metadata", str(sample_tree)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -164,12 +164,18 @@ class TestIntegration:
         """Test patrones de exclusión."""
         result = subprocess.run(
             [
-                sys.executable, "-m", "ls_tree", "--exclude", "*.pyc",
-                "--exclude-dir", "__pycache__", str(sample_tree)
+                sys.executable,
+                "-m",
+                "ls_tree",
+                "--exclude",
+                "*.pyc",
+                "--exclude-dir",
+                "__pycache__",
+                str(sample_tree),
             ],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -181,12 +187,22 @@ class TestIntegration:
         """Test múltiples exclusiones."""
         result = subprocess.run(
             [
-                sys.executable, "-m", "ls_tree", "-x", "*.pyc", "-x", "*.pyo",
-                "-xd", "__pycache__", "-xd", "node_modules", str(sample_tree)
+                sys.executable,
+                "-m",
+                "ls_tree",
+                "-x",
+                "*.pyc",
+                "-x",
+                "*.pyo",
+                "-xd",
+                "__pycache__",
+                "-xd",
+                "node_modules",
+                str(sample_tree),
             ],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -200,12 +216,17 @@ class TestIntegration:
         """Test formato JSON con metadatos."""
         result = subprocess.run(
             [
-                sys.executable, "-m", "ls_tree", "--format", "json",
-                "--show-metadata", str(sample_tree)
+                sys.executable,
+                "-m",
+                "ls_tree",
+                "--format",
+                "json",
+                "--show-metadata",
+                str(sample_tree),
             ],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -228,12 +249,17 @@ class TestIntegration:
         """Test formato YAML con metadatos."""
         result = subprocess.run(
             [
-                sys.executable, "-m", "ls_tree", "--format", "yaml",
-                "--show-metadata", str(sample_tree)
+                sys.executable,
+                "-m",
+                "ls_tree",
+                "--format",
+                "yaml",
+                "--show-metadata",
+                str(sample_tree),
             ],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -256,22 +282,30 @@ class TestIntegration:
         """Test combinación de múltiples opciones."""
         result = subprocess.run(
             [
-                sys.executable, "-m", "ls_tree", "--format", "tree", "--no-emoji",
-                "--show-metadata", "--exclude", "*.pyc", str(sample_tree)
+                sys.executable,
+                "-m",
+                "ls_tree",
+                "--format",
+                "tree",
+                "--no-emoji",
+                "--show-metadata",
+                "--exclude",
+                "*.pyc",
+                str(sample_tree),
             ],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
         assert "📁" not in result.stdout  # No emojis
-        assert "[d]" in result.stdout     # Marcadores ASCII
-        assert "[f]" in result.stdout     # Marcadores ASCII
-        assert "[" in result.stdout       # Metadatos
-        assert "files" in result.stdout   # Metadatos
+        assert "[d]" in result.stdout  # Marcadores ASCII
+        assert "[f]" in result.stdout  # Marcadores ASCII
+        assert "[" in result.stdout  # Metadatos
+        assert "files" in result.stdout  # Metadatos
         assert "main.pyc" not in result.stdout  # Excluido
-        assert "main.py" in result.stdout       # Incluido
+        assert "main.py" in result.stdout  # Incluido
 
     def test_cli_current_directory(self, sample_tree: Path) -> None:
         """Test que se usa el directorio actual por defecto."""
@@ -280,7 +314,7 @@ class TestIntegration:
             capture_output=True,
             text=True,
             encoding="utf-8",
-            cwd=sample_tree
+            cwd=sample_tree,
         )
 
         assert result.returncode == 0
@@ -292,12 +326,12 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", str(temp_dir)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
         # Debería mostrar solo el directorio raíz
-        assert len(result.stdout.strip().split('\n')) <= 1
+        assert len(result.stdout.strip().split("\n")) <= 1
 
     def test_cli_single_file(self, temp_dir: Path) -> None:
         """Test directorio con un solo archivo."""
@@ -308,7 +342,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", str(temp_dir)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -329,7 +363,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", str(temp_dir)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -351,7 +385,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", str(temp_dir)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0
@@ -376,7 +410,7 @@ class TestIntegration:
             [sys.executable, "-m", "ls_tree", str(temp_dir)],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
         )
 
         assert result.returncode == 0

@@ -13,16 +13,11 @@ class TestRenderFlat:
 
     def test_render_flat_basic(self, sample_tree: Path) -> None:
         """Test renderizado básico en formato plano."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
@@ -39,16 +34,11 @@ class TestRenderFlat:
 
     def test_render_flat_with_metadata(self, sample_tree: Path) -> None:
         """Test renderizado plano con metadatos."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=True
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, sample_tree, show_metadata=True)
             output = mock_stdout.getvalue()
 
@@ -63,12 +53,12 @@ class TestRenderFlat:
             exclude=["*.pyc"],
             exclude_dir=["__pycache__", "node_modules", ".git"],
             exclude_file=[],
-            show_metadata=False
+            show_metadata=False,
         )
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
@@ -84,16 +74,11 @@ class TestRenderFlat:
 
     def test_render_flat_empty_directory(self, temp_dir: Path) -> None:
         """Test renderizado plano en directorio vacío."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, temp_dir)
             output = mock_stdout.getvalue()
 
@@ -105,16 +90,11 @@ class TestRenderFlat:
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, temp_dir)
             output = mock_stdout.getvalue()
 
@@ -123,16 +103,11 @@ class TestRenderFlat:
 
     def test_render_flat_relative_paths(self, sample_tree: Path) -> None:
         """Test que se muestran rutas relativas correctamente."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_flat(tree_generator, sample_tree)
             output = mock_stdout.getvalue()
 
@@ -148,16 +123,11 @@ class TestRenderTree:
 
     def test_render_tree_basic(self, sample_tree: Path) -> None:
         """Test renderizado básico en formato árbol."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -171,16 +141,11 @@ class TestRenderTree:
 
     def test_render_tree_no_emoji(self, sample_tree: Path) -> None:
         """Test renderizado en formato árbol sin emojis."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, sample_tree, use_emoji=False)
             output = mock_stdout.getvalue()
 
@@ -195,16 +160,11 @@ class TestRenderTree:
 
     def test_render_tree_with_metadata(self, sample_tree: Path) -> None:
         """Test renderizado en formato árbol con metadatos."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=True
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=True)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, sample_tree, use_emoji=True, show_metadata=True)
             output = mock_stdout.getvalue()
 
@@ -219,12 +179,12 @@ class TestRenderTree:
             exclude=["*.pyc"],
             exclude_dir=["__pycache__", "node_modules", ".git"],
             exclude_file=[],
-            show_metadata=False
+            show_metadata=False,
         )
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -240,16 +200,11 @@ class TestRenderTree:
 
     def test_render_tree_empty_directory(self, temp_dir: Path) -> None:
         """Test renderizado en formato árbol en directorio vacío."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -261,16 +216,11 @@ class TestRenderTree:
         test_file = temp_dir / "test.txt"
         test_file.write_text("test content")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -290,16 +240,11 @@ class TestRenderTree:
         (temp_dir / "level1" / "level1.txt").write_text("level1")
         (temp_dir / "level1" / "level2" / "level2.txt").write_text("level2")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -324,16 +269,11 @@ class TestRenderTree:
         (temp_dir / "data.json").write_text('{"key": "value"}')
         (temp_dir / "image.png").write_text("fake png")
 
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(temp_dir, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, temp_dir, use_emoji=True)
             output = mock_stdout.getvalue()
 
@@ -346,16 +286,11 @@ class TestRenderTree:
 
     def test_render_tree_relative_paths(self, sample_tree: Path) -> None:
         """Test que se muestran rutas relativas correctamente."""
-        args = argparse.Namespace(
-            exclude=[],
-            exclude_dir=[],
-            exclude_file=[],
-            show_metadata=False
-        )
+        args = argparse.Namespace(exclude=[], exclude_dir=[], exclude_file=[], show_metadata=False)
 
         tree_generator = build_tree(sample_tree, args)
 
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             render_tree(tree_generator, sample_tree, use_emoji=True)
             output = mock_stdout.getvalue()
 

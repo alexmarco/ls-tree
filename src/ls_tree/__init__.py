@@ -106,6 +106,7 @@ def build_tree(directory: Path, args: argparse.Namespace) -> TreeGenerator:
     """
     # Usamos os.walk() para compatibilidad con Python 3.8+
     import os
+
     for dirpath_str, dirnames, filenames in os.walk(directory, topdown=True):
         dirpath = Path(dirpath_str)
         # --- PODA INTELIGENTE ---
@@ -487,10 +488,10 @@ def _render_tree_recursive(
                         dir_metadata = metadata_map[path].get("directory")
                         if dir_metadata:
                             name_with_meta = (
-                            f"{name} [{dir_metadata.file_count} files, "
-                            f"{_format_size(dir_metadata.total_size)}, "
-                            f"{dir_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
-                        )
+                                f"{name} [{dir_metadata.file_count} files, "
+                                f"{_format_size(dir_metadata.total_size)}, "
+                                f"{dir_metadata.modified.strftime('%Y-%m-%d %H:%M')}]"
+                            )
                         break
             print(f"{prefix}{connector}{icon}{name_with_meta}")
             extension: str = "    " if is_last else "│   "
@@ -537,10 +538,11 @@ def main() -> None:
     if sys.platform == "win32":
         # Verificar si estamos en un test
         import inspect
+
         frame = inspect.currentframe()
         in_test = False
         while frame:
-            if 'pytest' in str(frame.f_code.co_filename) or 'test_' in frame.f_code.co_name:
+            if "pytest" in str(frame.f_code.co_filename) or "test_" in frame.f_code.co_name:
                 in_test = True
                 break
             frame = frame.f_back
@@ -548,9 +550,10 @@ def main() -> None:
         if not in_test:
             try:
                 import codecs
-                if hasattr(sys.stdout, 'detach'):
+
+                if hasattr(sys.stdout, "detach"):
                     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
-                if hasattr(sys.stderr, 'detach'):
+                if hasattr(sys.stderr, "detach"):
                     sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
             except (AttributeError, OSError):
                 # Si no se puede configurar UTF-8, continuar sin cambios
