@@ -501,11 +501,28 @@ MIT License - see LICENSE file for details.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for detailed information on how to contribute to trxd.
+
+### Quick Start
+
+1. **Fork** the repository
+2. **Clone** your fork locally
+3. **Create** a feature branch (`git checkout -b feat/amazing-feature`)
+4. **Make** your changes following our [coding standards](CONTRIBUTING.md#estándares-de-código)
+5. **Test** your changes (`uv run pytest`)
+6. **Commit** using [Conventional Commits](CONTRIBUTING.md#convenciones-de-commits)
+7. **Push** to your branch (`git push origin feat/amazing-feature`)
+8. **Open** a Pull Request
+
+### Types of Contributions
+
+- 🐛 **Bug fixes** and issue reports
+- 🚀 **New features** and enhancements
+- 📚 **Documentation** improvements
+- 🧪 **Tests** and quality improvements
+- 🎨 **UI/UX** enhancements
+
+For more details, examples, and our automated workflow, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Changelog
 
