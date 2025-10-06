@@ -4,15 +4,20 @@ Thank you for your interest in contributing to **trxd**! This document will guid
 
 ## 📋 Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [How to Contribute](#how-to-contribute)
-- [Environment Setup](#environment-setup)
-- [Workflow](#workflow)
-- [Code Standards](#code-standards)
-- [Release Process](#release-process)
-- [Reporting Issues](#reporting-issues)
-- [Pull Requests](#pull-requests)
-- [Additional Resources](#additional-resources)
+- [🤝 Code of Conduct](#-code-of-conduct)
+- [🚀 How to Contribute](#-how-to-contribute)
+- [⚙️ Environment Setup](#️-environment-setup)
+- [🔄 Workflow](#-workflow)
+- [📏 Code Standards](#-code-standards)
+- [⚙️ CI/CD](#️-cicd)
+- [🏷️ Release Process](#️-release-process)
+- [🐛 Reporting Issues](#-reporting-issues)
+- [🔄 Pull Requests](#-pull-requests)
+- [📚 Additional Resources](#-additional-resources)
+- [💬 Communication](#-communication)
+- [💡 Contribution Ideas](#-contribution-ideas)
+- [🏆 Recognition](#-recognition)
+- [🙏 Acknowledgments](#-acknowledgments)
 
 ## 🤝 Code of Conduct
 
@@ -52,11 +57,11 @@ uv sync --all-extras
 
 # 4. Verify installation
 uv run python -m trxd --help
-```
+```bash
 
 ### Project Structure
 
-```
+```text
 trxd/
 ├── src/trxd/           # Main source code
 ├── tests/              # Unit and integration tests
