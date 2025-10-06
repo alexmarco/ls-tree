@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 
+## [25.10.5] - 2025-10-06
+
+### Changed
+
+- Translated all comments and docstrings to English for consistency
+- Updated all test files to use English docstrings and comments
+- Improved code readability and international accessibility
+
+### Fixed
+
+- Fixed mypy type checking errors in test_utils.py
+- Corrected type annotations for _format_size function calls
+
 ## [25.10.4] - 2025-10-06
 
 ### Fixed
