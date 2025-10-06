@@ -729,22 +729,28 @@ def is_excluded(path: Path, args: argparse.Namespace) -> bool:
     return tree_builder.is_excluded(path)
 
 
-def render_tree(tree_generator: TreeGenerator, start_path: Path = Path("."),
-                use_emoji: bool = True, show_metadata: bool = False) -> None:
+def render_tree(
+    tree_generator: TreeGenerator,
+    start_path: Path = Path("."),
+    use_emoji: bool = True,
+    show_metadata: bool = False,
+) -> None:
     """Compatibility function for existing tests"""
     renderer = TreeRenderer(start_path, show_metadata, use_emoji)
     renderer.render(tree_generator)
 
 
-def render_flat(tree_generator: TreeGenerator, start_path: Path = Path("."),
-                show_metadata: bool = False) -> None:
+def render_flat(
+    tree_generator: TreeGenerator, start_path: Path = Path("."), show_metadata: bool = False
+) -> None:
     """Compatibility function for existing tests"""
     renderer = FlatRenderer(start_path, show_metadata)
     renderer.render(tree_generator)
 
 
-def render_csv(tree_generator: TreeGenerator, start_path: Path = Path("."),
-               show_metadata: bool = False) -> None:
+def render_csv(
+    tree_generator: TreeGenerator, start_path: Path = Path("."), show_metadata: bool = False
+) -> None:
     """Compatibility function for existing tests"""
     renderer = CSVRenderer(start_path, show_metadata)
     renderer.render(tree_generator)
