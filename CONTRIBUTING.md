@@ -66,13 +66,12 @@ trxd/
 └── pyproject.toml      # Project configuration
 ```
 
-
 ## 🔄 Workflow
 
 ### Development Process
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1d4ed8', 'lineColor': '#64748b', 'secondaryColor': '#f1f5f9', 'tertiaryColor': '#e2e8f0', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f1f5f9', 'tertiaryBkg': '#e2e8f8'}}}%%
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2563eb', 'primaryTextColor': '#1e293b', 'primaryBorderColor': '#1d4ed8', 'lineColor': '#64748b', 'secondaryColor': '#f8fafc', 'tertiaryColor': '#e2e8f0', 'background': '#ffffff', 'mainBkg': '#ffffff', 'secondBkg': '#f8fafc', 'tertiaryBkg': '#f1f5f9'}}}%%
 graph TD
     A[🚀 Fork & Clone] --> B[🌿 Create Branch]
     B --> C[💻 Make Changes]
@@ -82,22 +81,29 @@ graph TD
     F --> G[👀 Review]
     G --> H[🎉 Merge]
     
-    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style H fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+    style B fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style C fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+    style E fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style F fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style G fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#1e293b
+    style H fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#1e293b
 ```
 
 ### Release Process
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#059669', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#047857', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#dcfce7', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f0fdf4', 'tertiaryBkg': '#dcfce7'}}}%%
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#059669', 'primaryTextColor': '#1e293b', 'primaryBorderColor': '#047857', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#dcfce7', 'background': '#ffffff', 'mainBkg': '#ffffff', 'secondBkg': '#f0fdf4', 'tertiaryBkg': '#dcfce7'}}}%%
 graph LR
     A[📜 Run Script] --> B[🏷️ Create Tag]
     B --> C[⚡ Auto Release]
     C --> D[📚 PyPI Upload]
     
-    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style D fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#1e293b
+    style C fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#1e293b
+    style D fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#1e293b
 ```
 
 ### Branch Naming
@@ -111,6 +117,7 @@ Use descriptive branch names with prefixes:
 - `test/` - Testing improvements
 
 **Examples:**
+
 - `feat/add-xml-output`
 - `fix/csv-encoding-issue`
 - `docs/update-readme`
@@ -122,9 +129,9 @@ Use descriptive branch names with prefixes:
 We follow **Conventional Commits** to maintain a clear history:
 
 ```bash
-# Estructura: <type>(<scope>): <description>
+# Structure: <type>(<scope>): <description>
 
-# Ejemplos:
+# Examples:
 feat(auth): add email and password login
 fix(api): resolve 500 error when fetching users
 docs: update README with installation instructions
@@ -190,14 +197,18 @@ class TestFeature:
 Our automated workflows ensure code quality and smooth releases:
 
 ### Quality Checks
+
 Every push and PR automatically runs:
+
 - **Code formatting** with `ruff`
 - **Linting** with `ruff check`
 - **Type checking** with `mypy`
 - **Tests** with `pytest`
 
 ### Release Automation
+
 When you create a tag, GitHub Actions automatically:
+
 - Generates changelog with `git-cliff`
 - Creates GitHub release
 - Publishes to PyPI
@@ -359,23 +370,25 @@ graph TD
 ## 💡 Contribution Ideas
 
 ### Good First Issues
+
 - Add new output formats (XML, HTML)
 - Improve error messages and help text
 - Add more integration tests
 - Document advanced use cases
 
 ### Intermediate Tasks
+
 - Implement advanced filters (date, permissions)
 - Add support for compressed files
 - Optimize performance for large directories
 - Add interactive mode
 
 ### Advanced Features
+
 - Implement parallelization
 - Add database support
 - Create plugin system
 - Implement streaming for large files
-
 
 ## 🏆 Recognition
 
