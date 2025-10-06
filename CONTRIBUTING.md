@@ -144,16 +144,16 @@ test: add unit tests for authentication
 
 | Type | Description | Emoji |
 |------|-------------|-------|
-| `feat` | Nueva funcionalidad | 🚀 |
-| `fix` | Corrección de bugs | 🐛 |
-| `docs` | Documentación | 📚 |
-| `style` | Formato, espacios, etc. | 🎨 |
-| `refactor` | Refactorización de código | 🚜 |
+| `feat` | New functionality | 🚀 |
+| `fix` | Bug fixes | 🐛 |
+| `docs` | Documentation | 📚 |
+| `style` | Formatting, spaces, etc. | 🎨 |
+| `refactor` | Code refactoring | 🚜 |
 | `test` | Tests | 🧪 |
-| `chore` | Tareas de mantenimiento | 🔧 |
-| `perf` | Mejoras de rendimiento | ⚡ |
-| `ci` | Cambios en CI/CD | ⚙️ |
-| `build` | Cambios en build system | 🔨 |
+| `chore` | Maintenance tasks | 🔧 |
+| `perf` | Performance improvements | ⚡ |
+| `ci` | CI/CD changes | ⚙️ |
+| `build` | Build system changes | 🔨 |
 
 ### Quality Tools
 
