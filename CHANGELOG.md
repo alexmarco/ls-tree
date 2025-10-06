@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [25.10.13] - 2025-10-06
+
+### 🐛 Fixed
+
+- **docs**: Improve Mermaid diagram contrast and readability
+
+- **docs**: Translate commit types descriptions to English
+
+- **docs**: Translate template sections to English
+
+- **docs**: Translate Additional Resources section to English
+
+- **docs**: Resolve markdown linter errors in CONTRIBUTING.md
+
+- Resolve code quality issues
+
+
+
+### 📚 Documentation
+
+- Add comprehensive contributing guide
+
+- Update README with enhanced contributing section
+
+- Translate contributing guide and templates to English
+
+- Simplify and clean up contributing guide
+
+
+
+### 🔧 Chore
+
+- Update changelog for v25.10.12
+
+- Bump version to 25.10.13
+
+
+
+### 🚀 Added
+
+- **templates**: Add GitHub issue and PR templates
+
+
 ## [25.10.12] - 2025-10-06
 
 ### 🐛 Fixed
