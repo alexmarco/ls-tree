@@ -173,11 +173,16 @@ class TestIsExcluded:
 
     def test_case_sensitivity(self) -> None:
         """Test sensibilidad a mayúsculas/minúsculas."""
+        import platform
+
         args = argparse.Namespace(exclude=["*.PYC"], exclude_dir=[], exclude_file=[])
 
-        # En Windows, pathlib es case-insensitive por defecto
-        # Por lo tanto, ambos deberían coincidir
-        assert is_excluded(Path("script.pyc"), args)  # minúsculas
+        # En Windows, pathlib.Path.match es case-insensitive por defecto
+        # En Linux/Unix, es case-sensitive
+        if platform.system() == "Windows":
+            assert is_excluded(Path("script.pyc"), args)  # minúsculas
+        else:
+            assert not is_excluded(Path("script.pyc"), args)  # minúsculas no coincide
         assert is_excluded(Path("script.PYC"), args)  # mayúsculas
 
     def test_nested_paths(self) -> None:
