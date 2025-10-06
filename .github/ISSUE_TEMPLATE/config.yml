@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/alexmarco/trxd/discussions
+    about: Ask questions, share ideas, or discuss trxd with the community
+  - name: 📚 Documentation
+    url: https://github.com/alexmarco/trxd#readme
+    about: Check the README and documentation for usage examples
+  - name: 🐛 Bug Reports
+    url: https://github.com/alexmarco/trxd/issues/new?template=bug_report.md
+    about: Report a bug or unexpected behavior
+  - name: 🚀 Feature Requests
+    url: https://github.com/alexmarco/trxd/issues/new?template=feature_request.md
+    about: Suggest a new feature or enhancement
