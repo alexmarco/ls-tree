@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 
+## [25.10.6] - 2025-10-06
+
+### Fixed
+
+- Translated CLI help messages from Spanish to English
+- Updated argparse help text for complete English interface
+- Fixed remaining Spanish text in command-line interface
+
 ## [25.10.5] - 2025-10-06
 
 ### Changed
