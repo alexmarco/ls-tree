@@ -1,4 +1,4 @@
-"""Tests de integración para ls-tree."""
+"""Tests de integración para trxd."""
 
 import json
 import subprocess
@@ -10,7 +10,7 @@ import yaml
 
 
 class TestIntegration:
-    """Tests de integración para ls-tree."""
+    """Tests de integración para trxd."""
 
     def test_cli_basic_usage(self, sample_tree: Path) -> None:
         """Test uso básico de la CLI."""

@@ -9,7 +9,7 @@ and this project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 
 ### Added
 
-- Initial release of ls-tree
+- Initial release of trxd
 - Multiple output formats: tree (with emojis), ASCII tree, flat list, JSON, and YAML
 - Advanced filtering with glob patterns for files and directories
 - Metadata support showing file sizes, modification dates, and directory statistics

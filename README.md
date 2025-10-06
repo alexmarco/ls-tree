@@ -1,4 +1,4 @@
-# ls-tree
+# trxd
 
 A modern Python command-line tool for listing directory contents with advanced filtering and metadata support. Similar to `tree` but with more features and better performance.
 
@@ -16,21 +16,21 @@ A modern Python command-line tool for listing directory contents with advanced f
 ### Using pip
 
 ```bash
-pip install ls-tree
+pip install trxd
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/your-username/ls-tree.git
-cd ls-tree
+git clone https://github.com/alexmarco/trxd.git
+cd trxd
 pip install -e .
 ```
 
 ### Using uv (recommended)
 
 ```bash
-uv add ls-tree
+uv add trxd
 ```
 
 ## Usage
@@ -39,65 +39,65 @@ uv add ls-tree
 
 ```bash
 # List current directory in tree format
-ls-tree
+trxd
 
 # List specific directory
-ls-tree /path/to/directory
+trxd /path/to/directory
 
 # List with emoji icons (default)
-ls-tree --format tree
+trxd --format tree
 
 # List with ASCII characters (no emojis)
-ls-tree --format tree --no-emoji
+trxd --format tree --no-emoji
 
 # List with ASCII format (same as --no-emoji)
-ls-tree --format ascii
+trxd --format ascii
 ```
 
 ### Output formats
 
 ```bash
 # Tree format with emojis (default)
-ls-tree --format tree
+trxd --format tree
 
 # Tree format with ASCII characters
-ls-tree --format ascii
+trxd --format ascii
 
 # Flat list format
-ls-tree --format flat
+trxd --format flat
 
 # JSON format
-ls-tree --format json
+trxd --format json
 
 # YAML format
-ls-tree --format yaml
+trxd --format yaml
 ```
 
 ### Filtering options
 
 ```bash
 # Exclude files and directories
-ls-tree --exclude "*.pyc" --exclude "__pycache__"
+trxd --exclude "*.pyc" --exclude "__pycache__"
 
 # Exclude only directories
-ls-tree --exclude-dir "node_modules" --exclude-dir ".git"
+trxd --exclude-dir "node_modules" --exclude-dir ".git"
 
 # Exclude only files
-ls-tree --exclude-file "*.log" --exclude-file "*.tmp"
+trxd --exclude-file "*.log" --exclude-file "*.tmp"
 
 # Multiple exclusions
-ls-tree -x "*.pyc" -x "*.pyo" -xd "__pycache__" -xd ".git"
+trxd -x "*.pyc" -x "*.pyo" -xd "__pycache__" -xd ".git"
 ```
 
 ### Metadata support
 
 ```bash
 # Show file sizes and modification dates
-ls-tree --show-metadata
+trxd --show-metadata
 
 # Combine with different formats
-ls-tree --format flat --show-metadata
-ls-tree --format json --show-metadata
+trxd --format flat --show-metadata
+trxd --format json --show-metadata
 ```
 
 ## Examples
@@ -105,7 +105,7 @@ ls-tree --format json --show-metadata
 ### Basic directory listing
 
 ```bash
-$ ls-tree src/
+$ trxd src/
 📁 src/
 ├── 📁 components/
 │   ├── 🐍 Button.py
@@ -118,7 +118,7 @@ $ ls-tree src/
 ### Tree format without emojis
 
 ```bash
-$ ls-tree --format tree --no-emoji src/
+$ trxd --format tree --no-emoji src/
 [d] src/
 ├── [d] components/
 │   ├── [f] Button.py
@@ -131,7 +131,7 @@ $ ls-tree --format tree --no-emoji src/
 ### ASCII tree format
 
 ```bash
-$ ls-tree --format ascii src/
+$ trxd --format ascii src/
 [d] src/
 ├── [d] components/
 │   ├── [f] Button.py
@@ -144,7 +144,7 @@ $ ls-tree --format ascii src/
 ### Tree format with metadata
 
 ```bash
-$ ls-tree --format tree --show-metadata src/
+$ trxd --format tree --show-metadata src/
 📁 src/ [4 files, 2.1 KB]
 ├── 📁 components/ [2 files, 922 B]
 │   ├── 🐍 Button.py [450 B, 2024-01-15 14:25]
@@ -157,7 +157,7 @@ $ ls-tree --format tree --show-metadata src/
 ### Mixed file types with emojis
 
 ```bash
-$ ls-tree project/
+$ trxd project/
 📁 project/
 ├── 📁 src/
 │   ├── 🐍 main.py
@@ -175,7 +175,7 @@ $ ls-tree project/
 ### Flat format (simple)
 
 ```bash
-$ ls-tree --format flat src/
+$ trxd --format flat src/
 src
 src/main.py
 src/components
@@ -188,7 +188,7 @@ src/utils/helpers.py
 ### Flat format with metadata
 
 ```bash
-$ ls-tree --format flat --show-metadata src/
+$ trxd --format flat --show-metadata src/
 src [4 files, 2.1 KB]
 src/main.py [1.2 KB, 2024-01-15 14:30]
 src/components [2 files, 922 B]
@@ -201,7 +201,7 @@ src/utils/helpers.py [800 B, 2024-01-15 14:15]
 ### JSON output (simple)
 
 ```bash
-$ ls-tree --format json src/
+$ trxd --format json src/
 {
   "src": {
     "main.py": null,
@@ -219,7 +219,7 @@ $ ls-tree --format json src/
 ### JSON output with metadata
 
 ```bash
-$ ls-tree --format json --show-metadata
+$ trxd --format json --show-metadata
 {
   "_metadata": {
     "file_count": 4,
@@ -276,7 +276,7 @@ $ ls-tree --format json --show-metadata
 ### YAML output (simple)
 
 ```bash
-$ ls-tree --format yaml src/
+$ trxd --format yaml src/
 src:
   main.py: null
   components:
@@ -289,7 +289,7 @@ src:
 ### YAML output with metadata
 
 ```bash
-$ ls-tree --format yaml --show-metadata src/
+$ trxd --format yaml --show-metadata src/
 _metadata:
   file_count: 4
   total_size: 2156
@@ -333,7 +333,7 @@ src:
 ### ASCII format with metadata
 
 ```bash
-$ ls-tree --format ascii --show-metadata src/
+$ trxd --format ascii --show-metadata src/
 [d] src/ [4 files, 2.1 KB]
 ├── [d] components/ [2 files, 922 B]
 │   ├── [f] Button.py [450 B, 2024-01-15 14:25]
@@ -347,46 +347,46 @@ $ ls-tree --format ascii --show-metadata src/
 
 ```bash
 # Exclude Python cache files
-$ ls-tree --exclude "*.pyc" --exclude "__pycache__"
+$ trxd --exclude "*.pyc" --exclude "__pycache__"
 
 # Exclude common build directories
-$ ls-tree --exclude-dir "node_modules" --exclude-dir ".git" --exclude-dir "dist"
+$ trxd --exclude-dir "node_modules" --exclude-dir ".git" --exclude-dir "dist"
 
 # Show only source files
-$ ls-tree --exclude-file "*.log" --exclude-file "*.tmp" --show-metadata
+$ trxd --exclude-file "*.log" --exclude-file "*.tmp" --show-metadata
 
 # Complex filtering example
-$ ls-tree --exclude-dir "node_modules" --exclude-dir ".git" --exclude "*.pyc" --exclude "*.pyo" --show-metadata
+$ trxd --exclude-dir "node_modules" --exclude-dir ".git" --exclude "*.pyc" --exclude "*.pyo" --show-metadata
 ```
 
 ### Real-world usage examples
 
 ```bash
 # List a Python project structure
-$ ls-tree --exclude-dir "__pycache__" --exclude-dir ".git" --exclude "*.pyc" --format tree
+$ trxd --exclude-dir "__pycache__" --exclude-dir ".git" --exclude "*.pyc" --format tree
 
 # Get directory size information
-$ ls-tree --show-metadata --format flat | grep "\[.*files"
+$ trxd --show-metadata --format flat | grep "\[.*files"
 
 # Export project structure for documentation
-$ ls-tree --format yaml --exclude-dir ".git" --exclude-dir "node_modules" > project-structure.yaml
+$ trxd --format yaml --exclude-dir ".git" --exclude-dir "node_modules" > project-structure.yaml
 
 # Generate JSON for API consumption
-$ ls-tree --format json --show-metadata --exclude-dir ".git" > directory-info.json
+$ trxd --format json --show-metadata --exclude-dir ".git" > directory-info.json
 
 # Quick file listing without directories
-$ ls-tree --format flat --exclude-dir "*" src/
+$ trxd --format flat --exclude-dir "*" src/
 ```
 
 ### Integration examples
 
 ```bash
 # Use with other tools
-$ ls-tree --format flat | grep "\.py$" | wc -l  # Count Python files
-$ ls-tree --show-metadata --format json | jq '.src.contents | keys'  # Get directory contents with jq
+$ trxd --format flat | grep "\.py$" | wc -l  # Count Python files
+$ trxd --show-metadata --format json | jq '.src.contents | keys'  # Get directory contents with jq
 
 # Generate reports
-$ ls-tree --show-metadata --format json | jq '[.src.contents | to_entries[] | select(.value.type == "file") | {name: .key, size: .value.size}]'
+$ trxd --show-metadata --format json | jq '[.src.contents | to_entries[] | select(.value.type == "file") | {name: .key, size: .value.size}]'
 ```
 
 ## Command-line options
@@ -425,8 +425,8 @@ options:
 ### Setup development environment
 
 ```bash
-git clone https://github.com/your-username/ls-tree.git
-cd ls-tree
+git clone https://github.com/alexmarco/trxd.git
+cd trxd
 uv sync --dev
 ```
 

@@ -1,4 +1,4 @@
-"""Configuración de pytest para ls-tree."""
+"""Configuración de pytest para trxd."""
 
 import tempfile
 from pathlib import Path

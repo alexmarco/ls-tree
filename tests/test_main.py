@@ -16,14 +16,14 @@ class TestMain:
 
     def test_main_help(self) -> None:
         """Test que la ayuda se muestra correctamente."""
-        with patch("sys.argv", ["ls-tree", "--help"]):
+        with patch("sys.argv", ["trxd", "--help"]):
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert exc_info.value.code == 0
 
     def test_main_invalid_directory(self) -> None:
         """Test que se maneja correctamente un directorio inválido."""
-        with patch("sys.argv", ["ls-tree", "/nonexistent/directory"]), patch(
+        with patch("sys.argv", ["trxd", "/nonexistent/directory"]), patch(
             "sys.stderr", new_callable=StringIO
         ) as mock_stderr, pytest.raises(SystemExit) as exc_info:
             main()
@@ -32,7 +32,7 @@ class TestMain:
 
     def test_main_default_format(self, sample_tree: Path) -> None:
         """Test formato por defecto (tree con emojis)."""
-        with patch("sys.argv", ["ls-tree", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -46,7 +46,7 @@ class TestMain:
 
     def test_main_tree_format(self, sample_tree: Path) -> None:
         """Test formato tree explícito."""
-        with patch("sys.argv", ["ls-tree", "--format", "tree", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--format", "tree", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -60,7 +60,7 @@ class TestMain:
 
     def test_main_ascii_format(self, sample_tree: Path) -> None:
         """Test formato ASCII."""
-        with patch("sys.argv", ["ls-tree", "--format", "ascii", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--format", "ascii", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -76,7 +76,7 @@ class TestMain:
 
     def test_main_flat_format(self, sample_tree: Path) -> None:
         """Test formato flat."""
-        with patch("sys.argv", ["ls-tree", "--format", "flat", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--format", "flat", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -92,7 +92,7 @@ class TestMain:
 
     def test_main_json_format(self, sample_tree: Path) -> None:
         """Test formato JSON."""
-        with patch("sys.argv", ["ls-tree", "--format", "json", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--format", "json", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -109,7 +109,7 @@ class TestMain:
 
     def test_main_yaml_format(self, sample_tree: Path) -> None:
         """Test formato YAML."""
-        with patch("sys.argv", ["ls-tree", "--format", "yaml", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--format", "yaml", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -126,7 +126,7 @@ class TestMain:
 
     def test_main_no_emoji(self, sample_tree: Path) -> None:
         """Test opción --no-emoji."""
-        with patch("sys.argv", ["ls-tree", "--no-emoji", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--no-emoji", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -141,7 +141,7 @@ class TestMain:
 
     def test_main_show_metadata(self, sample_tree: Path) -> None:
         """Test opción --show-metadata."""
-        with patch("sys.argv", ["ls-tree", "--show-metadata", str(sample_tree)]), patch(
+        with patch("sys.argv", ["trxd", "--show-metadata", str(sample_tree)]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout:
             main()
@@ -156,7 +156,7 @@ class TestMain:
         """Test patrones de exclusión."""
         with patch(
             "sys.argv",
-            ["ls-tree", "--exclude", "*.pyc", "--exclude-dir", "__pycache__", str(sample_tree)],
+            ["trxd", "--exclude", "*.pyc", "--exclude-dir", "__pycache__", str(sample_tree)],
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
@@ -172,7 +172,7 @@ class TestMain:
         with patch(
             "sys.argv",
             [
-                "ls-tree",
+                "trxd",
                 "-x",
                 "*.pyc",
                 "-x",
@@ -197,7 +197,7 @@ class TestMain:
 
     def test_main_current_directory(self, sample_tree: Path) -> None:
         """Test que se usa el directorio actual por defecto."""
-        with patch("sys.argv", ["ls-tree"]), patch(
+        with patch("sys.argv", ["trxd"]), patch(
             "sys.stdout", new_callable=StringIO
         ) as mock_stdout, patch("pathlib.Path.cwd", return_value=sample_tree):
             main()
@@ -209,7 +209,7 @@ class TestMain:
     def test_main_json_with_metadata(self, sample_tree: Path) -> None:
         """Test formato JSON con metadatos."""
         with patch(
-            "sys.argv", ["ls-tree", "--format", "json", "--show-metadata", str(sample_tree)]
+            "sys.argv", ["trxd", "--format", "json", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
@@ -231,7 +231,7 @@ class TestMain:
     def test_main_yaml_with_metadata(self, sample_tree: Path) -> None:
         """Test formato YAML con metadatos."""
         with patch(
-            "sys.argv", ["ls-tree", "--format", "yaml", "--show-metadata", str(sample_tree)]
+            "sys.argv", ["trxd", "--format", "yaml", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
@@ -253,7 +253,7 @@ class TestMain:
     def test_main_flat_with_metadata(self, sample_tree: Path) -> None:
         """Test formato flat con metadatos."""
         with patch(
-            "sys.argv", ["ls-tree", "--format", "flat", "--show-metadata", str(sample_tree)]
+            "sys.argv", ["trxd", "--format", "flat", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
@@ -266,7 +266,7 @@ class TestMain:
     def test_main_ascii_with_metadata(self, sample_tree: Path) -> None:
         """Test formato ASCII con metadatos."""
         with patch(
-            "sys.argv", ["ls-tree", "--format", "ascii", "--show-metadata", str(sample_tree)]
+            "sys.argv", ["trxd", "--format", "ascii", "--show-metadata", str(sample_tree)]
         ), patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             main()
             output = mock_stdout.getvalue()
@@ -284,7 +284,7 @@ class TestMain:
         with patch(
             "sys.argv",
             [
-                "ls-tree",
+                "trxd",
                 "--format",
                 "tree",
                 "--no-emoji",

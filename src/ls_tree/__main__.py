@@ -1,4 +1,4 @@
-"""Punto de entrada para ejecutar ls-tree como módulo."""
+"""Punto de entrada para ejecutar trxd como módulo."""
 
 from ls_tree import main
 

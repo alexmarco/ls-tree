@@ -39,7 +39,7 @@ Issues = "https://github.com/alejandromarcoramos/ls-tree/issues"
 Documentation = "https://github.com/alejandromarcoramos/ls-tree#readme"
 
 [project.scripts]
-ls-tree = "ls_tree:main"
+trxd = "ls_tree:main"
 
 [tool.ruff]
 line-length = 100
