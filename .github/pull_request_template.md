@@ -1,8 +1,8 @@
-## 📝 Descripción
+## 📝 Description
 
-Descripción clara de los cambios realizados en este PR.
+Clear description of the changes made in this PR.
 
-## 🔗 Issues Relacionados
+## 🔗 Related Issues
 
 - Closes #(issue number)
 - Fixes #(issue number)
@@ -10,94 +10,100 @@ Descripción clara de los cambios realizados en este PR.
 
 ## 🧪 Testing
 
-- [ ] Tests unitarios añadidos/actualizados
-- [ ] Tests de integración pasan
-- [ ] Verificado manualmente en diferentes sistemas operativos
-- [ ] Verificado con diferentes formatos de salida
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manually verified on different operating systems
+- [ ] Verified with different output formats
 
-### Comandos de Testing
+### Testing Commands
 
 ```bash
-# Ejecutar tests
+# Run tests
 uv run pytest
 
-# Verificar calidad del código
+# Check code quality
 uv run ruff check --fix .
 uv run ruff format .
 uv run mypy .
 
-# Probar funcionalidad manualmente
+# Test functionality manually
 uv run python -m trxd --help
 uv run python -m trxd /path/to/test/directory
 ```
 
-## 📚 Documentación
+## 📚 Documentation
 
-- [ ] README actualizado si es necesario
-- [ ] Docstrings añadidos/actualizados
-- [ ] Comentarios en código si es necesario
-- [ ] CONTRIBUTING.md actualizado si es necesario
+- [ ] README updated if necessary
+- [ ] Docstrings added/updated
+- [ ] Code comments if necessary
+- [ ] CONTRIBUTING.md updated if necessary
 
-## 🎨 Cambios Visuales
+## 🎨 Visual Changes
 
-Si hay cambios visuales, incluye capturas de pantalla o ejemplos:
+If there are visual changes, include screenshots or examples:
 
-### Antes
+### Before
+
 ```
-# Output anterior
-```
-
-### Después
-```
-# Output nuevo
+# Previous output
 ```
 
-## 🔧 Cambios Técnicos
+### After
 
-### Archivos Modificados
-- `archivo1.py` - Descripción del cambio
-- `archivo2.py` - Descripción del cambio
+```
+# New output
+```
 
-### Nuevas Dependencias
-- [ ] No se añadieron nuevas dependencias
-- [ ] Se añadieron nuevas dependencias (especificar cuáles y por qué)
+## 🔧 Technical Changes
+
+### Modified Files
+
+- `file1.py` - Description of change
+
+- `file2.py` - Description of change
+
+### New Dependencies
+
+- [ ] No new dependencies added
+- [ ] New dependencies added (specify which ones and why)
 
 ### Breaking Changes
-- [ ] No hay breaking changes
-- [ ] Hay breaking changes (describir cuáles y cómo migrar)
 
-## 📊 Impacto en Rendimiento
+- [ ] No breaking changes
+- [ ] Breaking changes exist (describe which ones and how to migrate)
 
-- [ ] No hay impacto en rendimiento
-- [ ] Mejora el rendimiento (describir)
-- [ ] Puede afectar el rendimiento (describir y justificar)
+## 📊 Performance Impact
+
+- [ ] No performance impact
+- [ ] Improves performance (describe)
+- [ ] May affect performance (describe and justify)
 
 ## 🔍 Checklist
 
-- [ ] Mi código sigue las convenciones del proyecto
-- [ ] He realizado self-review de mi código
-- [ ] He comentado mi código, especialmente en áreas difíciles de entender
-- [ ] He hecho los cambios correspondientes en la documentación
-- [ ] Mis cambios no generan warnings nuevos
-- [ ] He añadido tests que prueban que mi fix es efectivo o que mi feature funciona
-- [ ] Los tests nuevos y existentes pasan localmente con mis cambios
-- [ ] Cualquier cambio dependiente ha sido mergeado y publicado
+- [ ] My code follows the project conventions
+- [ ] I have performed self-review of my code
+- [ ] I have commented my code, especially in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes do not generate new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published
 
-## 📝 Notas Adicionales
+## 📝 Additional Notes
 
-Cualquier información adicional que los reviewers deberían saber.
+Any additional information that reviewers should know.
 
-## 🎯 Tipo de Cambio
+## 🎯 Type of Change
 
-- [ ] Bug fix (cambio que corrige un problema)
-- [ ] Nueva funcionalidad (cambio que añade funcionalidad)
-- [ ] Breaking change (fix o feature que causaría que funcionalidad existente no funcione como se espera)
-- [ ] Documentación (cambios solo en documentación)
-- [ ] Refactoring (cambio de código que no corrige un bug ni añade funcionalidad)
-- [ ] Performance (cambio que mejora el rendimiento)
-- [ ] Test (añadir tests o corregir tests existentes)
-- [ ] Chore (cambios en build process, herramientas auxiliares, etc.)
+- [ ] Bug fix (change that fixes a problem)
+- [ ] New feature (change that adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation (changes only in documentation)
+- [ ] Refactoring (code change that neither fixes a bug nor adds functionality)
+- [ ] Performance (change that improves performance)
+- [ ] Test (adding tests or fixing existing tests)
+- [ ] Chore (changes in build process, auxiliary tools, etc.)
 
 ## 🚀 Screenshots/Videos
 
-Si aplica, incluye screenshots o videos que demuestren los cambios.
+If applicable, include screenshots or videos that demonstrate the changes.

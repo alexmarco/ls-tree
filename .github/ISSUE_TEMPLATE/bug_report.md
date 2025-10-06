@@ -6,53 +6,53 @@ labels: ['bug', 'needs-triage']
 assignees: ''
 ---
 
-## 🐛 Descripción del Bug
+## 🐛 Bug Description
 
-Una descripción clara y concisa del problema.
+A clear and concise description of the problem.
 
-## 🔄 Pasos para Reproducir
+## 🔄 Steps to Reproduce
 
-1. Ve a '...'
-2. Ejecuta el comando '...'
-3. Desplázate hasta '...'
-4. Ve el error
+1. Go to '...'
+2. Run command '...'
+3. Scroll down to '...'
+4. See error
 
-## ✅ Comportamiento Esperado
+## ✅ Expected Behavior
 
-Una descripción clara y concisa de lo que esperabas que pasara.
+A clear and concise description of what you expected to happen.
 
-## 📸 Capturas de Pantalla
+## 📸 Screenshots
 
-Si aplica, añade capturas de pantalla para ayudar a explicar tu problema.
+If applicable, add screenshots to help explain your problem.
 
-## 🖥️ Información del Sistema
+## 🖥️ System Information
 
 - **OS**: [e.g. Windows 10, macOS 12.0, Ubuntu 20.04]
 - **Python**: [e.g. 3.9.7]
 - **trxd**: [e.g. 25.10.5]
 - **Terminal**: [e.g. PowerShell, Bash, Zsh]
 
-## 📝 Comando Ejecutado
+## 📝 Command Executed
 
 ```bash
-# Pega aquí el comando exacto que causó el error
+# Paste here the exact command that caused the error
 trxd --format json /path/to/directory
 ```
 
-## 📋 Output Completo
+## 📋 Complete Output
 
 ```
-# Pega aquí el output completo, incluyendo el error
+# Paste here the complete output, including the error
 ```
 
-## 📝 Información Adicional
+## 📝 Additional Information
 
-Cualquier otra información relevante sobre el problema.
+Any other relevant information about the problem.
 
 ## 🔍 Checklist
 
-- [ ] He buscado en issues existentes para evitar duplicados
-- [ ] He verificado que estoy usando la versión más reciente
-- [ ] He incluido todos los pasos para reproducir el problema
-- [ ] He incluido información del sistema
-- [ ] He incluido el comando exacto que causó el error
+- [ ] I have searched existing issues to avoid duplicates
+- [ ] I have verified I am using the latest version
+- [ ] I have included all steps to reproduce the problem
+- [ ] I have included system information
+- [ ] I have included the exact command that caused the error

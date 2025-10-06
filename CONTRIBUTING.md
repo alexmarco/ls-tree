@@ -1,72 +1,72 @@
 # Contributing to trxd
 
-¡Gracias por tu interés en contribuir a **trxd**! Este documento te guiará a través del proceso de contribución y te ayudará a entender nuestro flujo de trabajo.
+Thank you for your interest in contributing to **trxd**! This document will guide you through the contribution process and help you understand our workflow.
 
-## 📋 Tabla de Contenidos
+## 📋 Table of Contents
 
-- [Código de Conducta](#código-de-conducta)
-- [¿Cómo Contribuir?](#cómo-contribuir)
-- [Configuración del Entorno](#configuración-del-entorno)
-- [Flujo de Trabajo](#flujo-de-trabajo)
-- [Estándares de Código](#estándares-de-código)
-- [Proceso de Release](#proceso-de-release)
-- [Reportar Issues](#reportar-issues)
+- [Code of Conduct](#code-of-conduct)
+- [How to Contribute](#how-to-contribute)
+- [Environment Setup](#environment-setup)
+- [Workflow](#workflow)
+- [Code Standards](#code-standards)
+- [Release Process](#release-process)
+- [Reporting Issues](#reporting-issues)
 - [Pull Requests](#pull-requests)
-- [Recursos Adicionales](#recursos-adicionales)
+- [Additional Resources](#additional-resources)
 
-## 🤝 Código de Conducta
+## 🤝 Code of Conduct
 
-Este proyecto sigue un código de conducta para asegurar un ambiente acogedor para todos. Al participar, se espera que mantengas un comportamiento respetuoso y constructivo.
+This project follows a code of conduct to ensure a welcoming environment for everyone. By participating, you are expected to maintain respectful and constructive behavior.
 
-## 🚀 ¿Cómo Contribuir?
+## 🚀 How to Contribute
 
-Hay muchas formas de contribuir a trxd:
+There are many ways to contribute to trxd:
 
-- 🐛 **Reportar bugs** y problemas
-- 💡 **Sugerir nuevas funcionalidades**
-- 📝 **Mejorar la documentación**
-- 🔧 **Contribuir código**
-- 🧪 **Escribir o mejorar tests**
-- 📊 **Optimizar rendimiento**
+- 🐛 **Report bugs** and issues
+- 💡 **Suggest new features**
+- 📝 **Improve documentation**
+- 🔧 **Contribute code**
+- 🧪 **Write or improve tests**
+- 📊 **Optimize performance**
 
-## ⚙️ Configuración del Entorno
+## ⚙️ Environment Setup
 
-### Prerrequisitos
+### Prerequisites
 
 - **Python 3.8+**
 - **Git**
-- **uv** (gestor de dependencias)
+- **uv** (dependency manager)
 
-### Instalación
+### Installation
 
 ```bash
-# 1. Fork y clona el repositorio
-git clone https://github.com/tu-usuario/trxd.git
+# 1. Fork and clone the repository
+git clone https://github.com/your-username/trxd.git
 cd trxd
 
-# 2. Instala uv si no lo tienes
+# 2. Install uv if you don't have it
 pip install uv
 
-# 3. Instala dependencias
+# 3. Install dependencies
 uv sync --all-extras
 
-# 4. Verifica la instalación
+# 4. Verify installation
 uv run python -m trxd --help
 ```
 
-### Estructura del Proyecto
+### Project Structure
 
 ```
 trxd/
-├── src/trxd/           # Código fuente principal
-├── tests/              # Tests unitarios e integración
-├── scripts/            # Scripts de utilidad
+├── src/trxd/           # Main source code
+├── tests/              # Unit and integration tests
+├── scripts/            # Utility scripts
 ├── .github/workflows/  # GitHub Actions
-├── docs/               # Documentación
-└── pyproject.toml      # Configuración del proyecto
+├── docs/               # Documentation
+└── pyproject.toml      # Project configuration
 ```
 
-### Arquitectura del Proyecto
+### Project Architecture
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#1e40af', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'lineColor': '#64748b', 'secondaryColor': '#eff6ff', 'tertiaryColor': '#dbeafe', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#eff6ff', 'tertiaryBkg': '#dbeafe'}}}%%
@@ -112,9 +112,9 @@ graph TB
     style R fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
 ```
 
-## 🔄 Flujo de Trabajo
+## 🔄 Workflow
 
-### Flujo de Desarrollo General
+### General Development Flow
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1d4ed8', 'lineColor': '#64748b', 'secondaryColor': '#f1f5f9', 'tertiaryColor': '#e2e8f0', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f1f5f9', 'tertiaryBkg': '#e2e8f8'}}}%%
@@ -137,7 +137,7 @@ graph TD
     N --> O[🏷️ Automatic Release]
 ```
 
-### Flujo de Release Automatizado
+### Automated Release Flow
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#059669', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#047857', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#dcfce7', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#f0fdf4', 'tertiaryBkg': '#dcfce7'}}}%%
@@ -158,7 +158,7 @@ graph TD
     style F fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
 ```
 
-### Convenciones de Branches
+### Branch Conventions
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#7c3aed', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#6d28d9', 'lineColor': '#64748b', 'secondaryColor': '#faf5ff', 'tertiaryColor': '#f3e8ff', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#faf5ff', 'tertiaryBkg': '#f3e8ff'}}}%%
@@ -185,11 +185,11 @@ graph LR
     style F fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
 ```
 
-## 📏 Estándares de Código
+## 📏 Code Standards
 
-### Convenciones de Commits
+### Commit Conventions
 
-Seguimos **Conventional Commits** para mantener un historial claro:
+We follow **Conventional Commits** to maintain a clear history:
 
 ```bash
 # Estructura: <type>(<scope>): <description>
@@ -203,9 +203,9 @@ refactor(utils): improve error handling
 test: add unit tests for authentication
 ```
 
-### Tipos de Commits
+### Commit Types
 
-| Tipo | Descripción | Emoji |
+| Type | Description | Emoji |
 |------|-------------|-------|
 | `feat` | Nueva funcionalidad | 🚀 |
 | `fix` | Corrección de bugs | 🐛 |
@@ -218,25 +218,25 @@ test: add unit tests for authentication
 | `ci` | Cambios en CI/CD | ⚙️ |
 | `build` | Cambios en build system | 🔨 |
 
-### Herramientas de Calidad
+### Quality Tools
 
-Antes de hacer commit, ejecuta:
+Before committing, run:
 
 ```bash
-# Formatear código
+# Format code
 uv run ruff format .
 
-# Verificar linting
+# Check linting
 uv run ruff check --fix .
 
-# Verificar tipos
+# Check types
 uv run mypy .
 
-# Ejecutar tests
+# Run tests
 uv run pytest
 ```
 
-### Estructura de Tests
+### Test Structure
 
 ```python
 # tests/test_feature.py
@@ -255,9 +255,9 @@ class TestFeature:
             feature_function("")
 ```
 
-## ⚙️ Flujo de CI/CD
+## ⚙️ CI/CD Flow
 
-### Pipeline de Integración Continua
+### Continuous Integration Pipeline
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#7c2d12', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#92400e', 'lineColor': '#64748b', 'secondaryColor': '#fef7ed', 'tertiaryColor': '#fed7aa', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#fef7ed', 'tertiaryBkg': '#fed7aa'}}}%%
@@ -287,56 +287,56 @@ graph LR
     style P fill:#dcfce7,stroke:#16a34a,stroke-width:2px
 ```
 
-### Workflows Disponibles
+### Available Workflows
 
-| Workflow | Trigger | Propósito |
+| Workflow | Trigger | Purpose |
 |----------|---------|-----------|
-| **CI** | Push/PR | Verificar calidad del código |
-| **Changelog** | Tag | Generar changelog automáticamente |
-| **Release** | Tag | Crear release y publicar a PyPI |
+| **CI** | Push/PR | Verify code quality |
+| **Changelog** | Tag | Generate changelog automatically |
+| **Release** | Tag | Create release and publish to PyPI |
 
-## 🏷️ Proceso de Release
+## 🏷️ Release Process
 
-### Release Automatizado
+### Automated Release
 
-Nuestro proceso de release está completamente automatizado:
+Our release process is completely automated:
 
 ```bash
-# Crear nueva release (incremento automático)
+# Create new release (automatic increment)
 python scripts/release.py
 
-# Crear release con versión específica
+# Create release with specific version
 python scripts/release.py 25.10.13
 
-# Ver qué pasaría sin ejecutar
+# See what would happen without executing
 python scripts/release.py --dry-run
 ```
 
-### ¿Qué pasa automáticamente?
+### What happens automatically?
 
-1. **Actualización de versión** en `pyproject.toml`
-2. **Creación de tag** y push a GitHub
-3. **Generación de changelog** automática con `git-cliff`
-4. **Creación de GitHub release** con changelog
-5. **Publicación a PyPI** automática
+1. **Version update** in `pyproject.toml`
+2. **Tag creation** and push to GitHub
+3. **Automatic changelog generation** with `git-cliff`
+4. **GitHub release creation** with changelog
+5. **Automatic PyPI publication**
 
-### Versionado
+### Versioning
 
-Usamos **Calendar Versioning (CalVer)**:
+We use **Calendar Versioning (CalVer)**:
 
-- **Formato**: `YY.MM.MICRO`
-- **Ejemplo**: `25.10.5` (Octubre 2025, release #5)
-- **Ventajas**: Fácil de entender la antigüedad de versiones
+- **Format**: `YY.MM.MICRO`
+- **Example**: `25.10.5` (October 2025, release #5)
+- **Advantages**: Easy to understand version age
 
-## 🐛 Reportar Issues
+## 🐛 Reporting Issues
 
-### Antes de Reportar
+### Before Reporting
 
-1. **Busca issues existentes** para evitar duplicados
-2. **Verifica la versión** más reciente
-3. **Revisa la documentación**
+1. **Search existing issues** to avoid duplicates
+2. **Check the latest version**
+3. **Review the documentation**
 
-### Template de Bug Report
+### Bug Report Template
 
 ```markdown
 ## 🐛 Descripción del Bug
@@ -365,14 +365,14 @@ Cualquier otra información relevante.
 
 ## 🔄 Pull Requests
 
-### Antes de Crear un PR
+### Before Creating a PR
 
-1. **Sincroniza tu branch** con `main`
-2. **Ejecuta todos los tests** y verifica que pasen
-3. **Actualiza la documentación** si es necesario
-4. **Sigue las convenciones** de commits
+1. **Sync your branch** with `main`
+2. **Run all tests** and verify they pass
+3. **Update documentation** if necessary
+4. **Follow commit conventions**
 
-### Template de Pull Request
+### Pull Request Template
 
 ```markdown
 ## 📝 Descripción
@@ -399,7 +399,7 @@ Fixes #456
 - [ ] Documentación actualizada
 ```
 
-### Proceso de Review
+### Review Process
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#dc2626', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#b91c1c', 'lineColor': '#64748b', 'secondaryColor': '#fef2f2', 'tertiaryColor': '#fee2e2', 'background': '#ffffff', 'mainBkg': '#f8fafc', 'secondBkg': '#fef2f2', 'tertiaryBkg': '#fee2e2'}}}%%
@@ -420,15 +420,15 @@ graph TD
     style I fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
 ```
 
-## 📚 Recursos Adicionales
+## 📚 Additional Resources
 
-### Documentación
+### Documentation
 
 - [README.md](README.md) - Información general del proyecto
 - [CHANGELOG.md](CHANGELOG.md) - Historial de cambios
 - [pyproject.toml](pyproject.toml) - Configuración del proyecto
 
-### Herramientas
+### Tools
 
 - [uv](https://github.com/astral-sh/uv) - Gestor de dependencias
 - [ruff](https://github.com/astral-sh/ruff) - Linter y formateador
@@ -436,25 +436,25 @@ graph TD
 - [pytest](https://pytest.org/) - Framework de testing
 - [git-cliff](https://git-cliff.org/) - Generador de changelogs
 
-### Enlaces Útiles
+### Useful Links
 
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Keep a Changelog](https://keepachangelog.com/)
 - [Semantic Versioning](https://semver.org/)
 - [Calendar Versioning](https://calver.org/)
 
-## 💬 Comunicación
+## 💬 Communication
 
-- **Issues**: Para bugs y feature requests
-- **Discussions**: Para preguntas generales y ideas
-- **Pull Requests**: Para contribuciones de código
+- **Issues**: For bugs and feature requests
+- **Discussions**: For general questions and ideas
+- **Pull Requests**: For code contributions
 
-## 💡 Ejemplos de Contribución
+## 💡 Contribution Examples
 
-### Ejemplo 1: Añadir un Nuevo Renderer
+### Example 1: Adding a New Renderer
 
 ```python
-# 1. Crear el nuevo renderer
+# 1. Create the new renderer
 class XMLRenderer(Renderer):
     def render(self, tree_generator: TreeGenerator) -> None:
         print('<?xml version="1.0" encoding="UTF-8"?>')
@@ -463,18 +463,18 @@ class XMLRenderer(Renderer):
             print(f'  <item type="{item.type}" name="{item.name}"/>')
         print('</tree>')
 
-# 2. Añadir tests
+# 2. Add tests
 def test_xml_renderer():
     renderer = XMLRenderer()
     # ... tests aquí
 
-# 3. Actualizar TreeApplication para incluir el nuevo formato
+# 3. Update TreeApplication to include the new format
 ```
 
-### Ejemplo 2: Mejorar el Filtrado
+### Example 2: Improving Filtering
 
 ```python
-# 1. Añadir nueva funcionalidad de filtrado
+# 1. Add new filtering functionality
 class TreeBuilder:
     def __init__(self, args: argparse.Namespace):
         self.args = args
@@ -484,85 +484,86 @@ class TreeBuilder:
         # Implementar filtrado por tamaño
         pass
 
-# 2. Añadir argumento CLI
+# 2. Add CLI argument
 parser.add_argument('--size-filter', help='Filter by file size (e.g., >1MB)')
 
-# 3. Añadir tests
+# 3. Add tests
 def test_size_filtering():
     # ... tests aquí
 ```
 
-### Ejemplo 3: Optimización de Rendimiento
+### Example 3: Performance Optimization
 
 ```python
-# 1. Identificar cuello de botella
-# 2. Implementar optimización
+# 1. Identify bottleneck
+# 2. Implement optimization
 class OptimizedTreeBuilder:
     def build_tree(self, directory: Path) -> TreeGenerator:
         # Usar generadores para memoria eficiente
         # Implementar caché para metadatos
         pass
 
-# 3. Añadir benchmarks
+# 3. Add benchmarks
 def benchmark_tree_building():
     # Medir rendimiento antes/después
     pass
 ```
 
-## 🎯 Roadmap de Contribuciones
+## 🎯 Contribution Roadmap
 
-### 🟢 Fácil (Good First Issues)
+### 🟢 Easy (Good First Issues)
 
-- [ ] Añadir más formatos de salida (XML, HTML)
-- [ ] Mejorar mensajes de error
-- [ ] Añadir más tests de integración
-- [ ] Documentar casos de uso avanzados
+- [ ] Add more output formats (XML, HTML)
+- [ ] Improve error messages
+- [ ] Add more integration tests
+- [ ] Document advanced use cases
 
-### 🟡 Intermedio
+### 🟡 Intermediate
 
-- [ ] Implementar filtros avanzados (fecha, permisos)
-- [ ] Añadir soporte para archivos comprimidos
-- [ ] Optimizar rendimiento para directorios grandes
-- [ ] Añadir modo interactivo
+- [ ] Implement advanced filters (date, permissions)
+- [ ] Add support for compressed files
+- [ ] Optimize performance for large directories
+- [ ] Add interactive mode
 
-### 🔴 Avanzado
+### 🔴 Advanced
 
-- [ ] Implementar paralelización
-- [ ] Añadir soporte para bases de datos
-- [ ] Crear plugin system
-- [ ] Implementar streaming para archivos grandes
+- [ ] Implement parallelization
+- [ ] Add database support
+- [ ] Create plugin system
+- [ ] Implement streaming for large files
 
-## 🏆 Reconocimientos
+## 🏆 Recognition
 
-### Tipos de Contribución Reconocidas
+### Recognized Contribution Types
 
-- 🐛 **Bug Reports**: Ayudan a mejorar la estabilidad
-- 💡 **Feature Requests**: Guían el desarrollo futuro
-- 📝 **Documentación**: Hacen el proyecto más accesible
-- 🔧 **Code Contributions**: Mejoran la funcionalidad
-- 🧪 **Testing**: Aseguran la calidad
-- 🎨 **UI/UX**: Mejoran la experiencia de usuario
+- 🐛 **Bug Reports**: Help improve stability
+- 💡 **Feature Requests**: Guide future development
+- 📝 **Documentation**: Make the project more accessible
+- 🔧 **Code Contributions**: Improve functionality
+- 🧪 **Testing**: Ensure quality
+- 🎨 **UI/UX**: Improve user experience
 
-### Contribuidores Destacados
+### Outstanding Contributors
 
-Los contribuidores destacados aparecerán en:
-- README.md como contribuidores
-- CHANGELOG.md en releases importantes
+Outstanding contributors will appear in:
+
+- README.md as contributors
+- CHANGELOG.md in important releases
 - GitHub contributors page
 
-## 🙏 Agradecimientos
+## 🙏 Acknowledgments
 
-¡Gracias por contribuir a trxd! Cada contribución, por pequeña que sea, hace que el proyecto sea mejor para todos.
+Thank you for contributing to trxd! Every contribution, no matter how small, makes the project better for everyone.
 
-### Cómo Agradecemos las Contribuciones
+### How We Acknowledge Contributions
 
-- ✅ **Reconocimiento público** en releases
-- ✅ **Menciones** en documentación
-- ✅ **Acceso** a discussions privadas
-- ✅ **Invitación** a colaborar en decisiones
+- ✅ **Public recognition** in releases
+- ✅ **Mentions** in documentation
+- ✅ **Access** to private discussions
+- ✅ **Invitation** to collaborate on decisions
 
 ---
 
-**¿Tienes preguntas?** No dudes en abrir un issue o discussion. ¡Estamos aquí para ayudar! 🚀
+**Have questions?** Feel free to open an issue or discussion. We're here to help! 🚀
 
-**¿Listo para contribuir?** ¡Empieza con un issue o fork el repositorio! 🎉
+**Ready to contribute?** Start with an issue or fork the repository! 🎉

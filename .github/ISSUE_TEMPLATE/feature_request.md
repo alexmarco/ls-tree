@@ -6,56 +6,56 @@ labels: ['enhancement', 'needs-triage']
 assignees: ''
 ---
 
-## 🚀 Descripción de la Funcionalidad
+## 🚀 Feature Description
 
-Una descripción clara y concisa de la funcionalidad que te gustaría ver implementada.
+A clear and concise description of the feature you would like to see implemented.
 
-## 💡 Motivación
+## 💡 Motivation
 
-¿Por qué esta funcionalidad sería útil? ¿Qué problema resolvería?
+Why would this feature be useful? What problem would it solve?
 
-## 📋 Descripción Detallada
+## 📋 Detailed Description
 
-Describe la funcionalidad en detalle:
+Describe the feature in detail:
 
-- **Comportamiento esperado**: ¿Cómo debería funcionar?
-- **Casos de uso**: ¿En qué situaciones sería útil?
-- **Ejemplos**: ¿Tienes ejemplos de cómo se usaría?
+- **Expected behavior**: How should it work?
+- **Use cases**: In what situations would it be useful?
+- **Examples**: Do you have examples of how it would be used?
 
-## 🎯 Alternativas Consideradas
+## 🎯 Alternatives Considered
 
-Describe cualquier solución alternativa o funcionalidad que hayas considerado.
+Describe any alternative solutions or features you have considered.
 
-## 📝 Ejemplo de Uso
+## 📝 Usage Example
 
 ```bash
-# Ejemplo de cómo te gustaría usar la nueva funcionalidad
+# Example of how you would like to use the new feature
 trxd --new-feature --option value /path/to/directory
 ```
 
-## 🔧 Consideraciones Técnicas
+## 🔧 Technical Considerations
 
-Si tienes ideas sobre cómo implementar esta funcionalidad, compártelas aquí.
+If you have ideas about how to implement this feature, share them here.
 
-## 📊 Impacto
+## 📊 Impact
 
-- **Complejidad**: [Baja/Media/Alta]
-- **Tiempo estimado**: [Horas/Días/Semanas]
-- **Breaking changes**: [Sí/No] - ¿Requiere cambios en la API?
+- **Complexity**: [Low/Medium/High]
+- **Estimated time**: [Hours/Days/Weeks]
+- **Breaking changes**: [Yes/No] - Does it require API changes?
 
-## 🎨 Mockups/Prototipos
+## 🎨 Mockups/Prototypes
 
-Si tienes mockups, prototipos o ejemplos visuales, compártelos aquí.
+If you have mockups, prototypes or visual examples, share them here.
 
-## 📚 Documentación
+## 📚 Documentation
 
-¿Qué documentación sería necesaria para esta funcionalidad?
+What documentation would be needed for this feature?
 
 ## 🔍 Checklist
 
-- [ ] He buscado en issues existentes para evitar duplicados
-- [ ] He verificado que esta funcionalidad no existe ya
-- [ ] He descrito claramente el problema que resuelve
-- [ ] He incluido ejemplos de uso
-- [ ] He considerado el impacto técnico
-- [ ] He pensado en la documentación necesaria
+- [ ] I have searched existing issues to avoid duplicates
+- [ ] I have verified this feature doesn't already exist
+- [ ] I have clearly described the problem it solves
+- [ ] I have included usage examples
+- [ ] I have considered the technical impact
+- [ ] I have thought about the necessary documentation
