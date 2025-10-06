@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+### 📚 Documentation
+
+- **changelog**: Regenerate complete changelog with full history
+
+- **workflow**: Minor formatting fix in git-workflow documentation
+
+
+
 ### 🔧 Chore
 
 - Bump version to 25.10.8

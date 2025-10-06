@@ -1,6 +1,6 @@
 [project]
 name = "trxd"
-version = "25.10.8"
+version = "25.10.9"
 description = "A modern Python command-line tool for listing directory contents with advanced filtering and metadata support"
 readme = "README.md"
 license = { file = "LICENSE" }
